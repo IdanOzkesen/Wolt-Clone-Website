@@ -1,0 +1,26 @@
+{
+  "name": "advanced-systems-programming-task-3",
+  "version": "1.0.0",
+  "description": "## Project Overview This application is a collaborative filtering recommendation engine developed in C++. It analyzes user purchasing and viewing histories to find similar users and recommend new products based on those similarities.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adivilkom/Advanced-Systems-Programming-task-3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adivilkom/Advanced-Systems-Programming-task-3/issues"
+  },
+  "homepage": "https://github.com/adivilkom/Advanced-Systems-Programming-task-3#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

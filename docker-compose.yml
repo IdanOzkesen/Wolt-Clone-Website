@@ -1,0 +1,20 @@
+services:
+  server:
+    build: .
+    container_name: recommendation_server
+    volumes:
+      - ./data:/app/data 
+    ports:
+      - "8080:8080" 
+    command: ["./build/run_server", "8080"]
+
+  client:
+    build: .
+    container_name: recommendation_client
+    depends_on:
+      - server
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+    entrypoint: ["tail", "-f", "/dev/null"]
