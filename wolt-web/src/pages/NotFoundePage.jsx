@@ -1,15 +1,12 @@
-import {Link} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import {useEffect} from "react";
 
 function NotFoundPage() {
-    return (
-        <div>
-            <h1>404 - Not Found</h1>
-            <p>The page you are looking for does not exist.</p>
-            <Link to="/">
-                <button>Go back to Home</button>
-            </Link>
-        </div>
-    );
+    const navigate = useNavigate();
+    useEffect(() => {
+        navigate('/');
+    }, [navigate]);
+    return null;
 }
 
 export default NotFoundPage;
