@@ -24,7 +24,7 @@ function TopPanel() {
             <span className="user-name">Hello, {username}</span>
             <button className="btn-logout" onClick={handleLogout}>Log Out</button>
           </div>
-            <button className="btn-adress" onClick={() => navigate('/address')}>Set Address</button>
+          <button className="btn-adress" onClick={() => navigate('/address')}>Set Address</button>
 
          </>
 
@@ -41,6 +41,7 @@ function TopPanel() {
       </div>
 
       <div className="top-panel-actions">
+        
         
       </div>
     </header>
