@@ -1,0 +1,104 @@
+.top-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
+
+.top-panel-logo {
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.brand-text {
+  color: #009de0;
+}
+
+.clone-text {
+  color: #202125;
+}
+
+.top-panel-search {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background-color: #f3f3f4;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: background-color 0.2s;
+}
+
+.search-input:focus {
+  background-color: #e8e8e9;
+}
+
+.top-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #202125;
+}
+
+button {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.btn-login {
+  background-color: transparent;
+  color: #202125;
+}
+
+.btn-signup, .btn-adress {
+  background-color: #e5f4fa;
+  color: #004f70;
+}
+
+.btn-signup:hover, .btn-adress:hover {
+  background-color: #d1ecf7;
+}
+
+.btn-logout {
+  background-color: #f3f3f4;
+  color: #202125;
+}
+
+.btn-logout:hover {
+  background-color: #e8e8e9;
+}
