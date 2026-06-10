@@ -11,3 +11,80 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* =========================
+   BASE (LIGHT MODE DEFAULT)
+   Only 5 colors allowed in system:
+   white / black / blue / cyan / gray
+========================= */
+
+:root {
+  /* CORE COLORS */
+  --white: #ffffff;
+  --black: #0b0b0b;
+  --blue: #009de0;
+  --cyan: #00c2e8;
+  --gray: #a0a0a0;
+
+  /* BACKGROUNDS */
+  --bg-primary: var(--white);
+  --bg-secondary: var(--black);
+
+  /* TEXT */
+  --text-primary: var(--black);
+  --text-inverse: var(--white);
+  --text-muted: var(--gray);
+
+  /* BRAND */
+  --brand-primary: var(--blue);
+  --brand-secondary: var(--cyan);
+
+  /* CARDS */
+  --card-bg: #f3f3f3;
+  --card-hover: #e8e8e8;
+
+  /* INPUTS */
+  --input-bg: var(--white);
+  --input-text: var(--black);
+
+  /* BUTTONS */
+  --btn-primary: var(--cyan);
+  --btn-primary-hover: var(--blue);
+}
+
+/* =========================
+   DARK MODE (ONLY SWITCH VARIABLES)
+========================= */
+
+.dark {
+  --bg-primary: var(--black);
+  --bg-secondary: var(--white);
+
+  --text-primary: var(--white);
+  --text-inverse: var(--black);
+  --text-muted: var(--gray);
+
+  --card-bg: #1a1a1a;
+  --card-hover: #222222;
+
+  --input-bg: #1a1a1a;
+  --input-text: var(--white);
+
+  --btn-primary: var(--cyan);
+  --btn-primary-hover: var(--blue);
+}
+
+/* =========================
+   GLOBAL BODY
+========================= */
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Segoe UI", sans-serif;
+}
