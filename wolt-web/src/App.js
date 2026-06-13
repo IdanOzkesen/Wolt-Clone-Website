@@ -1,5 +1,4 @@
-// src/App.js
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import TopPanel from './components/TopPanel';
@@ -8,16 +7,29 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import NotFoundPage from './pages/NotFoundePage';
 
+// 1. רכיב פריסה שמכיל את ה-TopPanel רק עבור העמודים שבתוכו
+const MainLayout = () => {
+  return (
+    <>
+      <TopPanel />
+      <Outlet /> {/* כאן יתרנדרו עמודי הבנים כמו HomePage */}
+    </>
+  );
+};
+
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <TopPanel />
         <Routes>
-          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path='*' element={<NotFoundPage />} />
+
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+          </Route>
+
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
