@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
+import { apiFetch } from "../services/api";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ function SignupPage() {
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    
+
     if (type === 'file' && files[0]) {
       const file = files[0];
       setFormData(prev => ({ ...prev, [name]: file }));
@@ -56,6 +57,21 @@ function SignupPage() {
     if (Object.keys(currentErrors).length > 0) return;
 
     console.log('Form submitted:', formData);
+    const userDataToSend = { ...formData };
+    const response = await apiFetch('/signup', {
+      method: 'POST',
+      body: JSON.stringify(formData)
+    });
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      navigate('/discovery', { replace: true });
+    } else {
+      const errorData = await response.json();
+      setErrors({ general: errorData.message || "Signup failed. Please try again." });
+    }
+
   };
 
   return (
@@ -114,6 +130,7 @@ function SignupPage() {
         </div>
 
         <button type="submit" className="submit-btn">Sign Up</button>
+        <button type="button" className="link-btn" onClick={() => navigate('/login')}>Already have an account? Log in</button>
       </form>
     </div>
   );
