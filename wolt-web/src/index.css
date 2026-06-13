@@ -1,39 +1,41 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+/* =========================
+   RESET & BASE STYLES
+========================= */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* =========================
-   BASE (LIGHT MODE DEFAULT)
-   Only 5 colors allowed in system:
-   white / black / blue / cyan / gray
-========================= */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* =========================
+   SYSTEM VARIABLES (LIGHT MODE DEFAULT)
+========================= */
 :root {
-  /* CORE COLORS */
+  /* 5 CORE COLORS */
   --white: #ffffff;
   --black: #0b0b0b;
-  --blue: #009de0;
+  --blue: #0076a8; 
   --cyan: #00c2e8;
   --gray: #a0a0a0;
 
   /* BACKGROUNDS */
   --bg-primary: var(--white);
-  --bg-secondary: var(--black);
+  --bg-secondary: var(--gray);
 
   /* TEXT */
   --text-primary: var(--black);
@@ -44,47 +46,43 @@ code {
   --brand-primary: var(--blue);
   --brand-secondary: var(--cyan);
 
-  /* CARDS */
-  --card-bg: #f3f3f3;
-  --card-hover: #e8e8e8;
-
-  /* INPUTS */
+  /* CARDS & INTERACTIVE */
+  --card-bg: rgba(0, 0, 0, 0.04); 
+  --card-hover: rgba(0, 0, 0, 0.08);
+  
   --input-bg: var(--white);
+  --input-border: var(--gray);
   --input-text: var(--black);
 
   /* BUTTONS */
-  --btn-primary: var(--cyan);
-  --btn-primary-hover: var(--blue);
+  --btn-primary: var(--brand-primary);
+  --btn-primary-hover: var(--brand-secondary);
+  --btn-text: var(--white);
 }
 
 /* =========================
-   DARK MODE (ONLY SWITCH VARIABLES)
+   DARK MODE OVERRIDES
 ========================= */
-
 .dark {
+  /* BACKGROUNDS */
   --bg-primary: var(--black);
-  --bg-secondary: var(--white);
+  --bg-secondary: rgba(255, 255, 255, 0.1);
 
+  /* TEXT */
   --text-primary: var(--white);
   --text-inverse: var(--black);
   --text-muted: var(--gray);
 
-  --card-bg: #1a1a1a;
-  --card-hover: #222222;
+  /* CARDS & INTERACTIVE */
+  --card-bg: rgba(255, 255, 255, 0.07);
+  --card-hover: rgba(255, 255, 255, 0.12);
 
-  --input-bg: #1a1a1a;
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-border: var(--gray);
   --input-text: var(--white);
 
-  --btn-primary: var(--cyan);
-  --btn-primary-hover: var(--blue);
-}
-
-/* =========================
-   GLOBAL BODY
-========================= */
-
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: "Segoe UI", sans-serif;
+  /* BUTTONS */
+  --btn-primary: var(--brand-secondary); 
+  --btn-primary-hover: var(--brand-primary);
+  --btn-text: var(--black); 
 }
