@@ -6,7 +6,7 @@ import TopPanel from './components/TopPanel';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import NotFoundPage from './pages/NotFoundePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (

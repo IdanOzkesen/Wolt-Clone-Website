@@ -7,4 +7,7 @@ const router = express.Router();
 // handle user login/authentication by credentials provided in the request body
 router.post('/', tokenController.getUserByCredentials)
 
+// handle token refresh requests by providing a valid refresh token in the request body
+router.post('/refresh', tokenController.refreshTokenHandler)
+
 module.exports = router
