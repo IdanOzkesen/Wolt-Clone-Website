@@ -30,6 +30,19 @@
   font-weight: 700;
 }
 
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.input-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+}
+
 .base-input {
   width: 100%; 
   padding: 14px 16px; 
@@ -45,6 +58,27 @@
 
 .base-input:focus {
   border-color: var(--brand-primary, #009de0); 
+}
+
+.base-input.has-error {
+  border-color: #ff4d4f;
+}
+
+.error-text {
+  color: #ff4d4f;
+  font-size: 13px;
+  margin-top: 2px;
+  padding-left: 4px;
+}
+
+.image-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 10px auto;
+  display: block;
+  border: 2px solid var(--gray, #e0e0e0);
 }
 
 .submit-btn {
