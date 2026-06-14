@@ -233,3 +233,16 @@ Delete an order:
 ```Bash
 curl -i -X DELETE http://localhost:10000/api/users/:userid/orders/:orderId -H "userId: <USER_ID>"
 ```
+
+
+### 📸 System Execution Demo
+Below is a step-by-step demonstration of the system running, from starting the servers to executing the core API flow:
+
+![Demo 1](Demo1.png)
+![Demo 2](Demo2.png)
+![Demo 3](Demo3.png)
+![Demo 4](Demo4.png)
+![Demo 5](Demo5.png)
+![Demo 6](Demo6.png)
+![Demo 7](Demo7.png)
+![Demo 8](Demo8.png)

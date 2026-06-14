@@ -9,6 +9,13 @@ const createUser = async (req, res) => {
         res.status(400).json({error: "Missing required fields: name, password, address, or phoneNum"})
         return
     }
+    const hasNmber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasUpperCase = /[A-Z]/.test(password);
+    if(password.length < 8 || !hasUpperCase || !hasSpecialChar || !hasNmber) {
+        res.status(400).json({error: "Password must:\nbe at least 8 characters long\ncontain at least one uppercase letter\ninclude at least one special character\ncontain at least one number"});
+        return;
+    }
     // create a new user by calling the createUser function in the user model
     const newUser = userModel.createUser(name, password, address, phoneNum)
     if (newUser === null) {

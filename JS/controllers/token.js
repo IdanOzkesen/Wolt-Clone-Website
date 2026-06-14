@@ -54,4 +54,16 @@ const refreshTokenHandler = (req, res) => {
     });
 }
 
-module.exports = { getUserByCredentials, refreshTokenHandler, ACCESS_SECRET };
+const logoutHandler = (req, res) => {
+    const { Refresh_Token } = req.body;
+    // Check if the refresh token is provided in the request body 
+    // and if it is valid (exists in the activeRefreshTokens array)
+    if (!Refresh_Token || !activeRefreshTokens.includes(Refresh_Token)) {
+        return res.status(400).json({ error: "Refresh Token required or Refresh Token invalid" });
+    }
+    // Remove the refresh token from the activeRefreshTokens array to invalidate it
+    activeRefreshTokens = activeRefreshTokens.filter(token => token !== Refresh_Token);
+    res.json({ message: "Logged out successfully" });
+}
+
+module.exports = { getUserByCredentials, refreshTokenHandler, ACCESS_SECRET, logoutHandler };

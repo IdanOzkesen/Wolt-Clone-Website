@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/adivilkom/Advanced-Systems-Programming-task-3#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "cors": "^2.8.6",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3"
   }
 }
