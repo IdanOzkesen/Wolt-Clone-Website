@@ -30,6 +30,10 @@ function TopPanel() {
     navigate("/");
   };
 
+  const displayName = "";
+  if(isLoggedIn) {
+    displayName = userData.userDisplayName;
+  }
   return (
     <>
       <header className="top-panel">
@@ -59,7 +63,7 @@ function TopPanel() {
           {/* Auth */}
           {localStorage.getItem('accessToken') ? (
             <div className="user-profile">
-              <span className="user-name">Hello, {userData.userDisplayName}</span>
+              <span className="user-name">Hello, {displayName}</span>
               <button className="btn-logout" onClick={handleLogout}>
                 Log Out
               </button>
