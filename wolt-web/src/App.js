@@ -5,23 +5,14 @@ import TopPanel from './components/TopPanel';
 import LandPage from './pages/LandPage';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
-<<<<<<< HEAD
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
-=======
-import SignupPage from './pages/SignupPage';
-import NotFoundPage from './pages/NotFoundePage';
->>>>>>> c6bee7975e4d515f06009fd5a01c03528d00b92c
 
 const MainLayout = () => {
   return (
     <>
       <TopPanel />
-<<<<<<< HEAD
       <Outlet /> 
-=======
-      <Outlet />
->>>>>>> c6bee7975e4d515f06009fd5a01c03528d00b92c
     </>
   );
 };
