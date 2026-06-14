@@ -55,13 +55,13 @@ function LoginPage() {
 
     if (Object.keys(currentErrors).length > 0) return;
 
-    /*const userDataToSend = {
+    const userDataToSend = {
       name: formData.userName,
       password: formData.password
     };
 
     try {
-      const response = await apiFetch('/users', {
+      const response = await apiFetch('/token', {
         method: 'POST',
         body: JSON.stringify(userDataToSend)
       });
@@ -77,7 +77,7 @@ function LoginPage() {
       }
     } catch (err) {
       setErrors({ general: "Network error. Please check if the server is running." });
-    }*/
+    }
   };
 
   return (
