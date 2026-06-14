@@ -98,7 +98,7 @@ export function AuthProvider({ children }) {
         }
 
         const userInfo = await userResponse.json();
-        
+
         // Fallback to formData.userName to guarantee a name exists even if the server omits it
         const userDataToSave = {
           name: userInfo.name,
@@ -108,10 +108,7 @@ export function AuthProvider({ children }) {
         };
 
         for (const [key, value] of Object.entries(userDataToSave)) {
-          // Avoid storing explicit "undefined" string values in local storage
-          if (value) {
-            localStorage.setItem(key, value);
-          }
+          localStorage.setItem(key, value);
         }
 
         setUserData(userDataToSave);
@@ -129,14 +126,23 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-        await apiLogout(); 
-    } catch (error) {
-        console.error("Logout error:", error);
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken) {
+        await apiFetch('/token/logout', {
+          method: 'POST',
+          body: JSON.stringify({ token: refreshToken })
+        });
+      }
+    }
+    catch (error) {
+      console.error("Logout error:", error);
     } finally {
-        setUserData(null);
-        setIsLoggedIn(false);
-        
-        localStorage.clear();        
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setUserData(null);
+      setIsLoggedIn(false);
+
+      localStorage.clear();
     }
   };
 

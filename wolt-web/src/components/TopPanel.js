@@ -4,13 +4,14 @@ import { AuthContext } from "../context/AuthContext";
 import AddressModal from "./AddressModal";
 import "./TopPanel.css";
 
-
 function TopPanel() {
   const navigate = useNavigate();
   const { isLoggedIn, userData, logout } = useContext(AuthContext);
 
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [address, setAddress] = useState("");
+  
+  // Lazily initialize the address state from localStorage to persist guest data across F5 refreshes
+  const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
 
   // 🌙 Theme state
   const [darkMode, setDarkMode] = useState(false);
@@ -27,10 +28,14 @@ function TopPanel() {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    // No need to navigate here, the AuthContext logout function safely handles the redirection
   };
 
   const displayName = userData?.userDisplayName || "";
+
+  // Priority: 1. Logged-in user data, 2. Current local session state (including guest localStorage), 3. Default text
+  const displayAddress = userData?.address || address || "Set Address";
+
   return (
     <>
       <header className="top-panel">
@@ -54,8 +59,7 @@ function TopPanel() {
             className="btn-address"
             onClick={() => setShowAddressModal(true)}
           >
-            {/* Priority: 1. Current local state change, 2. Global user data, 3. Default text */}
-            {address || userData?.address || "Set Address"}
+            {displayAddress}
           </button>
 
           {/* Auth */}
