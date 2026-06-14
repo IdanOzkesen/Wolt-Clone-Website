@@ -65,21 +65,3 @@ export const apiFetch = async (endpoint, options = {}) => {
   // Return the final response object back to the caller
   return response;
 };
-
-export const logout = async () => {
-  try {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (refreshToken) {
-      await apiFetch('/token/logout', {
-        method: 'POST',
-        body: JSON.stringify({ token: refreshToken })
-      });
-    }
-  } catch (error) {
-    console.error("Server logout notification failed:", error);
-  } finally {
-    // מחיקת הטוקנים המקומית תתבצע תמיד, גם אם השרת לא זמין
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-  }
-};

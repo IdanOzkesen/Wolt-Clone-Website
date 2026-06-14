@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
-import { apiFetch } from "../services/api";
 import BaseInputFieldWithError from "../components/BaseInputFieldWithError";
+import { AuthContext } from "../context/AuthContext";
+
 
 function SignupPage() {
   const navigate = useNavigate();
+  const { signup } = useContext(AuthContext);
+
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -64,31 +67,13 @@ function SignupPage() {
 
     if (Object.keys(currentErrors).length > 0) return;
 
-    const userDataToSend = {
-      name: formData.userName,
-      password: formData.password,
-      address: formData.address,
-      phoneNum: formData.phoneNumber
-    };
-
-    try {
-      const response = await apiFetch('/users', {
-        method: 'POST',
-        body: JSON.stringify(userDataToSend)
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        navigate('/discovery', { replace: true });
-      } else {
-        const errorData = await response.json();
-        setErrors({ general: errorData.error || "Signup failed. Please try again." });
-      }
-    } catch (err) {
-      setErrors({ general: "Network error. Please check if the server is running." });
+    const result = await signup(formData);
+    if (result.success) {
+      navigate('/discovery', { replace: true });
     }
+    setErrors({general: result.error});
+
+
   };
 
   return (
