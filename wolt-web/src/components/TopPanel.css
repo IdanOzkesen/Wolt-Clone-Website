@@ -1,23 +1,20 @@
+/* Main header container fixed at the top of the viewport */
 .top-panel {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 72px;
-
-  background-color: var(--bg-secondary);
-
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 0 24px;
-
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 1000;
 }
 
-/* LOGO */
+/* Logo styling with pointer cursor for navigation */
 .top-panel-logo {
   font-size: 24px;
   font-weight: bold;
@@ -25,46 +22,42 @@
   user-select: none;
 }
 
-.brand-text {
-  color: var(--brand-primary);
-}
+.brand-text { color: #009de0; }
+.clone-text { color: #202125; }
 
-.clone-text {
-  color: var(--text-inverse);
-}
-
-/* SEARCH */
+/* Search container - takes available space with maximum width */
 .top-panel-search {
   flex: 1;
   max-width: 500px;
   margin: 0 20px;
 }
 
+/* Search input - box-sizing prevents the padding from causing overflow issues */
 .search-input {
   width: 100%;
   padding: 12px 16px;
   border: none;
-  background-color: var(--input-bg);
+  background-color: #f3f3f4;
   border-radius: 8px;
   font-size: 14px;
   outline: none;
-  box-sizing: border-box;
-  color: var(--input-text);
+  transition: background-color 0.2s;
+  box-sizing: border-box; 
 }
 
 .search-input:focus {
-  background-color: var(--card-hover);
+  background-color: #e8e8e9;
 }
 
-/* ACTIONS */
+/* Actions container - flex-shrink: 0 prevents the search bar from squishing the buttons */
 .top-panel-actions {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-shrink: 0;
+  flex-shrink: 0; 
 }
 
-/* USER */
+/* Logged-in user profile layout */
 .user-profile {
   display: flex;
   align-items: center;
@@ -73,10 +66,10 @@
 
 .user-name {
   font-weight: 500;
-  color: var(--text-primary);
+  color: #202125;
 }
 
-/* BUTTONS */
+/* Base button styling - configured for compact size and proper spacing */
 button {
   padding: 7px 12px;
   font-size: 13px;
@@ -84,7 +77,7 @@ button {
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: 0.2s;
+  transition: transform 0.1s, opacity 0.2s;
   margin: 0 8px;
 }
 
@@ -92,44 +85,26 @@ button:active {
   transform: scale(0.98);
 }
 
+/* Specific button color themes */
 .btn-login {
-  background: transparent;
-  color: var(--text-primary);
+  background-color: transparent;
+  color: #202125;
 }
 
-.btn-signup {
-  background: var(--brand-primary);
-  color: var(--text-inverse);
+.btn-signup, .btn-adress {
+  background-color: #e5f4fa;
+  color: #004f70;
 }
 
-.btn-address {
-  background: transparent;
-  color: var(--brand-primary);
-}
-
-.btn-signup:hover,
-.btn-address:hover {
-  background: var(--card-hover);
+.btn-signup:hover, .btn-adress:hover {
+  background-color: #d1ecf7;
 }
 
 .btn-logout {
-  background: var(--card-bg);
-  color: var(--text-primary);
+  background-color: #f3f3f4;
+  color: #202125;
 }
 
 .btn-logout:hover {
-  background: var(--card-hover);
-}
-
-/* THEME BUTTON */
-.btn-theme {
-  background: transparent;
-  color: var(--text-primary);
-  font-size: 16px;
-  padding: 6px 10px;
-  border-radius: 6px;
-}
-
-.btn-theme:hover {
-  background: var(--card-hover);
+  background-color: #e8e8e9;
 }

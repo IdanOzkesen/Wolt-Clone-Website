@@ -1,9 +1,9 @@
-function Home() {
+function HomePage() {
   return (
     <div>
-      <h1>Home Page (Wolt)</h1>
+      <h1>home screan (Wolt)</h1>
     </div>
   );
 }
 
-export default Home;
+export default HomePage;
