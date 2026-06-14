@@ -7,12 +7,11 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import NotFoundPage from './pages/NotFoundePage';
 
-// 1. רכיב פריסה שמכיל את ה-TopPanel רק עבור העמודים שבתוכו
 const MainLayout = () => {
   return (
     <>
       <TopPanel />
-      <Outlet /> {/* כאן יתרנדרו עמודי הבנים כמו HomePage */}
+      <Outlet />
     </>
   );
 };
