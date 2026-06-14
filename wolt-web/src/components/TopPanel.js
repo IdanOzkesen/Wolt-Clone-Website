@@ -7,7 +7,7 @@ import "./TopPanel.css";
 
 function TopPanel() {
   const navigate = useNavigate();
-  const { isLoggedIn, username } = useContext(AuthContext);
+  const { isLoggedIn, userData, logout } = useContext(AuthContext);
 
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [address, setAddress] = useState("");
@@ -59,7 +59,7 @@ function TopPanel() {
           {/* Auth */}
           {localStorage.getItem('accessToken') ? (
             <div className="user-profile">
-              <span className="user-name">Hello, {username}</span>
+              <span className="user-name">Hello, {userData.userDisplayName}</span>
               <button className="btn-logout" onClick={handleLogout}>
                 Log Out
               </button>

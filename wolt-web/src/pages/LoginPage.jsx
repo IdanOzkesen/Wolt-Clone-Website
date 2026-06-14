@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import { apiFetch } from "../services/api";
 import BaseInputFieldWithError from "../components/BaseInputFieldWithError";
+import { AuthContext } from "../context/AuthContext";
+
 
 function LoginPage() {
   const navigate = useNavigate();
+  const {login} = useContext(AuthContext);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -55,29 +58,12 @@ function LoginPage() {
 
     if (Object.keys(currentErrors).length > 0) return;
 
-    const userDataToSend = {
-      name: formData.userName,
-      password: formData.password
-    };
-
-    try {
-      const response = await apiFetch('/token', {
-        method: 'POST',
-        body: JSON.stringify(userDataToSend)
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        navigate('/discovery', { replace: true });
-      } else {
-        const errorData = await response.json();
-        setErrors({ general: errorData.error || "Login failed. Please try again." });
-      }
-    } catch (err) {
-      setErrors({ general: "Network error. Please check if the server is running." });
+    const result = await login(formData);
+    if (result.success) {
+      navigate('/discovery', { replace: true });
     }
+    setErrors({ general: result.error });
+
   };
 
   return (
