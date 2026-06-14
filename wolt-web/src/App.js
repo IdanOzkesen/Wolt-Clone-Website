@@ -2,9 +2,10 @@ import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import TopPanel from './components/TopPanel';
-import HomePage from './pages/HomePage';
+import LandPage from './pages/LandPage';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
+import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 const MainLayout = () => {
@@ -23,9 +24,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          
 
           <Route element={<MainLayout />}>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<LandPage />} />
+            <Route path="/discovery" element={<HomePage />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />

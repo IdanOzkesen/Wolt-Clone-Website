@@ -5,7 +5,7 @@
 }
 
 /* MAIN */
-.home-container {
+.LandPage-container {
   min-height: 100vh;
   font-family: Arial, sans-serif;
   background: var(--bg-primary);

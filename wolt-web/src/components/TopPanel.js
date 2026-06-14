@@ -2,11 +2,12 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import AddressModal from "./AddressModal";
+import {logout} from "../services/api";
 import "./TopPanel.css";
 
 function TopPanel() {
   const navigate = useNavigate();
-  const { isLoggedIn, username, logout } = useContext(AuthContext);
+  const { isLoggedIn, username } = useContext(AuthContext);
 
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [address, setAddress] = useState("");
@@ -56,7 +57,7 @@ function TopPanel() {
           </button>
 
           {/* Auth */}
-          {isLoggedIn ? (
+          {localStorage.getItem('accessToken') ? (
             <div className="user-profile">
               <span className="user-name">Hello, {username}</span>
               <button className="btn-logout" onClick={handleLogout}>
@@ -76,7 +77,7 @@ function TopPanel() {
 
           {/* 🌙 RIGHT MOST BUTTON */}
           <button className="btn-theme" onClick={toggleTheme}>
-            {darkMode ? "let there be light ☀️" : "the dark knight rises 🌙"}
+            {darkMode ? "let there be light 🧙 ☀️" : "the dark knight rises 🦇 🌙"}
           </button>
 
         </div>

@@ -10,4 +10,7 @@ router.post('/', tokenController.getUserByCredentials)
 // handle token refresh requests by providing a valid refresh token in the request body
 router.post('/refresh', tokenController.refreshTokenHandler)
 
+// handle user logout by invalidating the provided refresh token in the request body
+router.post('/logout', tokenController.logoutHandler)
+
 module.exports = router

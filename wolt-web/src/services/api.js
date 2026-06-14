@@ -43,7 +43,7 @@ export const apiFetch = async (endpoint, options = {}) => {
       // If the token refresh process was successful
       if (refreshResponse.ok) {
         const data = await refreshResponse.json();
-        
+
         // Save the newly generated access token into local storage for future requests
         localStorage.setItem('accessToken', data.accessToken);
 
@@ -56,13 +56,30 @@ export const apiFetch = async (endpoint, options = {}) => {
         // If the refresh token itself is expired or invalid, clear all tokens from storage
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        
+
         // Forcefully redirect the user to the login page using the browser window location
         window.location.href = '/login';
       }
     }
   }
-
   // Return the final response object back to the caller
   return response;
+};
+
+export const logout = async () => {
+  try {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      await apiFetch('/token/logout', {
+        method: 'POST',
+        body: JSON.stringify({ token: refreshToken })
+      });
+    }
+  } catch (error) {
+    console.error("Server logout notification failed:", error);
+  } finally {
+    // מחיקת הטוקנים המקומית תתבצע תמיד, גם אם השרת לא זמין
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+  }
 };
