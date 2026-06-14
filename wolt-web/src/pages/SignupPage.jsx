@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
-import { apiFetch, logout } from "../services/api";
+import { apiFetch } from "../services/api";
+import BaseInputFieldWithError from "../components/BaseInputFieldWithError";
 
 function SignupPage() {
   const navigate = useNavigate();
+
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
@@ -62,8 +64,6 @@ function SignupPage() {
 
     if (Object.keys(currentErrors).length > 0) return;
 
-    console.log('Form submitted:', formData);
-
     const userDataToSend = {
       name: formData.userName,
       password: formData.password,
@@ -96,56 +96,49 @@ function SignupPage() {
       <form onSubmit={handleSubmit} className="auth-form">
         <h2>Sign Up</h2>
 
-        {errors.general && <div className="error-text general-error" style={{ textAlign: 'center', marginBottom: '10px' }}>{errors.general}</div>}
+        {errors.general && <div className="base-input-error" style={{ textAlign: 'center', marginBottom: '10px' }}>{errors.general}</div>}
 
         {imagePreview && <img src={imagePreview} alt="Preview" className="image-preview" />}
 
         <div className="input-group">
           <label className="input-label">Full Name</label>
-          <input className={`base-input ${errors.userName ? 'has-error' : ''}`} name="userName" placeholder="Enter your full name" value={formData.userName} onChange={handleChange} />
-          {errors.userName && <span className="error-text">{errors.userName}</span>}
+          <BaseInputFieldWithError name="userName" placeholder="Enter your full name" value={formData.userName} onChange={handleChange} error={errors.userName} />
         </div>
 
         <div className="input-group">
           <label className="input-label">Display Name</label>
-          <input className={`base-input ${errors.userDisplayName ? 'has-error' : ''}`} name="userDisplayName" placeholder="Enter your display name" value={formData.userDisplayName} onChange={handleChange} />
-          {errors.userDisplayName && <span className="error-text">{errors.userDisplayName}</span>}
+          <BaseInputFieldWithError name="userDisplayName" placeholder="Enter your display name" value={formData.userDisplayName} onChange={handleChange} error={errors.userDisplayName} />
         </div>
 
         <div className="input-group">
           <label className="input-label">Password</label>
-          <input className={`base-input ${errors.password ? 'has-error' : ''}`} name="password" type="password" placeholder="Create a password" value={formData.password} onChange={handleChange} />
-          {errors.password && <span className="error-text">{errors.password}</span>}
+          <BaseInputFieldWithError name="password" type="password" placeholder="Create a password" value={formData.password} onChange={handleChange} error={errors.password} />
         </div>
 
         <div className="input-group">
           <label className="input-label">Confirm Password</label>
-          <input className={`base-input ${errors.confirmPassword ? 'has-error' : ''}`} name="confirmPassword" type="password" placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} />
-          {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
+          <BaseInputFieldWithError name="confirmPassword" type="password" placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} error={errors.confirmPassword} />
         </div>
 
         <div className="input-group">
           <label className="input-label">Phone Number</label>
-          <input className={`base-input ${errors.phoneNumber ? 'has-error' : ''}`} name="phoneNumber" type="tel" placeholder="Enter your phone number" value={formData.phoneNumber} onChange={handleChange} />
-          {errors.phoneNumber && <span className="error-text">{errors.phoneNumber}</span>}
+          <BaseInputFieldWithError name="phoneNumber" type="tel" placeholder="Enter your phone number" value={formData.phoneNumber} onChange={handleChange} error={errors.phoneNumber} />
         </div>
 
         <div className="input-group">
           <label className="input-label">Address</label>
-          <input className={`base-input ${errors.address ? 'has-error' : ''}`} name="address" placeholder="Enter your address" value={formData.address} onChange={handleChange} />
-          {errors.address && <span className="error-text">{errors.address}</span>}
+          <BaseInputFieldWithError name="address" placeholder="Enter your address" value={formData.address} onChange={handleChange} error={errors.address} />
         </div>
 
         <div className="input-group">
           <label className="input-label">Profile Photo</label>
-          <input
-            className={`base-input ${errors.profilePhoto ? 'has-error' : ''}`}
+          <BaseInputFieldWithError
             name="profilePhoto"
             type="file"
             accept="image/*"
             onChange={handleChange}
+            error={errors.profilePhoto}
           />
-          {errors.profilePhoto && <span className="error-text">{errors.profilePhoto}</span>}
         </div>
 
         <button type="submit" className="submit-btn">Sign Up</button>

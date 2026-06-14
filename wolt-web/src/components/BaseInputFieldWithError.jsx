@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './BaseInputFieldWithError.css';
 const BaseInputFieldWithError = React.forwardRef(({
   type = 'text',
   placeholder,
@@ -26,6 +26,5 @@ const BaseInputFieldWithError = React.forwardRef(({
   );
 });
 
-BaseInputFieldWithError.displayName = 'BaseInputFieldWithError';
 
 export default BaseInputFieldWithError;
