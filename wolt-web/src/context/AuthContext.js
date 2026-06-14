@@ -1,27 +1,27 @@
 // src/context/AuthContext.js
 import React, { createContext, useState } from 'react';
-import { apiFetch } from "../services/api";
+import { apiFetch, apiLogout } from "../services/api";
 
-
-// Create the AuthContext
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  // Initialize state based on localStorage
-  const hasUser = localStorage.getItem('userName');
 
-  const [userData, setUserData] = useState(
-    hasUser
-      ? {
-        userName: localStorage.getItem('userName'),
+  const savedUserName = localStorage.getItem('name');
+  const savedToken = localStorage.getItem('accessToken');
+
+  const [userData, setUserData] = useState(() => {
+    if (savedUserName && savedToken) {
+      return {
+        name: savedUserName,
         userDisplayName: localStorage.getItem('userDisplayName'),
         address: localStorage.getItem('address'),
         profilePhoto: localStorage.getItem('profilePhoto')
-      }
-      : null
-  );
+      };
+    }
+    return null;
+  });
 
-  const [isLoggedIn, setIsLoggedIn] = useState(!!userData);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!savedToken && !!savedUserName);
 
   const signup = async (formData) => {
     const userDataToSend = {
@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
           name: formData.userName,
           userDisplayName: formData.userDisplayName,
           address: formData.address,
-          profilePhoto: formData.profilePhoto
+          profilePhoto: data.profilePhoto || ""
         };
 
         for (const [key, value] of Object.entries(userDataToSave)) {
@@ -55,8 +55,7 @@ export function AuthProvider({ children }) {
 
         setUserData(userDataToSave);
         setIsLoggedIn(true);
-
-        return { success: true }
+        return { success: true };
 
       } else {
         const errorData = await response.json();
@@ -65,7 +64,7 @@ export function AuthProvider({ children }) {
     } catch (err) {
       return { success: false, error: "Network error. Please check if the server is running." };
     }
-  }
+  };
 
   const login = async (formData) => {
     const userDataToSend = {
@@ -83,24 +82,25 @@ export function AuthProvider({ children }) {
         const data = await response.json();
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
-        const userId = data.id;
 
-        const userResponse  = await apiFetch('/users/userId', {
-          method: 'GET',
-          body: { 'accessToken': 'Bearer ${tokenData.accessToken}' }
+        const tokenPayload = JSON.parse(atob(data.accessToken.split('.')[1]));
+        const userId = tokenPayload.id;
+
+        const userResponse = await apiFetch(`/users/${userId}`, {
+          method: 'GET'
         });
 
         if (!userResponse.ok) {
-          const errorData = await response.json();
+          const errorData = await userResponse.json();
           return { success: false, error: errorData.error || "Failed to retrieve user data." };
         }
 
         const userInfo = await userResponse.json();
-
+        
         const userDataToSave = {
-          name: userInfo.userName,
-          userDisplayName: userInfo.userDisplayName,
-          address: userInfo.address,
+          name: userInfo.name || "",
+          userDisplayName: userInfo.userDisplayName || "",
+          address: userInfo.address || "",
           profilePhoto: userInfo.profilePhoto
         };
 
@@ -110,7 +110,7 @@ export function AuthProvider({ children }) {
 
         setUserData(userDataToSave);
         setIsLoggedIn(true);
-        return { success: true }
+        return { success: true };
 
       } else {
         const errorData = await response.json();
@@ -119,16 +119,17 @@ export function AuthProvider({ children }) {
     } catch (err) {
       return { success: false, error: "Network error. Please check if the server is running." };
     }
-  }
+  };
 
-    const logout = async (formData) => {
-      setUserData(null);
-      setIsLoggedIn(false);
-      localStorage.clear();
-    }
+  const logout = async () => {
+    apiLogout();
+    setUserData(null);
+    setIsLoggedIn(false);
+    localStorage.clear();
+  };
 
   return (
-    <AuthContext.Provider value={{ signup, userData, AuthContext, login, logout }}>
+    <AuthContext.Provider value={{ signup, login, logout, userData, isLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

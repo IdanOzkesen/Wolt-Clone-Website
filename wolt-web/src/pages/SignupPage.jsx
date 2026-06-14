@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
-import { apiFetch } from "../services/api";
 import BaseInputFieldWithError from "../components/BaseInputFieldWithError";
 import { AuthContext } from "../context/AuthContext";
 

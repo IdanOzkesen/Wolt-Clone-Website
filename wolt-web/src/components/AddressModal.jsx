@@ -1,10 +1,21 @@
 import "./AddressModal.css";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 function AddressModal({ isOpen, onClose, onSave }) {
-    const [country, setCountry] = useState("Israel");
-    const [address, setAddress] = useState("");
+    // Extract state and the setter function from the global authentication context
+    const { isLoggedIn, userData, setUserData } = useContext(AuthContext);
+
+    const initialFullAddress = userData.address;
+    // Dynamically split the address by the first comma
+    const hasComma = initialFullAddress.includes(",");
+    const countryPart = hasComma ? initialFullAddress.split(",")[0].trim() : "Israel";
+    const addressPart = hasComma ? initialFullAddress.split(",").slice(1).join(",").trim() : initialFullAddress.trim();
+
+    // Set the dynamic initial states
+    const [country, setCountry] = useState(countryPart);
+    const [address, setAddress] = useState(addressPart);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -13,20 +24,33 @@ function AddressModal({ isOpen, onClose, onSave }) {
     const handleSave = () => {
         const fullAddress = `${country}, ${address}`;
 
+        if (isLoggedIn && userData) {
+            // Creating a clean, deep copy of the object to force React to trigger a re-render
+            const updatedUserData = {
+                ...userData,
+                address: fullAddress
+            };
+
+            if (setUserData) {
+                setUserData(updatedUserData);
+            }
+
+            localStorage.setItem('address', fullAddress);
+        }
+
+        // Trigger the prop callback to update the parent state as well
         onSave(fullAddress);
         onClose();
-        // If we're on the home page, navigate to the discovery page after saving the address
+
         if (location.pathname === "/") {
             navigate("/discovery");
         }
     };
-
     const isDisabled = address.trim() === "";
 
     return (
         <div className="modal-overlay">
             <div className="modal">
-
                 <button className="close-btn" onClick={onClose}>
                     ✕
                 </button>
@@ -59,7 +83,6 @@ function AddressModal({ isOpen, onClose, onSave }) {
                 >
                     Save Address
                 </button>
-
             </div>
         </div>
     );

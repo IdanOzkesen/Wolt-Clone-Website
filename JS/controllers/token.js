@@ -25,11 +25,12 @@ const getUserByCredentials = (req, res) => {
         return;
     }
     // If the user is found, generate an access token and a refresh token
-    const accessToken = jwt.sign({ id: user.id }, ACCESS_SECRET, { expiresIn: '15m' });
-    const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET, { expiresIn: '30d' });
+    const userId = user.id
+    const accessToken = jwt.sign({ id: userId }, ACCESS_SECRET, { expiresIn: '15m' });
+    const refreshToken = jwt.sign({ id: userId }, REFRESH_SECRET, { expiresIn: '30d' });
     activeRefreshTokens.push(refreshToken);
-    // Return the access token and refresh token in the response
-    res.json({ accessToken, refreshToken });
+    // Return the access token, refresh token and userId in the response
+    res.json({ accessToken, refreshToken, userId });
 }
 
 const refreshTokenHandler = (req, res) => {

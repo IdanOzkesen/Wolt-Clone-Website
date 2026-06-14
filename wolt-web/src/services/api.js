@@ -66,7 +66,7 @@ export const apiFetch = async (endpoint, options = {}) => {
   return response;
 };
 
-export const logout = async () => {
+export const apiLogout = async () => {
   try {
     const refreshToken = localStorage.getItem('refreshToken');
     if (refreshToken) {

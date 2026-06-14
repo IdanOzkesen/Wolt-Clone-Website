@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import AddressModal from "./AddressModal";
-import {logout} from "../services/api";
 import "./TopPanel.css";
+
 
 function TopPanel() {
   const navigate = useNavigate();
@@ -30,10 +30,7 @@ function TopPanel() {
     navigate("/");
   };
 
-  const displayName = "";
-  if(isLoggedIn) {
-    displayName = userData.userDisplayName;
-  }
+  const displayName = userData?.userDisplayName || "";
   return (
     <>
       <header className="top-panel">
@@ -57,11 +54,12 @@ function TopPanel() {
             className="btn-address"
             onClick={() => setShowAddressModal(true)}
           >
-            {address ? address : "Set Address"}
+            {/* Priority: 1. Current local state change, 2. Global user data, 3. Default text */}
+            {address || userData?.address || "Set Address"}
           </button>
 
           {/* Auth */}
-          {localStorage.getItem('accessToken') ? (
+          {isLoggedIn ? (
             <div className="user-profile">
               <span className="user-name">Hello, {displayName}</span>
               <button className="btn-logout" onClick={handleLogout}>
