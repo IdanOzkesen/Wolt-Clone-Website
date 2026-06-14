@@ -10,12 +10,12 @@ function SignupPage() {
   const { signup } = useContext(AuthContext);
 
 
-  useEffect(() => {
+  /*useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       navigate('/discovery', { replace: true });
     }
-  }, [navigate]);
+  }, [navigate]);*/
 
   const [formData, setFormData] = useState({
     userName: '',

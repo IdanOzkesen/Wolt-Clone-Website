@@ -8,7 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const {login} = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');

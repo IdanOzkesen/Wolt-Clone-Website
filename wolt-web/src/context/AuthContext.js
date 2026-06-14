@@ -1,27 +1,29 @@
 // src/context/AuthContext.js
 import React, { createContext, useState } from 'react';
-import { apiFetch, apiLogout } from "../services/api";
+// Directly import apiLogout to match the export in api.js precisely
+import { apiFetch, logout as apiLogout } from '../services/api';
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-
-  const savedUserName = localStorage.getItem('name');
   const savedToken = localStorage.getItem('accessToken');
+  const savedUserName = localStorage.getItem('name');
 
+  // Initialize state using the token as the single source of truth to prevent UI desync
   const [userData, setUserData] = useState(() => {
-    if (savedUserName && savedToken) {
+    if (savedToken) {
       return {
-        name: savedUserName,
-        userDisplayName: localStorage.getItem('userDisplayName'),
-        address: localStorage.getItem('address'),
-        profilePhoto: localStorage.getItem('profilePhoto')
+        name: savedUserName || "",
+        userDisplayName: localStorage.getItem('userDisplayName') || "",
+        address: localStorage.getItem('address') || "",
+        profilePhoto: localStorage.getItem('profilePhoto') || ""
       };
     }
     return null;
   });
 
-  const [isLoggedIn, setIsLoggedIn] = useState(!!savedToken && !!savedUserName);
+  // Rely solely on the token existence to determine login state
+  const [isLoggedIn, setIsLoggedIn] = useState(!!savedToken);
 
   const signup = async (formData) => {
     const userDataToSend = {
@@ -97,15 +99,19 @@ export function AuthProvider({ children }) {
 
         const userInfo = await userResponse.json();
         
+        // Fallback to formData.userName to guarantee a name exists even if the server omits it
         const userDataToSave = {
-          name: userInfo.name || "",
-          userDisplayName: userInfo.userDisplayName || "",
-          address: userInfo.address || "",
-          profilePhoto: userInfo.profilePhoto
+          name: userInfo.name,
+          userDisplayName: userInfo.userDisplayName,
+          address: userInfo.address,
+          profilePhoto: userInfo.profilePhoto || ""
         };
 
         for (const [key, value] of Object.entries(userDataToSave)) {
-          localStorage.setItem(key, value);
+          // Avoid storing explicit "undefined" string values in local storage
+          if (value) {
+            localStorage.setItem(key, value);
+          }
         }
 
         setUserData(userDataToSave);
@@ -122,14 +128,20 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    apiLogout();
-    setUserData(null);
-    setIsLoggedIn(false);
-    localStorage.clear();
+    try {
+        await apiLogout(); 
+    } catch (error) {
+        console.error("Logout error:", error);
+    } finally {
+        setUserData(null);
+        setIsLoggedIn(false);
+        
+        localStorage.clear();        
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ signup, login, logout, userData, isLoggedIn }}>
+    <AuthContext.Provider value={{ signup, login, logout, userData, isLoggedIn, setUserData }}>
       {children}
     </AuthContext.Provider>
   );
