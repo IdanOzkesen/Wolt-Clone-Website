@@ -16,11 +16,30 @@
 }
 
 /* Logo styling with pointer cursor for navigation */
-.top-panel-logo {
-  font-size: 24px;
-  font-weight: bold;
+/* Circular logo container mask */
+.top-panel-logo-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden; /* Perfectly masks out anything outside the circle boundary */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  user-select: none;
+  background-color: transparent;
+  transition: transform 0.2s ease-in-out;
+}
+
+.top-panel-logo-wrapper:hover {
+  transform: scale(1.06);
+}
+
+/* Zooms into the center circle, discarding the blurred background frame */
+.top-panel-circular-logo {
+  height: 136%; /* Scales past the vertical blurred margins */
+  width: auto;  /* Maintains clean 1:1 image proportions */
+  object-fit: cover;
+  object-position: center; /* Keeps the inner character dead-centered */
 }
 
 .brand-text { color: var(--brand-primary); } /* Updated to use CSS variable */

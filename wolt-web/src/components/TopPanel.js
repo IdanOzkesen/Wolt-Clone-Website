@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import AddressModal from "./AddressModal";
 import Button from "./Buttons"; 
 import "./TopPanel.css";
+import woltLogo from "../assets/logo.png";
 
 function TopPanel() {
   const navigate = useNavigate();
@@ -40,9 +41,13 @@ function TopPanel() {
   return (
     <>
       <header className="top-panel">
-        <div className="top-panel-logo" onClick={() => navigate("/")}>
-          <span className="brand-text">Wolt</span>
-          <span className="clone-text">Clone</span>
+        {/* Interactive Logo Wrapper */}
+        <div className="top-panel-logo-wrapper" onClick={() => navigate("/")}>
+          <img 
+            src={woltLogo} 
+            alt="Wolt Clone" 
+            className="top-panel-circular-logo" 
+          />
         </div>
 
         <div className="top-panel-search">
