@@ -1,18 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function ThemeToggle() {
   const [dark, setDark] = useState(false);
 
   const toggle = () => {
-    const newMode = !dark;
-    setDark(newMode);
+    setDark(prev => !prev);
+  };
 
-    if (newMode) {
+  useEffect(() => {
+    if (dark) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  };
+  }, [dark]);
 
   return (
     <button onClick={toggle}>

@@ -4,11 +4,9 @@ import "./SignupPage.css";
 import BaseInputFieldWithError from "../components/BaseInputFieldWithError";
 import { AuthContext } from "../context/AuthContext";
 
-
 function SignupPage() {
   const navigate = useNavigate();
   const { signup } = useContext(AuthContext);
-
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -54,7 +52,7 @@ function SignupPage() {
     let currentErrors = {};
 
     Object.keys(formData).forEach(key => {
-      if (!formData[key]) {
+      if (!formData[key] && key !== 'profilePhoto') {
         currentErrors[key] = "This field is required";
       }
     });
@@ -72,8 +70,6 @@ function SignupPage() {
       navigate('/discovery', { replace: true });
     }
     setErrors({general: result.error});
-
-
   };
 
   return (
