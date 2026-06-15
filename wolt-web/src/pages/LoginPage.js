@@ -1,10 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-import { apiFetch } from "../services/api";
 import BaseInputFieldWithError from "../components/BaseInputFieldWithError";
 import { AuthContext } from "../context/AuthContext";
-
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -23,21 +21,14 @@ function LoginPage() {
   });
 
   const [errors, setErrors] = useState({});
-  const [imagePreview, setImagePreview] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
+    const { name, value, type, checked } = e.target;
 
-    if (type === 'file' && files[0]) {
-      const file = files[0];
-      setFormData(prev => ({ ...prev, [name]: file }));
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: type === 'checkbox' ? checked : value
-      }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
 
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -63,7 +54,6 @@ function LoginPage() {
       navigate('/discovery', { replace: true });
     }
     setErrors({ general: result.error });
-
   };
 
   return (
@@ -72,8 +62,6 @@ function LoginPage() {
         <h2>Login</h2>
 
         {errors.general && <div className="base-input-error" style={{ textAlign: 'center', marginBottom: '10px' }}>{errors.general}</div>}
-
-        {imagePreview && <img src={imagePreview} alt="Preview" className="image-preview" />}
 
         <div className="input-group">
           <label className="input-label">User Name</label>

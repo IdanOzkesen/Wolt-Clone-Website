@@ -16,7 +16,7 @@ const LandPage = () => {
           </h1>
 
           <div className="address-box">
-            <span className="geo-icon">📍</span>
+            <span className="geo-icon" role="img" aria-label="location">📍</span>
 
             <input
               type="text"
