@@ -5,13 +5,14 @@
   left: 0;
   right: 0;
   height: 72px;
-  background-color: #ffffff;
+  background-color: var(--bg-primary); /* Updated to use CSS variable */
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 1000;
+  transition: background-color 0.3s ease; /* Smooth transition for dark mode toggle */
 }
 
 /* Logo styling with pointer cursor for navigation */
@@ -22,8 +23,8 @@
   user-select: none;
 }
 
-.brand-text { color: #009de0; }
-.clone-text { color: #202125; }
+.brand-text { color: var(--brand-primary); } /* Updated to use CSS variable */
+.clone-text { color: var(--text-primary); } /* Updated to use CSS variable */
 
 /* Search container - takes available space with maximum width */
 .top-panel-search {
@@ -37,7 +38,8 @@
   width: 100%;
   padding: 12px 16px;
   border: none;
-  background-color: #f3f3f4;
+  background-color: var(--input-bg); /* Updated to use CSS variable */
+  color: var(--input-text); /* Updated to use CSS variable */
   border-radius: 8px;
   font-size: 14px;
   outline: none;
@@ -46,7 +48,7 @@
 }
 
 .search-input:focus {
-  background-color: #e8e8e9;
+  background-color: var(--card-hover); /* Updated to use CSS variable */
 }
 
 /* Actions container - flex-shrink: 0 prevents the search bar from squishing the buttons */
@@ -66,45 +68,5 @@
 
 .user-name {
   font-weight: 500;
-  color: #202125;
-}
-
-/* Base button styling - configured for compact size and proper spacing */
-button {
-  padding: 7px 12px;
-  font-size: 13px;
-  font-weight: bold;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.1s, opacity 0.2s;
-  margin: 0 8px;
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-/* Specific button color themes */
-.btn-login {
-  background-color: transparent;
-  color: #202125;
-}
-
-.btn-signup, .btn-adress {
-  background-color: #e5f4fa;
-  color: #004f70;
-}
-
-.btn-signup:hover, .btn-adress:hover {
-  background-color: #d1ecf7;
-}
-
-.btn-logout {
-  background-color: #f3f3f4;
-  color: #202125;
-}
-
-.btn-logout:hover {
-  background-color: #e8e8e9;
+  color: var(--text-primary); /* Updated to use CSS variable */
 }

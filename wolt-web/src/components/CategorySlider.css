@@ -69,16 +69,3 @@
   color: #313131;
   text-align: center;
 }
-
-/* Styling for the active selected category item */
-.category-item.active .category-img-wrapper {
-  background-color: #009de0; /* Wolt Light-blue accent */
-  border: 2px solid #0082ba;
-  transform: scale(1.08);
-  box-shadow: 0 4px 12px rgba(0, 157, 224, 0.3);
-}
-
-.category-item.active span {
-  color: #009de0;
-  font-weight: 700;
-}
