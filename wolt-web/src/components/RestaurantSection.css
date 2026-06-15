@@ -1,0 +1,78 @@
+.restaurant-section-row {
+  width: 100%;
+  margin-bottom: 40px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.restaurant-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.restaurant-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.res-row-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #eaeaea;
+}
+
+.res-text-details h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #202125;
+  margin: 0 0 4px 0;
+}
+
+.res-sub-meta {
+  font-size: 14px;
+  color: #646464;
+  margin: 0;
+  font-weight: 500;
+}
+
+.slider-arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.arrow-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #140000;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.arrow-btn:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.products-horizontal-list {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 12px;
+}
+
+.products-horizontal-list::-webkit-scrollbar {
+  display: none;
+}
