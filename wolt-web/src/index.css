@@ -86,3 +86,13 @@ code {
   --btn-primary-hover: var(--brand-primary);
   --btn-text: var(--black); 
 }
+
+.restaurant-card-link {
+  text-decoration: none;
+  color: inherit; 
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

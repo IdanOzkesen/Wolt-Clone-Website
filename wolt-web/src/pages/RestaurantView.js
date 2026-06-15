@@ -1,112 +1,111 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Link } from 'react-router-dom';
 import './RestaurantView.css';
 import { apiFetch } from '../services/api';
-// 1. Import the default placeholder asset exactly like in RestaurantSection
 import defaultPlaceholder from '../assets/default-placeholder.jpg';
 
 function RestaurantView() {
-  const { id } = useParams();
-  
-  // State Management
-  const [restaurant, setRestaurant] = useState(null);
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const menuSectionRef = useRef(null);
+    const { id } = useParams();
+    const [restaurant, setRestaurant] = useState(null);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [quantity, setQuantity] = useState(1);
 
-  useEffect(() => {
-    const fetchRestaurantDetails = async () => {
-      setLoading(true);
-      try {
-        // Fetch main restaurant metadata
-        const resDetails = await apiFetch(`/restaurants/${id}`);
-        if (!resDetails.ok) throw new Error('Restaurant not found');
-        const restaurantData = await resDetails.json();
-        setRestaurant(restaurantData);
+    useEffect(() => {
+        const fetchRestaurantDetails = async () => {
+            setLoading(true);
+            try {
+                const resDetails = await apiFetch(`/restaurants/${id}`);
+                const restaurantData = await resDetails.json();
+                setRestaurant(restaurantData);
 
-        // Fetch products/menu for this specific restaurant
-        const resProducts = await apiFetch(`/restaurants/${id}/products`);
-        if (resProducts.ok) {
-          const productsData = await resProducts.json();
-          setProducts(productsData);
-        }
-      } catch (err) {
-        console.error("Error loading restaurant data:", err);
-        setError(err.message || 'Failed to sync with server.');
-      } finally {
-        setLoading(false);
-      }
+                const resProducts = await apiFetch(`/restaurants/${id}/products`);
+                const productsData = await resProducts.json();
+                setProducts(productsData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchRestaurantDetails();
+    }, [id]);
+
+    const openModal = (product) => {
+        setSelectedProduct(product);
+        setQuantity(1);
     };
 
-    fetchRestaurantDetails();
-  }, [id]);
+    const closeModal = () => setSelectedProduct(null);
 
-  if (loading) return <div className="wolt-loading-screen">Loading menu...</div>;
-  if (error) return <div className="wolt-error-screen">⚠️ Error: {error}. <Link to="/">Back to Home</Link></div>;
-  if (!restaurant) return null;
+    // Modal Content Component
+    const ProductModal = () => (
+        <div className="product-modal-overlay" onClick={closeModal}>
+            <div className="product-modal-content" onClick={(e) => e.stopPropagation()}>
+                <button className="modal-close-icon" onClick={closeModal}>✕</button>
 
-  return (
-    <div className="restaurant-view-page">
-      {/* Premium Dark Hero Banner */}
-      <header className="restaurant-hero">
-        <div className="hero-overlay">
-          <div className="hero-content">
-            <span className="restaurant-tag">{restaurant.category || "General"}</span>
-            <h1 className="restaurant-view-name">{restaurant.name}</h1>
-            <p className="restaurant-view-meta">📍 {restaurant.address} • 📞 {restaurant.phoneNum}</p>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Menu Layout Container */}
-      <main className="restaurant-view-body">
-        <section className="menu-products-section" ref={menuSectionRef}>
-          <h2 className="section-menu-title">Popular Items</h2>
-          
-          {products.length === 0 ? (
-            <p className="no-products-msg">No items found in this restaurant's menu.</p>
-          ) : (
-            /* Dynamic 3-column product grid */
-            <div className="products-grid-layout">
-              {products.map((product) => (
-                <div key={product.id} className="product-item-card">
-                  
-                  {/* Left Side: Product textual content */}
-                  <div className="product-card-details">
-                    <h3 className="product-title-text">
-                      {product.name} {product.isSpicy && '🌶️'} {product.isVegan && '🌱'}
-                    </h3>
-                    <p className="product-desc-text">
-                      {product.description || "No description available for this item."}
-                    </p>
-                    <span className="product-price-text">${parseFloat(product.price).toFixed(2)}</span>
-                  </div>
-
-                  {/* Right Side: Product Image & Interactive Add Button */}
-                  <div className="product-image-block">
-                    <button 
-                      className="add-to-cart-action-btn"
-                      onClick={() => console.log(`Future feature: Add ${product.name} to cart`)}
-                    >
-                      +
-                    </button>
-                    {/* 2. Fallback to defaultPlaceholder if product.image is missing/empty */}
-                    <img 
-                      src={product.image || defaultPlaceholder} 
-                      alt={product.name} 
-                      className="product-dish-img" 
-                    />
-                  </div>
-
+                <div className="modal-header-image">
+                    <img src={selectedProduct.image || defaultPlaceholder} alt={selectedProduct.name} />
                 </div>
-              ))}
+
+                <div className="modal-scrollable-body">
+                    <h2 className="modal-product-title">{selectedProduct.name}</h2>
+                    <div className="modal-product-price">ILS {parseFloat(selectedProduct.price).toFixed(2)}</div>
+                    <p className="modal-product-description">{selectedProduct.description || "No description available."}</p>
+                </div>
+
+                <div className="modal-sticky-footer">
+                    <div className="modal-quantity-selector">
+                        <button className="quantity-btn" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                        <span className="quantity-number">{quantity}</span>
+                        <button className="quantity-btn" onClick={() => setQuantity(quantity + 1)}>+</button>
+                    </div>
+                    <button className="modal-add-btn" onClick={closeModal}>
+                        Add to order • ILS {(parseFloat(selectedProduct.price) * quantity).toFixed(2)}
+                    </button>
+                </div>
             </div>
-          )}
-        </section>
-      </main>
-    </div>
-  );
+        </div>
+    );
+
+    if (loading) return <div>Loading...</div>;
+
+    return (
+        <div className="restaurant-view-page">
+            {/* ... Hero and Main Content ... */}
+
+            {/* Modal - Floating on top of EVERYTHING */}
+            {selectedProduct && (
+                <div className="modal-overlay" onClick={closeModal}>
+                    <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+                        <button className="close-btn" onClick={closeModal}>×</button>
+
+                        <img src={selectedProduct.image || defaultPlaceholder} alt={selectedProduct.name} className="modal-img" />
+
+                        <div className="modal-details">
+                            <h2>{selectedProduct.name}</h2>
+                            <p className="price">ILS {parseFloat(selectedProduct.price).toFixed(2)}</p>
+                            <p className="desc">{selectedProduct.description || "No description."}</p>
+                        </div>
+
+                        <div className="modal-footer">
+                            <div className="qty-controls">
+                                <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                                <span>{quantity}</span>
+                                <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                            </div>
+                            <button className="add-btn" onClick={closeModal}>
+                                Add to order • ILS {(parseFloat(selectedProduct.price) * quantity).toFixed(2)}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default RestaurantView;

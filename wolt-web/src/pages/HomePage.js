@@ -92,11 +92,12 @@ function HomePage() {
           <div className="dashboard-group">
             <h1 className="group-main-title">All Restaurants in Your Area 📍</h1>
             {furtherRestaurants.map(res => (
-              <RestaurantSection
-                key={res.id}
-                restaurant={res}
-                distance={res.computedDistance}
-              />
+              <Link to={`/restaurant/${res.id}`} key={res.id} className="restaurant-card-link">
+                <RestaurantSection
+                  restaurant={res}
+                  distance={res.computedDistance}
+                />
+              </Link>
             ))}
           </div>
         )}
