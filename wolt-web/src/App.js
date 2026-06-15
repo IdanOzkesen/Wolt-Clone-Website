@@ -7,6 +7,7 @@ import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
+import RestaurantView from './pages/RestaurantView';
 
 const MainLayout = () => {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandPage />} />
             <Route path="/discovery" element={<HomePage />} />
+            <Route path="/restaurant/:id" element={<RestaurantView />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />
