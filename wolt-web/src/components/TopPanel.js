@@ -2,9 +2,10 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import AddressModal from "./AddressModal";
-import Button from "./Buttons"; 
+import Button from "./Buttons";
 import "./TopPanel.css";
 import woltLogo from "../assets/logo.png";
+
 
 function TopPanel() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ function TopPanel() {
   const { isLoggedIn, userData, logout } = useContext(AuthContext);
 
   const [showAddressModal, setShowAddressModal] = useState(false);
-  
+
   // Lazily initialize the address state from localStorage
   const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
 
@@ -49,21 +50,24 @@ function TopPanel() {
   return (
     <>
       <header className="top-panel">
-        {/* Interactive Logo Wrapper */}
-        <div className="top-panel-logo-wrapper" onClick={() => navigate("/")}>
-          <img 
-            src={woltLogo} 
-            alt="Wolt Clone" 
-            className="top-panel-circular-logo" 
-          />
-        </div>
 
-        <div className="top-panel-search">
-          <input
-            type="text"
-            placeholder="Search for restaurants..."
-            className="search-input"
-          />
+        {/* LEFT SECTION: Logo & Address */}
+        <div className="top-panel-left">
+          <div className="top-panel-logo-wrapper" onClick={() => navigate("/")}>
+            <img
+              src={woltLogo}
+              alt="Wolt Clone"
+              className="top-panel-circular-logo"
+            />
+          </div>
+
+          <button className="top-panel-address" onClick={() => setShowAddressModal(true)}>
+            <div className="address-icon-wrapper">
+              <span role="img" aria-label="location">📍</span>
+            </div>
+            <span className="address-text">{displayAddress}</span>
+            <span className="chevron-icon">⌄</span>
+          </button>
         </div>
 
         {/* MIDDLE SECTION: Search Bar (Hidden on LandPage) */}
@@ -92,7 +96,7 @@ function TopPanel() {
                 Log In
               </Button>
               <Button variant="primary" onClick={() => navigate("/signup")}>
-                 Sign Up
+                Sign Up
               </Button>
             </>
           )}
