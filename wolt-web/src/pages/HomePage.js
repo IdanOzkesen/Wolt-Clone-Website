@@ -3,6 +3,7 @@ import "./HomePage.css";
 import CategorySlider from "../components/CategorySlider";
 import RestaurantSection from "../components/RestaurantSection";
 import { apiFetch } from '../services/api';
+import { Link } from "react-router-dom";
 
 
 function HomePage() {
@@ -54,16 +55,16 @@ function HomePage() {
 
   return (
     <div className="discovery-page-container">
-      
+
       {/* Top horizontal circular categories slider with sync state */}
-      <CategorySlider 
-        restaurants={restaurants} 
+      <CategorySlider
+        restaurants={restaurants}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
 
       <main className="sections-list">
-        
+
         {/* If the filter yields no results */}
         {filteredRestaurants.length === 0 && (
           <div className="no-results-placeholder">
@@ -76,11 +77,12 @@ function HomePage() {
           <div className="dashboard-group">
             <h1 className="group-main-title">Popular Nearby (Under 2 km) 🛵</h1>
             {nearbyRestaurants.map(res => (
-              <RestaurantSection 
-                key={res.id} 
-                restaurant={res} 
-                distance={res.computedDistance} 
-              />
+              <Link to={`/restaurant/${res.id}`} key={res.id} className="restaurant-card-link">
+                <RestaurantSection
+                  restaurant={res}
+                  distance={res.computedDistance}
+                />
+              </Link>
             ))}
           </div>
         )}
@@ -90,10 +92,10 @@ function HomePage() {
           <div className="dashboard-group">
             <h1 className="group-main-title">All Restaurants in Your Area 📍</h1>
             {furtherRestaurants.map(res => (
-              <RestaurantSection 
-                key={res.id} 
-                restaurant={res} 
-                distance={res.computedDistance} 
+              <RestaurantSection
+                key={res.id}
+                restaurant={res}
+                distance={res.computedDistance}
               />
             ))}
           </div>
