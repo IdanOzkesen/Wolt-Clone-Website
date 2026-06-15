@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import AddressModal from "./AddressModal";
 import Button from "./Buttons"; 
 import "./TopPanel.css";
+import woltLogo from "../assets/logo.png";
 
 function TopPanel() {
   const navigate = useNavigate();
@@ -48,21 +49,21 @@ function TopPanel() {
   return (
     <>
       <header className="top-panel">
-        
-        {/* LEFT SECTION: Logo & Address */}
-        <div className="top-panel-left">
-          <div className="top-panel-logo" onClick={() => navigate("/")}>
-            <span className="brand-text">Wolt</span>
-            <span className="clone-text">Clone</span>
-          </div>
+        {/* Interactive Logo Wrapper */}
+        <div className="top-panel-logo-wrapper" onClick={() => navigate("/")}>
+          <img 
+            src={woltLogo} 
+            alt="Wolt Clone" 
+            className="top-panel-circular-logo" 
+          />
+        </div>
 
-          <button className="top-panel-address" onClick={() => setShowAddressModal(true)}>
-            <div className="address-icon-wrapper">
-              <span role="img" aria-label="location">📍</span>
-            </div>
-            <span className="address-text">{displayAddress}</span>
-            <span className="chevron-icon">⌄</span>
-          </button>
+        <div className="top-panel-search">
+          <input
+            type="text"
+            placeholder="Search for restaurants..."
+            className="search-input"
+          />
         </div>
 
         {/* MIDDLE SECTION: Search Bar (Hidden on LandPage) */}
