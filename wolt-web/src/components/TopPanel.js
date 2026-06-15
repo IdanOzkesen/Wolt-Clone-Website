@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import AddressModal from "./AddressModal";
+import Button from "./Buttons"; 
 import "./TopPanel.css";
 
 function TopPanel() {
@@ -55,36 +56,33 @@ function TopPanel() {
         <div className="top-panel-actions">
 
           {/* Address */}
-          <button
-            className="btn-address"
-            onClick={() => setShowAddressModal(true)}
-          >
+          <Button variant="secondary" onClick={() => setShowAddressModal(true)}>
             {displayAddress}
-          </button>
+          </Button>
 
           {/* Auth */}
           {isLoggedIn ? (
             <div className="user-profile">
               <span className="user-name">Hello, {displayName}</span>
-              <button className="btn-logout" onClick={handleLogout}>
+              <Button variant="secondary" onClick={handleLogout}>
                 Log Out
-              </button>
+              </Button>
             </div>
           ) : (
             <>
-              <button className="btn-login" onClick={() => navigate("/login")}>
+              <Button variant="secondary" onClick={() => navigate("/login")}>
                 Log In
-              </button>
-              <button className="btn-signup" onClick={() => navigate("/signup")}>
+              </Button>
+              <Button variant="primary" onClick={() => navigate("/signup")}>
                 Sign Up
-              </button>
+              </Button>
             </>
           )}
 
           {/* 🌙 RIGHT MOST BUTTON */}
-          <button className="btn-theme" onClick={toggleTheme}>
+          <Button variant="secondary" onClick={toggleTheme}>
             {darkMode ? "let there be light 🧙 ☀️" : "the dark knight rises 🦇 🌙"}
-          </button>
+          </Button>
 
         </div>
       </header>

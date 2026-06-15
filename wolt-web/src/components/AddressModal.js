@@ -1,6 +1,7 @@
 import "./AddressModal.css";
 import React, { useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { apiFetch } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
 function AddressModal({ isOpen, onClose, onSave }) {
@@ -29,20 +30,45 @@ function AddressModal({ isOpen, onClose, onSave }) {
 
     if (!isOpen) return null;
 
-    const handleSave = () => {
+    // Made the function async to handle the API call
+    const handleSave = async () => { 
         const fullAddress = `${country}, ${address}`;
 
+        // Check if the user is logged in - if so, update the server
         if (isLoggedIn && userData) {
+            try {
+                // 1. Extract the user ID from the JWT token
+                const token = localStorage.getItem('accessToken');
+                if (token) {
+                    const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+                    const userId = tokenPayload.id;
+
+                    // 2. Send the new address to the Node.js server
+                    // Note: If your backend expects a PUT request instead of PATCH, change the method here
+                    const response = await apiFetch(`/users/${userId}`, {
+                        method: 'PATCH', 
+                        body: JSON.stringify({ address: fullAddress })
+                    });
+
+                    if (!response.ok) {
+                        console.error("Failed to update address on server");
+                    }
+                }
+            } catch (error) {
+                console.error("Error updating address:", error);
+            }
+
+            // 3. Update the local state so the UI refreshes immediately
             const updatedUserData = {
                 ...userData,
                 address: fullAddress
             };
-            
             if (setUserData) {
                 setUserData(updatedUserData);
             }
         }
         
+        // 4. Save to localStorage as well (useful for guest users who are not logged in)
         localStorage.setItem('address', fullAddress);
 
         if (onSave) {

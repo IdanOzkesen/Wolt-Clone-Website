@@ -1,0 +1,38 @@
+/* Base styles applied to ALL buttons */
+.base-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Click animation for all buttons */
+.base-btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary Template - Uses variables from index.css */
+.btn-primary {
+  background: var(--btn-primary);
+  color: var(--btn-text);
+}
+
+.btn-primary:hover {
+  background: var(--btn-primary-hover);
+}
+
+/* Secondary Template - Good for "Cancel" or "Go Back" */
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background: var(--card-hover);
+}
