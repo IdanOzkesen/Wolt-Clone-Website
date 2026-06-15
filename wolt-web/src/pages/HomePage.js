@@ -7,6 +7,7 @@ import { apiFetch } from '../services/api';
 
 function HomePage() {
   const [restaurants, setRestaurants] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null); // Track the active category filter
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,7 +20,6 @@ function HomePage() {
 
         // Data Processing: Inject mock distances to enable filtering by distance
         const processedData = (data || []).map((res, index) => {
-          // Generates a dynamic mock distance between 0.5 and 5.0 km based on index
           const mockDistance = parseFloat((((index * 7) % 45) / 10 + 0.5).toFixed(1));
           return {
             ...res,
@@ -42,22 +42,39 @@ function HomePage() {
   if (loading) return <div className="wolt-loading">Loading delicious content...</div>;
   if (error) return <div className="wolt-error">{error}</div>;
 
-  // Split and filter data dynamically based ONLY on distance criteria
-  const nearbyRestaurants = restaurants.filter(res => res.computedDistance <= 2.0);
-  const furtherRestaurants = restaurants.filter(res => res.computedDistance > 2.0);
+  // Step 1: Filter the master list dynamically by the selected category (if one is active)
+  const filteredRestaurants = selectedCategory
+    ? restaurants.filter(res => res.category === selectedCategory)
+    : restaurants;
+
+  // Step 2: Split the ALREADY filtered data based ONLY on distance criteria
+  const nearbyRestaurants = filteredRestaurants.filter(res => res.computedDistance <= 2.0);
+  const furtherRestaurants = filteredRestaurants.filter(res => res.computedDistance > 2.0);
 
   return (
     <div className="discovery-page-container">
       
-      {/* Top horizontal circular categories slider */}
-      <CategorySlider />
+      {/* Top horizontal circular categories slider with sync state */}
+      <CategorySlider 
+        restaurants={restaurants} 
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+      />
 
       <main className="sections-list">
         
+        {/* If the filter yields no results */}
+        {filteredRestaurants.length === 0 && (
+          <div className="no-results-placeholder">
+            <p>No restaurants found matching "{selectedCategory}" in your area.</p>
+          </div>
+        )}
+
         {/* Section 1: Popular Nearby (Distance <= 2.0 km) */}
         {nearbyRestaurants.length > 0 && (
           <div className="dashboard-group">
             <h1 className="group-main-title">Popular Nearby (Under 2 km) 🛵</h1>
+            
             {nearbyRestaurants.map(res => (
               <RestaurantSection 
                 key={res.id} 
