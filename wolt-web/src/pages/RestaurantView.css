@@ -1,0 +1,120 @@
+.restaurant-view-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+/* Banner Design */
+.restaurant-hero {
+  background: linear-gradient(135deg, #111b24 0%, #1a2a36 100%);
+  height: 320px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  color: #ffffff;
+}
+
+.hero-overlay {
+  width: 100%;
+  padding: 40px 10%;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+}
+
+.restaurant-tag {
+  background-color: #009de0;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.restaurant-view-name {
+  font-size: 42px;
+  margin: 10px 0 5px 0;
+  font-weight: 800;
+}
+
+.jump-to-menu-btn {
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 8px 16px;
+  margin-top: 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.jump-to-menu-btn:hover {
+  background: #ffffff;
+  color: #111b24;
+}
+
+/* Menu Layout */
+.restaurant-view-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.section-menu-title {
+  font-size: 28px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #f3f3f3;
+  padding-bottom: 10px;
+}
+
+.products-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.product-item-card {
+  border: 1px solid #e4e4e4;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.product-item-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.product-card-details h3 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+}
+
+.product-desc {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 10px 0;
+}
+
+.product-price {
+  font-weight: 700;
+  color: #222;
+}
+
+.add-to-cart-action-btn {
+  background-color: #f2f4f5;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  color: #009de0;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.add-to-cart-action-btn:hover {
+  background-color: #e2e5e7;
+}
