@@ -5,16 +5,20 @@ import AddressModal from "./AddressModal";
 import Button from "./Buttons";
 import "./TopPanel.css";
 import woltLogo from "../assets/logo.png";
-
+import { useCart } from '../context/CartContext'; 
+import CartSidebar from './CartSidebar';
 
 function TopPanel() {
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn, userData, logout } = useContext(AuthContext);
-
+  
+  // Cart States
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { totalItemsCount } = useCart();
+  
+  // Address States
   const [showAddressModal, setShowAddressModal] = useState(false);
-
-  // Lazily initialize the address state from localStorage
   const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
 
   // Sync address from localStorage whenever the route changes
@@ -81,8 +85,14 @@ function TopPanel() {
           </div>
         )}
 
-        {/* RIGHT SECTION: Auth & Theme Actions */}
+        {/* RIGHT SECTION: Auth, Cart & Theme Actions */}
         <div className="top-panel-actions">
+          
+          {/* Shopping Cart Toggle Button */}
+          <Button variant="secondary" onClick={() => setIsCartOpen(true)}>
+            🛒 {totalItemsCount > 0 && <span style={{ marginLeft: '4px', fontWeight: 'bold' }}>({totalItemsCount})</span>}
+          </Button>
+
           {isLoggedIn ? (
             <div className="user-profile">
               <span className="user-name">Hello, {displayName}</span>
@@ -116,6 +126,9 @@ function TopPanel() {
           setAddress(fullAddress);
         }}
       />
+
+      {/* Cart Sidebar rendered at the root level so it covers the screen properly */}
+      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
 }
