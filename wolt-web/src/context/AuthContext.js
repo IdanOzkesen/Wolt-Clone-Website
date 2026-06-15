@@ -101,9 +101,9 @@ export function AuthProvider({ children }) {
 
         // Fallback to formData.userName to guarantee a name exists even if the server omits it
         const userDataToSave = {
-          name: userInfo.name,
-          userDisplayName: userInfo.userDisplayName,
-          address: userInfo.address,
+          name: userInfo.name || formData.userName,
+          userDisplayName: userInfo.userDisplayName || userInfo.name || formData.userName,
+          address: userInfo.address || "",
           profilePhoto: userInfo.profilePhoto || ""
         };
 

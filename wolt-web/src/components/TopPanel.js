@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import AddressModal from "./AddressModal";
 import Button from "./Buttons"; 
@@ -8,19 +8,27 @@ import woltLogo from "../assets/logo.png";
 
 function TopPanel() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isLoggedIn, userData, logout } = useContext(AuthContext);
 
   const [showAddressModal, setShowAddressModal] = useState(false);
   
-  // Lazily initialize the address state from localStorage to persist guest data across F5 refreshes
+  // Lazily initialize the address state from localStorage
   const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
 
-  // 🌙 Theme state
+  // Sync address from localStorage whenever the route changes
+  useEffect(() => {
+    const storedAddress = localStorage.getItem('address');
+    if (storedAddress) {
+      setAddress(storedAddress);
+    }
+  }, [location.pathname]);
+
+  // Theme state
   const [darkMode, setDarkMode] = useState(false);
 
   const toggleTheme = () => {
     setDarkMode((prev) => !prev);
-
     if (!darkMode) {
       document.documentElement.classList.add("dark");
     } else {
@@ -30,13 +38,13 @@ function TopPanel() {
 
   const handleLogout = () => {
     logout();
-    // No need to navigate here, the AuthContext logout function safely handles the redirection
   };
 
   const displayName = userData?.userDisplayName || "";
-
-  // Priority: 1. Logged-in user data, 2. Current local session state (including guest localStorage), 3. Default text
   const displayAddress = userData?.address || address || "Set Address";
+
+  // Determine if we are on the LandPage to conditionally hide the search bar
+  const isLandPage = location.pathname === "/";
 
   return (
     <>
@@ -58,14 +66,19 @@ function TopPanel() {
           />
         </div>
 
+        {/* MIDDLE SECTION: Search Bar (Hidden on LandPage) */}
+        {!isLandPage && (
+          <div className="top-panel-search">
+            <input
+              type="text"
+              placeholder="Search in Wolt..."
+              className="search-input"
+            />
+          </div>
+        )}
+
+        {/* RIGHT SECTION: Auth & Theme Actions */}
         <div className="top-panel-actions">
-
-          {/* Address */}
-          <Button variant="secondary" onClick={() => setShowAddressModal(true)}>
-            {displayAddress}
-          </Button>
-
-          {/* Auth */}
           {isLoggedIn ? (
             <div className="user-profile">
               <span className="user-name">Hello, {displayName}</span>
@@ -79,17 +92,17 @@ function TopPanel() {
                 Log In
               </Button>
               <Button variant="primary" onClick={() => navigate("/signup")}>
-                Sign Up
+                 Sign Up
               </Button>
             </>
           )}
 
-          {/* 🌙 RIGHT MOST BUTTON */}
+          {/* Theme Toggle Button */}
           <Button variant="secondary" onClick={toggleTheme}>
-            {darkMode ? "let there be light 🧙 ☀️" : "the dark knight rises 🦇 🌙"}
+            {darkMode ? "☀️" : "🌙"}
           </Button>
-
         </div>
+
       </header>
 
       <AddressModal

@@ -1,98 +1,137 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* MAIN */
+/* Main container */
 .LandPage-container {
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Locks the page exactly to the viewport height */
+  overflow: hidden; /* Disables scrolling entirely */
+  background-color: var(--bg-primary);
 }
 
-/* HERO */
+/* ---------------- HERO SECTION ---------------- */
 .hero {
-  background: var(--brand-secondary);
-  min-height: 65vh;
+  background-color: #009de0;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 80vh; /* Takes exactly 80% of the screen height */
+  box-sizing: border-box; /* Ensures padding does not cause overflow beyond 80% */
+  padding: 72px 20px 0; /* Pushes content down so the fixed header doesn't overlap */
   text-align: center;
-  padding: 120px 20px 60px;
 }
 
 .hero-content {
-  max-width: 600px;
   width: 100%;
+  max-width: 650px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
 }
 
 .hero h1 {
+  color: white;
   font-size: 48px;
-  color: var(--text-inverse);
+  font-weight: bold;
+  margin-bottom: 40px;
+  line-height: 1.1;
+  letter-spacing: -1px;
 }
 
-/* ADDRESS BOX */
+/* Address Input Box */
 .address-box {
-  background: var(--input-bg);
   display: flex;
   align-items: center;
-  padding: 10px;
-  border-radius: 12px;
+  background: white;
+  padding: 8px 8px 8px 16px;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.geo-icon {
+  font-size: 20px;
+  margin-right: 12px;
 }
 
 .address-box input {
   flex: 1;
   border: none;
-  outline: none;
   font-size: 16px;
-  color: var(--input-text);
+  outline: none;
+  color: #202125;
 }
 
-/* BUTTONS */
-.search-btn {
-  background: var(--brand-primary);
-  color: var(--text-inverse);
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-}
-
+/* Login Hint Button */
 .login-hint-btn {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.15);
   border: none;
-  color: var(--text-inverse);
-  padding: 8px 14px;
-  border-radius: 20px;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 24px; 
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  width: fit-content;
 }
 
-/* CONTENT */
+.login-hint-btn:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ---------------- CARDS SECTION ---------------- */
 .content {
-  background: var(--bg-secondary);
-  padding: 50px;
-  margin-top: -30px;
-  border-radius: 30px 30px 0 0;
+  height: 20vh; /* Takes exactly the remaining 20% of the screen height */
+  padding: 16px 20px; /* Minimal padding for top and bottom */
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+  height: 100%; /* Automatically fits the 20vh height */
 }
 
 .card {
-  background: var(--card-bg);
-  padding: 20px;
-  border-radius: 15px;
+  flex: 1;
+  min-width: 300px;
+  height: 100%; /* Dynamic height instead of pixels to fit the screen perfectly */
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
-  transition: 0.2s;
-  color: var(--text-inverse);
 }
 
 .card:hover {
-  background: var(--card-hover);
+  transform: translateY(-2px); /* Subtle animation that prevents screen clipping */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  color: var(--text-primary);
+}
+
+.card-overlay h2 {
+  margin: 0 0 4px 0;
+  font-size: 18px; /* Slightly reduced to fit the new area */
+  font-weight: 700;
+}
+
+.card-overlay p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
 }
