@@ -1,21 +1,28 @@
-/* Main header container fixed at the top of the viewport */
+/* Main header container */
 .top-panel {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 72px;
-  background-color: var(--bg-primary); /* Updated to use CSS variable */
+  background-color: var(--bg-primary); 
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* Spreads Left, Center, and Right evenly */
   padding: 0 24px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 1000;
-  transition: background-color 0.3s ease; /* Smooth transition for dark mode toggle */
+  transition: background-color 0.3s ease; 
 }
 
-/* Logo styling with pointer cursor for navigation */
+/* Left Section: Logo + Address Group */
+.top-panel-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Logo styling */
 .top-panel-logo {
   font-size: 24px;
   font-weight: bold;
@@ -23,35 +30,80 @@
   user-select: none;
 }
 
-.brand-text { color: var(--brand-primary); } /* Updated to use CSS variable */
-.clone-text { color: var(--text-primary); } /* Updated to use CSS variable */
+.brand-text { color: var(--brand-primary); } 
+.clone-text { color: var(--text-primary); } 
 
-/* Search container - takes available space with maximum width */
+/* Wolt-Style Address Button */
+.top-panel-address {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px 6px 6px;
+  border-radius: 30px;
+  transition: background-color 0.2s ease;
+}
+
+.top-panel-address:hover {
+  background-color: var(--card-hover);
+}
+
+.address-icon-wrapper {
+  background-color: rgba(0, 157, 224, 0.1); /* Subtle light blue circle */
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.address-text {
+  color: var(--brand-primary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.chevron-icon {
+  color: var(--brand-primary);
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 2px;
+}
+
+/* Search container */
 .top-panel-search {
   flex: 1;
   max-width: 500px;
   margin: 0 20px;
 }
 
-/* Search input - box-sizing prevents the padding from causing overflow issues */
+/* Search input */
 .search-input {
   width: 100%;
-  padding: 12px 16px;
+  padding: 12px 16px 12px 20px;
   border: none;
-  background-color: var(--input-bg); /* Updated to use CSS variable */
-  color: var(--input-text); /* Updated to use CSS variable */
-  border-radius: 8px;
+  background-color: var(--card-bg); 
+  color: var(--text-primary); 
+  border-radius: 24px; /* Make it completely rounded like the real Wolt app */
   font-size: 14px;
+  font-weight: 500;
   outline: none;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box; 
 }
 
 .search-input:focus {
-  background-color: var(--card-hover); /* Updated to use CSS variable */
+  background-color: var(--card-hover); 
 }
 
-/* Actions container - flex-shrink: 0 prevents the search bar from squishing the buttons */
+.search-input:focus {
+  background-color: var(--card-hover); 
+}
+
+/* Actions container */
 .top-panel-actions {
   display: flex;
   align-items: center;
@@ -68,5 +120,5 @@
 
 .user-name {
   font-weight: 500;
-  color: var(--text-primary); /* Updated to use CSS variable */
+  color: var(--text-primary); 
 }

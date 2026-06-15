@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/Buttons"; 
+import AddressModal from "../components/AddressModal"; // Imported the modal component
 import "./LandPage.css";
 
 const LandPage = () => {
   const navigate = useNavigate();
+  // State to control the visibility of the address modal
+  const [showAddressModal, setShowAddressModal] = useState(false);
 
   return (
     <div className="LandPage-container">
@@ -21,11 +25,15 @@ const LandPage = () => {
             <input
               type="text"
               placeholder="Where should we deliver your order?"
+              readOnly // Prevents typing directly into the input
+              onClick={() => setShowAddressModal(true)} // Opens modal on input click
+              style={{ cursor: 'pointer' }} // Changes cursor to indicate it's clickable
             />
 
-            <button className="search-btn">
+            {/* Search button triggers the address modal */}
+            <Button variant="primary" onClick={() => setShowAddressModal(true)}>
               Search
-            </button>
+            </Button>
           </div>
 
           <button
@@ -57,6 +65,13 @@ const LandPage = () => {
 
         </div>
       </section>
+
+      {/* Mount the modal component and control its state */}
+      <AddressModal
+        isOpen={showAddressModal}
+        onClose={() => setShowAddressModal(false)}
+        // onSave is handled internally by the modal itself, including navigation
+      />
     </div>
   );
 };
