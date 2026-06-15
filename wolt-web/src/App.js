@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext'; // הוספנו את הייבוא של העגלה
 
 import TopPanel from './components/TopPanel';
 import LandPage from './pages/LandPage';
@@ -21,21 +22,22 @@ const MainLayout = () => {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          
+      <CartProvider> {/* המעטפת של עגלת הקניות שומרת על הסטייט לכל האפליקציה */}
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<LandPage />} />
+              <Route path="/discovery" element={<HomePage />} />
+              <Route path="/restaurant/:id" element={<RestaurantView />} />
+            </Route>
 
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<LandPage />} />
-            <Route path="/discovery" element={<HomePage />} />
-            <Route path="/restaurant/:id" element={<RestaurantView />} />
-          </Route>
-
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   );
 }
