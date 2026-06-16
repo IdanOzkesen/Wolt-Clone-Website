@@ -1,11 +1,16 @@
-import React, { useContext } from 'react';
-//import { RestaurantContext } from '../context/RestaurantContext';
+import React, { useContext, useEffect } from 'react';
+import { RestaurantContext } from '../context/RestaurantContext';
 import { useNavigate } from 'react-router-dom';
 import DynamicForm from '../components/DynamicForm';
+import { AuthContext } from "../context/AuthContext";
+
+
 
 function AddRestaurantPage() {
-    //const { addRestaurant } = useContext(RestaurantContext);
+    const { addRestaurant } = useContext(RestaurantContext);
     const navigate = useNavigate();
+    const { isLoggedIn } = useContext(AuthContext);
+
 
     const fields = [
         { name: 'name', label: 'Restaurant Name', placeholder: 'Enter Restaurant Name', required: true },
@@ -15,6 +20,12 @@ function AddRestaurantPage() {
         { name: 'profilePhoto', label: 'Restaurant Photo', type: 'file', required: false }
     ];
 
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate('/login', { replace: true });
+    }
+  }, [navigate]);
+
     const handleSubmit = async (formData) => {
         // הכנה של נתוני ה-FormData
         const dataToSend = new FormData();
@@ -22,13 +33,13 @@ function AddRestaurantPage() {
             dataToSend.append(key, value);
         });
 
-        /*const result = await addRestaurant(dataToSend);
-    
+        const result = await addRestaurant(dataToSend);
+
         if (result.success) {
-          navigate(`/restaurant/${result.data.id}`);
+            navigate(`/restaurant/${result.data.id}`);
         } else {
-          alert(result.error);
-        }*/
+            alert(result.error);
+        }
     };
 
     return (
