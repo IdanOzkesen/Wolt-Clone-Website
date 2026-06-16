@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import './RestaurantView.css';
 import { apiFetch } from '../services/api';
 import { useCart } from '../context/CartContext'; // 1. Imported the cart context
@@ -7,10 +7,12 @@ import defaultPlaceholder from '../assets/default-placeholder.jpg';
 import { AuthContext } from '../context/AuthContext';
 
 function RestaurantView() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { userData, isLoggedIn } = useContext(AuthContext);
   // 2. Destructure the addToCart function from our global state
   const { addToCart } = useCart();
+
 
   // State Management
   const [restaurant, setRestaurant] = useState(null);
@@ -58,7 +60,7 @@ function RestaurantView() {
           'userId': userData.userId
         }
       });
-      if (res.ok) window.location.href = "/";
+      if (res.ok) navigate("/", { replace: true });
     }
   };
 
