@@ -13,8 +13,9 @@ function TopPanel() {
   const location = useLocation();
   const { isLoggedIn, userData, logout } = useContext(AuthContext);
   
-  // Cart States
+  // Cart & Dropdown States
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const { totalItemsCount } = useCart();
   
   // Address States
@@ -42,27 +43,32 @@ function TopPanel() {
   };
 
   const handleLogout = () => {
+    setShowUserMenu(false);
     logout();
   };
 
+  // Safe data extraction with fallbacks
   const displayName = userData?.userDisplayName || "";
   const displayAddress = userData?.address || address || "Set Address";
-
-  // Determine if we are on the LandPage to conditionally hide the search bar
+  const profilePhoto = userData?.profilePhoto || ""; 
   const isLandPage = location.pathname === "/";
+
+  // Helper function to extract initials (e.g., "John Doe" -> "JD")
+  const getInitials = (name) => {
+    if (!name) return "";
+    const words = name.trim().split(" ");
+    if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+    return words[0][0].toUpperCase();
+  };
 
   return (
     <>
       <header className="top-panel">
-
+        
         {/* LEFT SECTION: Logo & Address */}
         <div className="top-panel-left">
           <div className="top-panel-logo-wrapper" onClick={() => navigate("/")}>
-            <img
-              src={woltLogo}
-              alt="Wolt Clone"
-              className="top-panel-circular-logo"
-            />
+            <img src={woltLogo} alt="Wolt Clone" className="top-panel-circular-logo" />
           </div>
 
           <button className="top-panel-address" onClick={() => setShowAddressModal(true)}>
@@ -77,57 +83,70 @@ function TopPanel() {
         {/* MIDDLE SECTION: Search Bar (Hidden on LandPage) */}
         {!isLandPage && (
           <div className="top-panel-search">
-            <input
-              type="text"
-              placeholder="Search in Wolt..."
-              className="search-input"
-            />
+            <input type="text" placeholder="Search in Wolt..." className="search-input" />
           </div>
         )}
 
-        {/* RIGHT SECTION: Auth, Cart & Theme Actions */}
+        {/* RIGHT SECTION: Actions (Cart, Profile, Theme) */}
         <div className="top-panel-actions">
           
-          {/* Shopping Cart Toggle Button */}
-          <Button variant="secondary" onClick={() => setIsCartOpen(true)}>
-            🛒 {totalItemsCount > 0 && <span style={{ marginLeft: '4px', fontWeight: 'bold' }}>({totalItemsCount})</span>}
-          </Button>
+          {/* Circular Cart Button */}
+          <button className="icon-circle-btn" onClick={() => setIsCartOpen(true)}>
+            🛍️
+            {totalItemsCount > 0 && <span className="cart-badge">{totalItemsCount}</span>}
+          </button>
 
           {isLoggedIn ? (
-            <div className="user-profile">
-              <span className="user-name">Hello, {displayName}</span>
-              <Button variant="secondary" onClick={handleLogout}>
-                Log Out
-              </Button>
+            <div className="user-menu-container">
+              {/* Profile Pill Button */}
+              <button 
+                className="user-profile-pill" 
+                onClick={() => setShowUserMenu(!showUserMenu)}
+              >
+                <div className="user-avatar">
+                  {/* Render photo if it exists, otherwise fallback to initials */}
+                  {profilePhoto ? (
+                    <img src={profilePhoto} alt="Profile" className="user-avatar-img" />
+                  ) : (
+                    getInitials(displayName)
+                  )}
+                </div>
+                <span className="chevron-icon">⌄</span>
+              </button>
+
+              {/* Dropdown Menu */}
+              {showUserMenu && (
+                <div className="user-dropdown">
+                  {profilePhoto && (
+                    <div className="dropdown-profile-pic">
+                      <img src={profilePhoto} alt="User Profile" />
+                    </div>
+                  )}
+                  <button onClick={handleLogout}>Log Out</button>
+                </div>
+              )}
             </div>
           ) : (
             <>
-              <Button variant="secondary" onClick={() => navigate("/login")}>
-                Log In
-              </Button>
-              <Button variant="primary" onClick={() => navigate("/signup")}>
-                Sign Up
-              </Button>
+              <Button variant="secondary" onClick={() => navigate("/login")}>Log In</Button>
+              <Button variant="primary" onClick={() => navigate("/signup")}>Sign Up</Button>
             </>
           )}
 
           {/* Theme Toggle Button */}
-          <Button variant="secondary" onClick={toggleTheme}>
+          <button className="icon-circle-btn" onClick={toggleTheme}>
             {darkMode ? "☀️" : "🌙"}
-          </Button>
+          </button>
         </div>
-
       </header>
 
       <AddressModal
         isOpen={showAddressModal}
         onClose={() => setShowAddressModal(false)}
-        onSave={(fullAddress) => {
-          setAddress(fullAddress);
-        }}
+        onSave={(fullAddress) => { setAddress(fullAddress); }}
       />
 
-      {/* Cart Sidebar rendered at the root level so it covers the screen properly */}
+      {/* Cart Sidebar rendered at the root level */}
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
