@@ -52,7 +52,6 @@ function RestaurantView() {
       <header className="restaurant-hero">
         <div className="hero-overlay">
           <div className="hero-content">
-            <span className="restaurant-tag">{restaurant.category || "General"}</span>
             <h1 className="restaurant-view-name">{restaurant.name}</h1>
             <p className="restaurant-view-meta">📍 {restaurant.address} • 📞 {restaurant.phoneNum}</p>
           </div>
@@ -77,7 +76,7 @@ function RestaurantView() {
                     <p className="product-desc-text">
                       {product.description || "No description available for this item."}
                     </p>
-                    <span className="product-price-text">${parseFloat(product.price).toFixed(2)}</span>
+                    <span className="product-price-text">₪{parseFloat(product.price).toFixed(2)}</span>
                   </div>
 
                   <div className="product-image-block">

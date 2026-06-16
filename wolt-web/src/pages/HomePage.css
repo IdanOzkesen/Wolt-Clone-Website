@@ -19,22 +19,22 @@
 }
 
 .group-main-title {
-  font-size: 24px;
-  font-weight: 800;
-  color: #141414;
-  margin: 0 16px 20px 16px;
-  border-bottom: 2px solid #f3f4f6;
-  padding-bottom: 8px;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary); /* Adapts to theme */
+    margin: 0 16px 20px 16px;
+    border-bottom: 2px solid var(--bg-secondary); /* Adapts to theme */
+    padding-bottom: 8px;
 }
 
 .wolt-loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-  font-size: 18px;
-  font-weight: 600;
-  color: #009de0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--brand-primary); /* Uses your brand variable */
 }
 
 /* Container to align title and button on opposite sides */
@@ -61,10 +61,9 @@
   /* Fully rounded pill shape */
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 157, 224, 0.2);
+  box-shadow: 0 2px 6px var(--card-bg);
 }
 
-/* Hover and Interactive micro-interactions */
 .create-restaurant-btn:hover {
   background-color: #0082ba;
   /* Darker blue on hover */
@@ -74,5 +73,5 @@
 
 .create-restaurant-btn:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 4px rgba(0, 157, 224, 0.2);
+  box-shadow: 0 2px 4px var(--card-bg);
 }
