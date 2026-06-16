@@ -1,4 +1,8 @@
-/* Dark overlay that covers the entire screen */
+/* =========================================================
+   Cart Sidebar - Base (Light Mode) & Dark Mode Overrides
+   ========================================================= */
+
+/* Dark overlay remains dark regardless of theme */
 .cart-overlay {
   position: fixed;
   top: 0;
@@ -8,7 +12,7 @@
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 2000;
   display: flex;
-  justify-content: flex-end; /* Aligns the sidebar to the right */
+  justify-content: flex-end; 
 }
 
 /* The actual sidebar container */
@@ -16,12 +20,19 @@
   width: 100%;
   max-width: 400px;
   height: 100%;
-  background-color: #131924; /* Matches the dark menu cards */
-  color: #ffffff;
+  background-color: #ffffff; /* Light background */
+  color: #202125; /* Light text */
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
   animation: slideIn 0.3s ease-out forwards;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dark .cart-sidebar {
+  background-color: #131924; /* Dark menu cards */
+  color: #ffffff;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes slideIn {
@@ -31,10 +42,14 @@
 
 .cart-header {
   padding: 24px;
-  border-bottom: 1px solid #1e2635;
+  border-bottom: 1px solid #e2e8f0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.dark .cart-header {
+  border-bottom-color: #1e2635;
 }
 
 .cart-header h2 {
@@ -45,12 +60,18 @@
 .close-cart-btn {
   background: transparent;
   border: none;
-  color: #8a99ad;
+  color: #5f6368;
   font-size: 32px;
   cursor: pointer;
+  transition: color 0.2s;
 }
 
-.close-cart-btn:hover { color: #ffffff; }
+.dark .close-cart-btn {
+  color: #8a99ad;
+}
+
+.close-cart-btn:hover { color: #202125; }
+.dark .close-cart-btn:hover { color: #ffffff; }
 
 .cart-body {
   flex: 1;
@@ -64,8 +85,12 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #8a99ad;
+  color: #5f6368;
   font-size: 18px;
+}
+
+.dark .empty-cart-msg {
+  color: #8a99ad;
 }
 
 .empty-cart-msg span { font-size: 48px; margin-bottom: 16px; }
@@ -89,7 +114,11 @@
   align-items: center;
   padding-bottom: 16px;
   margin-bottom: 16px;
-  border-bottom: 1px solid #1e2635;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dark .cart-item-row {
+  border-bottom-color: #1e2635;
 }
 
 .cart-item-details {
@@ -102,15 +131,26 @@
   margin-bottom: 4px;
 }
 
-.cart-item-price { color: #5aa7ff; }
+.cart-item-price { 
+  color: #009de0; 
+  font-weight: 600;
+}
+
+.dark .cart-item-price { 
+  color: #5aa7ff; 
+}
 
 .cart-item-controls {
   display: flex;
   align-items: center;
   gap: 12px;
-  background-color: #1a2436;
+  background-color: #f8f9fa;
   padding: 6px 12px;
   border-radius: 20px;
+}
+
+.dark .cart-item-controls {
+  background-color: #1a2436;
 }
 
 .qty-btn {
@@ -124,8 +164,13 @@
 
 .cart-footer {
   padding: 24px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e2e8f0;
+}
+
+.dark .cart-footer {
   background-color: #0b0f17;
-  border-top: 1px solid #1e2635;
+  border-top-color: #1e2635;
 }
 
 .cart-total-row {
@@ -146,12 +191,18 @@
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .go-to-checkout-btn:hover:not(:disabled) { background-color: #007bb5; }
+
 .go-to-checkout-btn:disabled {
+  background-color: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.dark .go-to-checkout-btn:disabled {
   background-color: #1e2635;
   color: #8a99ad;
-  cursor: not-allowed;
 }

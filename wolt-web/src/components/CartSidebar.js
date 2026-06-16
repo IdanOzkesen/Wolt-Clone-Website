@@ -1,16 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import './CartSidebar.css';
 
 const CartSidebar = ({ isOpen, onClose }) => {
   const { cart, totalPrice, removeFromCart, addToCart } = useCart();
+  const navigate = useNavigate();
 
   // If the sidebar is not toggled open, don't render anything
   if (!isOpen) return null;
 
   return (
     <div className="cart-overlay" onClick={onClose}>
-      {/* Prevent clicks inside the sidebar from closing the overlay */}
       <div className="cart-sidebar" onClick={(e) => e.stopPropagation()}>
         
         <div className="cart-header">
@@ -37,16 +38,10 @@ const CartSidebar = ({ isOpen, onClose }) => {
                     </div>
 
                     <div className="cart-item-controls">
-                      <button 
-                        className="qty-btn" 
-                        onClick={() => removeFromCart(item.productId)}
-                      >
-                        -
-                      </button>
+                      <button className="qty-btn" onClick={() => removeFromCart(item.productId)}>-</button>
                       <span className="qty-display">{item.quantity}</span>
                       <button 
                         className="qty-btn" 
-                        // We reconstruct a minimal product object to pass back to addToCart
                         onClick={() => addToCart({ id: item.productId, name: item.name, price: item.price }, { id: cart.restaurantId, name: cart.restaurantName })}
                       >
                         +
@@ -68,7 +63,10 @@ const CartSidebar = ({ isOpen, onClose }) => {
           <button 
             className="go-to-checkout-btn" 
             disabled={cart.items.length === 0}
-            onClick={() => alert("Checkout flow coming soon in AAA-139!")}
+            onClick={() => {
+              onClose(); 
+              navigate('/checkout'); 
+            }}
           >
             Go to checkout
           </button>
