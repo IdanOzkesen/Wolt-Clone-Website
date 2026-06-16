@@ -45,7 +45,7 @@ function TopPanel() {
   const handleLogout = () => {
     setShowUserMenu(false);
     logout();
-    navigate('/')
+    navigate('/');
   };
 
   // Safe data extraction with fallbacks
@@ -123,7 +123,24 @@ function TopPanel() {
                       <img src={profilePhoto} alt="User Profile" />
                     </div>
                   )}
-                  <button onClick={handleLogout}>Log Out</button>
+                  
+                  {/* New "My Orders" Button */}
+                  <button 
+                    className="dropdown-menu-btn"
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      navigate('/orders');
+                    }}>
+                    My Orders
+                  </button>
+
+                  {/* Log Out Button */}
+                  <button 
+                    className="dropdown-menu-btn logout-btn" 
+                    onClick={handleLogout}
+                  >
+                    Log Out
+                  </button>
                 </div>
               )}
             </div>

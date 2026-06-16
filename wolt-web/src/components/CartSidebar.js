@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import './CartSidebar.css';
 
 const CartSidebar = ({ isOpen, onClose }) => {
-  const { cart, totalPrice, removeFromCart, addToCart } = useCart();
+  const { cart, addToCart, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart(); 
   const navigate = useNavigate();
 
   // If the sidebar is not toggled open, don't render anything
@@ -20,6 +20,11 @@ const CartSidebar = ({ isOpen, onClose }) => {
         </div>
 
         <div className="cart-body">
+          {cart && cart.items && cart.items.length > 0 && (
+            <button className="clear-cart-btn" onClick={clearCart}>
+              🗑️ Clear All
+            </button>
+          )}
           {cart.items.length === 0 ? (
             <div className="empty-cart-msg">
               <span role="img" aria-label="sad-cart">🛒</span>

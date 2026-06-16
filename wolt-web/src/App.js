@@ -12,6 +12,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import RestaurantView from './pages/RestaurantView';
 import AddRestaurantPage from './pages/AddRestaurantPage';
 import CheckoutPage from './pages/CheckoutPage';
+import OrdersPage from './pages/OrdersPage';
 
 
 const MainLayout = () => {
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/restaurant/:id" element={<RestaurantView />} />
                 <Route path="/AddRestaurantPage" element={<AddRestaurantPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/orders" element={<OrdersPage />} />
               </Route>
 
               <Route path="*" element={<NotFoundPage />} />

@@ -1,0 +1,277 @@
+/* =========================================================
+   Orders Page - Base (Light Mode) & Dark Mode Overrides
+   ========================================================= */
+
+.orders-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 100px 20px 60px 20px;
+  color: #202125;
+  transition: color 0.2s ease;
+  min-height: 80vh;
+}
+
+.dark .orders-page-container {
+  color: #ffffff;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orders-header {
+  margin-bottom: 30px;
+}
+
+.orders-header h1 {
+  font-size: 36px;
+  margin: 0 0 8px 0;
+}
+
+.orders-header p {
+  color: #5f6368;
+  font-size: 18px;
+  margin: 0;
+}
+
+.dark .orders-header p {
+  color: #8a99ad;
+}
+
+/* =========================================================
+   Order Cards & Accordion
+   ========================================================= */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden; /* Keeps the expanded section neat */
+}
+
+.dark .order-card {
+  background-color: #131924;
+  border: 1px solid #1e2635;
+  box-shadow: none;
+}
+
+.order-card.expanded {
+  border-color: #009de0;
+}
+
+.dark .order-card.expanded {
+  border-color: #009de0;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.dark .order-card-header {
+  border-bottom-color: #1e2635;
+}
+
+.order-id {
+  font-weight: bold;
+  font-size: 18px;
+  color: #009de0;
+}
+
+.order-date {
+  color: #5f6368;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dark .order-date {
+  color: #8a99ad;
+}
+
+.order-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-detail-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-label {
+  color: #5f6368;
+  font-weight: 600;
+}
+
+.dark .detail-label {
+  color: #8a99ad;
+}
+
+.detail-value {
+  font-weight: 500;
+}
+
+/* =========================================================
+   Toggle Button & Expanded Content
+   ========================================================= */
+.toggle-details-btn {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: #009de0;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #e2e8f0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.dark .toggle-details-btn {
+  border-top-color: #1e2635;
+}
+
+.toggle-details-btn:hover {
+  color: #007bb5;
+}
+
+.order-expanded-content {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  animation: slideDown 0.3s ease-out;
+}
+
+.dark .order-expanded-content {
+  background-color: #0b0f17;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.expanded-title {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #5f6368;
+}
+
+.dark .expanded-title {
+  color: #8a99ad;
+}
+
+.expanded-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.expanded-item-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+.expanded-item-row:last-child {
+  border-bottom: none;
+}
+
+.dark .expanded-item-row {
+  border-bottom-color: #1e2635;
+}
+
+.expanded-item-qty {
+  color: #009de0;
+  font-weight: bold;
+  min-width: 30px;
+}
+
+.expanded-item-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.expanded-item-price {
+  font-weight: bold;
+  color: #5f6368;
+}
+
+.dark .expanded-item-price {
+  color: #8a99ad;
+}
+
+.expanded-empty {
+  color: #8a99ad;
+  font-style: italic;
+  font-size: 14px;
+}
+
+/* =========================================================
+   Empty & Loading States
+   ========================================================= */
+.empty-orders {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #ffffff;
+  border: 1px dashed #e2e8f0;
+  border-radius: 12px;
+}
+
+.dark .empty-orders {
+  background-color: #131924;
+  border-color: #1e2635;
+}
+
+.empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-orders h2 { margin-top: 0; margin-bottom: 8px; }
+.empty-orders p { color: #5f6368; margin-bottom: 24px; }
+.dark .empty-orders p { color: #8a99ad; }
+
+.start-exploring-btn {
+  background-color: #009de0;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.start-exploring-btn:hover { background-color: #007bb5; }
+
+.error-message {
+  color: #ff5a5a;
+  background-color: rgba(255, 90, 90, 0.1);
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+}
