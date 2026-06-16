@@ -98,10 +98,20 @@ const deleteRestaurant = async (req, res) => {
     res.status(204).end();
 }
 
+const restaurantModel = require('../models/restaurant.js');
+
+const getMyRestaurants = (req, res) => {
+
+    const ownerId = req.params.ownerId; 
+    const restaurants = restaurantModel.getRestaurantsByOwner(ownerId);
+    res.json(restaurants);
+}
+
 module.exports = {
     getAllRestaurants,
     createRestaurant,
     getRestaurantById,
     updateRestaurant,
-    deleteRestaurant
+    deleteRestaurant,
+    getMyRestaurants
 };

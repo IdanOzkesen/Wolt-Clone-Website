@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
   const [userData, setUserData] = useState(() => {
     if (savedToken) {
       return {
+        userId: localStorage.getItem('userId') || "",
         name: savedUserName || "",
         userDisplayName: localStorage.getItem('userDisplayName') || "",
         address: localStorage.getItem('address') || "",
@@ -44,7 +45,13 @@ export function AuthProvider({ children }) {
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
 
+        const userId = data.id;
+        if (userId) {
+          localStorage.setItem('userId', String(userId));
+        }
+
         const userDataToSave = {
+          userId: userId ? String(userId) : "",
           name: formData.userName,
           userDisplayName: formData.userDisplayName,
           address: formData.address,
@@ -86,7 +93,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('refreshToken', data.refreshToken);
 
         const tokenPayload = JSON.parse(atob(data.accessToken.split('.')[1]));
-        const userId = tokenPayload.id;
+        const userId = data.userId || tokenPayload.id;
 
         const userResponse = await apiFetch(`/users/${userId}`, {
           method: 'GET'
@@ -98,9 +105,14 @@ export function AuthProvider({ children }) {
         }
 
         const userInfo = await userResponse.json();
+        const resolvedUserId = userInfo.id || userId;
 
-        // Fallback to formData.userName to guarantee a name exists even if the server omits it
+        if (resolvedUserId) {
+          localStorage.setItem('userId', String(resolvedUserId));
+        }
+
         const userDataToSave = {
+          userId: resolvedUserId ? String(resolvedUserId) : "",
           name: userInfo.name || formData.userName,
           userDisplayName: userInfo.userDisplayName || userInfo.name || formData.userName,
           address: userInfo.address || "",

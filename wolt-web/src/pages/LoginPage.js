@@ -1,12 +1,13 @@
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-import BaseInputFieldWithError from "../components/BaseInputFieldWithError";
+import DynamicForm from "../components/DynamicForm";
 import { AuthContext } from "../context/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+  const [generalError, setGeneralError] = useState("");
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -15,67 +16,38 @@ function LoginPage() {
     }
   }, [navigate]);
 
-  const [formData, setFormData] = useState({
-    userName: '',
-    password: ''
-  });
+  const fields = [
+    { name: 'userName', label: 'User Name', placeholder: 'Enter your full name', required: true },
+    { name: 'password', label: 'Password', type: 'password', placeholder: 'Create a password', required: true },
+  ];
 
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let currentErrors = {};
-
-    Object.keys(formData).forEach(key => {
-      if (!formData[key]) {
-        currentErrors[key] = "This field is required";
-      }
-    });
-
-    setErrors(currentErrors);
-
-    if (Object.keys(currentErrors).length > 0) return;
-
+  const handleSubmit = async (formData) => {
+    setGeneralError("");
     const result = await login(formData);
     if (result.success) {
       navigate('/discovery', { replace: true });
+    } else {
+      setGeneralError(result.error);
     }
-    setErrors({ general: result.error });
   };
 
   return (
     <div className="page-container">
-      <form onSubmit={handleSubmit} className="auth-form">
-        <h2>Login</h2>
-
-        {errors.general && <div className="base-input-error" style={{ textAlign: 'center', marginBottom: '10px' }}>{errors.general}</div>}
-
-        <div className="input-group">
-          <label className="input-label">User Name</label>
-          <BaseInputFieldWithError name="userName" placeholder="Enter your full name" value={formData.userName} onChange={handleChange} error={errors.userName} />
-        </div>
-
-        <div className="input-group">
-          <label className="input-label">Password</label>
-          <BaseInputFieldWithError name="password" type="password" placeholder="Create a password" value={formData.password} onChange={handleChange} error={errors.password} />
-        </div>
-
-        <button type="submit" className="submit-btn">Login</button>
-        <button type="button" className="link-btn" onClick={() => navigate('/signup')}>Don't have a user? Come join.</button>
-      </form>
+      <DynamicForm
+        hideContainer
+        formClassName="auth-form"
+        title="Login"
+        fields={fields}
+        onSubmit={handleSubmit}
+        submitLabel="Login"
+        submitClassName="submit-btn"
+        generalError={generalError}
+        footer={
+          <button type="button" className="link-btn" onClick={() => navigate('/signup')}>
+            Don't have a user? Come join.
+          </button>
+        }
+      />
     </div>
   );
 }

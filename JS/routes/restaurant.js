@@ -9,5 +9,6 @@ router.post('/', restaurantController.createRestaurant);
 router.get('/:id', checkRestaurantExistence, restaurantController.getRestaurantById);
 router.patch('/:id', checkRestaurantExistence, restaurantController.updateRestaurant);
 router.delete('/:id',checkUserExistence, checkRestaurantExistence, restaurantController.deleteRestaurant);
+router.get('/owner/:ownerId', restaurantController.getMyRestaurants);
 
 module.exports = router;
