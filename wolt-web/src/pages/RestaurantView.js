@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './RestaurantView.css';
 import { apiFetch } from '../services/api';
-// 1. Import the default placeholder asset exactly like in RestaurantSection
+import { useCart } from '../context/CartContext'; // 1. Imported the cart context
 import defaultPlaceholder from '../assets/default-placeholder.jpg';
 
 function RestaurantView() {
   const { id } = useParams();
   
+  // 2. Destructure the addToCart function from our global state
+  const { addToCart } = useCart(); 
+
   // State Management
   const [restaurant, setRestaurant] = useState(null);
   const [products, setProducts] = useState([]);
@@ -19,13 +22,11 @@ function RestaurantView() {
     const fetchRestaurantDetails = async () => {
       setLoading(true);
       try {
-        // Fetch main restaurant metadata
         const resDetails = await apiFetch(`/restaurants/${id}`);
         if (!resDetails.ok) throw new Error('Restaurant not found');
         const restaurantData = await resDetails.json();
         setRestaurant(restaurantData);
 
-        // Fetch products/menu for this specific restaurant
         const resProducts = await apiFetch(`/restaurants/${id}/products`);
         if (resProducts.ok) {
           const productsData = await resProducts.json();
@@ -48,7 +49,6 @@ function RestaurantView() {
 
   return (
     <div className="restaurant-view-page">
-      {/* Premium Dark Hero Banner */}
       <header className="restaurant-hero">
         <div className="hero-overlay">
           <div className="hero-content">
@@ -59,7 +59,6 @@ function RestaurantView() {
         </div>
       </header>
 
-      {/* Main Menu Layout Container */}
       <main className="restaurant-view-body">
         <section className="menu-products-section" ref={menuSectionRef}>
           <h2 className="section-menu-title">Popular Items</h2>
@@ -67,12 +66,10 @@ function RestaurantView() {
           {products.length === 0 ? (
             <p className="no-products-msg">No items found in this restaurant's menu.</p>
           ) : (
-            /* Dynamic 3-column product grid */
             <div className="products-grid-layout">
               {products.map((product) => (
                 <div key={product.id} className="product-item-card">
                   
-                  {/* Left Side: Product textual content */}
                   <div className="product-card-details">
                     <h3 className="product-title-text">
                       {product.name} {product.isSpicy && '🌶️'} {product.isVegan && '🌱'}
@@ -83,15 +80,14 @@ function RestaurantView() {
                     <span className="product-price-text">${parseFloat(product.price).toFixed(2)}</span>
                   </div>
 
-                  {/* Right Side: Product Image & Interactive Add Button */}
                   <div className="product-image-block">
+                    {/* 3. Connected the button to the real addToCart function */}
                     <button 
                       className="add-to-cart-action-btn"
-                      onClick={() => console.log(`Future feature: Add ${product.name} to cart`)}
+                      onClick={() => addToCart(product, restaurant)}
                     >
                       +
                     </button>
-                    {/* 2. Fallback to defaultPlaceholder if product.image is missing/empty */}
                     <img 
                       src={product.image || defaultPlaceholder} 
                       alt={product.name} 

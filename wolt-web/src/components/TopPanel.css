@@ -149,3 +149,133 @@
   object-fit: cover;
   object-position: center; /* Keeps the inner character dead-centered */
 }
+/* --- User Profile Pill & Dropdown --- */
+.user-menu-container {
+  position: relative;
+}
+
+.user-profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #2a3a40; /* Dark slate matching your image */
+  border: none;
+  border-radius: 30px;
+  padding: 4px 14px 4px 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.user-profile-pill:hover {
+  background-color: #364b53;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  background-color: #c9f5d3; /* Light green avatar background */
+  color: #617b66; /* Dark green text */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 15px;
+  border: 2px solid white;
+}
+
+.user-profile-pill .chevron-icon {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background-color: #131924;
+  border: 1px solid #1e2635;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  min-width: 140px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.user-dropdown button {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #ff5a5a;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.user-dropdown button:hover {
+  background-color: rgba(255, 90, 90, 0.1);
+}
+
+/* --- Circular Icon Buttons (Cart & Theme) --- */
+.icon-circle-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #2a3a40;
+  border: none;
+  color: white;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.icon-circle-btn:hover {
+  background-color: #364b53;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  background-color: #009de0;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #0b0f17;
+}
+.dropdown-profile-pic {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #1e2635; 
+}
+
+.dropdown-profile-pic img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #009de0; 
+}
