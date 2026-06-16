@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
 import "./HomePage.css";
+import { Link, useNavigate } from "react-router-dom";
 import CategorySlider from "../components/CategorySlider";
 import RestaurantSection from "../components/RestaurantSection";
 import { apiFetch } from '../services/api';
-import { Link } from "react-router-dom";
+import Button from "../components/Buttons";
 
 
 function HomePage() {
+  const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null); // Track the active category filter
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const handleAddRestaurant = async () => {
+    try {
+      const response = await apiFetch("/restaurants", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "New Restaurant" })
+      });
+
+      if (!response.ok) throw new Error("Failed to create restaurant");
+
+      const newRestaurant = await response.json();
+      navigate(`/restaurant/${newRestaurant.id}`); // ניווט לעמוד המסעדה החדשה
+    } catch (err) {
+      console.error("Error creating restaurant:", err);
+      alert("Could not create restaurant.");
+    }
+  };
 
   useEffect(() => {
     const loadRestaurantsData = async () => {
@@ -55,6 +74,12 @@ function HomePage() {
 
   return (
     <div className="discovery-page-container">
+
+      <div style={{ padding: '20px 20px 0 20px' }}>
+        <Button variant="primary" onClick={handleAddRestaurant}>
+          Add New Restaurant
+        </Button>
+        </div>
 
       {/* Top horizontal circular categories slider with sync state */}
       <CategorySlider
