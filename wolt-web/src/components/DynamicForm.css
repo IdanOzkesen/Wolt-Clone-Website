@@ -1,0 +1,43 @@
+.dynamic-form-container {
+  display: flex;
+  justify-content: center;
+  /* מוריד את הטופס למטה כדי לא להיחסם ע"י ה-TopPanel */
+  padding-top: 100px; 
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.dynamic-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 30px;
+  border-radius: 12px;
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1); /* צל קצת יותר בולט */
+  margin-bottom: 50px;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* מרווח קצת יותר גדול לטובת ה-Label */
+  width: 100%;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-left: 2px;
+}

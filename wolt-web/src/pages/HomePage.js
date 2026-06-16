@@ -15,21 +15,7 @@ function HomePage() {
   const [error, setError] = useState(null);
 
   const handleAddRestaurant = async () => {
-    try {
-      const response = await apiFetch("/restaurants", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "New Restaurant" })
-      });
-
-      if (!response.ok) throw new Error("Failed to create restaurant");
-
-      const newRestaurant = await response.json();
-      navigate(`/restaurant/${newRestaurant.id}`); // ניווט לעמוד המסעדה החדשה
-    } catch (err) {
-      console.error("Error creating restaurant:", err);
-      alert("Could not create restaurant.");
-    }
+    navigate('/AddRestaurantPage');
   };
 
   useEffect(() => {
