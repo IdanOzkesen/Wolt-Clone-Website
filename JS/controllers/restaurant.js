@@ -25,7 +25,7 @@ const getAllRestaurants = (req, res) => {
  */
 const createRestaurant = (req, res) => {
     // Extracting all fields based on the new model requirements
-    const { name, address, category, phoneNum} = req.body;
+    const { name, address, category, phoneNum, ownerId, imageUrl} = req.body;
     // Validation: Return 400 Bad Request if the name is missing
     if (!name) {
         return res.status(400).json({ error: "Name is required" });
@@ -39,8 +39,12 @@ const createRestaurant = (req, res) => {
     if (!phoneNum) {
         return res.status(400).json({ error: "Phone number is required" });
     }
+    if (!ownerId) {
+        return res.status(400).json({ error: "ownerId required" });
+    }
+
     // Call the model with all 4 parameters
-    const newRestaurant = Restaurant.createRestaurant(name, address, category, phoneNum);
+    const newRestaurant = Restaurant.createRestaurant(name, address, category, phoneNum, ownerId, imageUrl);
     // If the restaurant already exists, return 400 Bad Request
     if (!newRestaurant) {
         return res.status(400).json({ error: "Restaurant already exists" });
@@ -65,8 +69,10 @@ const getRestaurantById = (req, res) => {
  * update restaurant
  */
 const updateRestaurant = (req, res) => {
-    const { id, name, address, category, phoneNum } = req.body;
-    const updatedRestaurant = Restaurant.updateRestaurant(id, name, address, category, phoneNum);
+    const { id } = req.params; // ID should come from params
+    const { name, address, category, phoneNum, imageUrl } = req.body;
+    const success = Restaurant.updateRestaurant(id, name, address, category, phoneNum, imageUrl);
+    if (!success) return res.status(404).json({ error: "Restaurant not found" });
     res.status(204).end();
 }
 
@@ -98,13 +104,13 @@ const deleteRestaurant = async (req, res) => {
     res.status(204).end();
 }
 
-const restaurantModel = require('../models/restaurant.js');
-
 const getMyRestaurants = (req, res) => {
-
     const ownerId = req.params.ownerId; 
-    const restaurants = restaurantModel.getRestaurantsByOwner(ownerId);
-    res.json(restaurants);
+    if (!ownerId) {
+        return res.status(400).json({ error: "ownerId is required" });
+    }
+    const restaurants = Restaurant.getRestaurantsByOwner(ownerId);
+    res.json(restaurants.map(cleanRestaurantData));
 }
 
 module.exports = {

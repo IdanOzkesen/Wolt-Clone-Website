@@ -1,10 +1,12 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import { apiFetch } from '../services/api';
+import { AuthContext } from './AuthContext';
 
 export const RestaurantContext = createContext();
 
 export function RestaurantProvider({ children }) {
     const [restaurants, setRestaurants] = useState([]);
+    const { userData } = useContext(AuthContext);
 
 
     const addRestaurant = async (restaurantData) => {
@@ -15,6 +17,7 @@ export function RestaurantProvider({ children }) {
                 category: restaurantData.category,
                 phoneNum: restaurantData.phoneNum,
                 photo: restaurantData.photo,
+                ownerId: userData.userId
             };
 
             const response = await apiFetch('/restaurants', {
