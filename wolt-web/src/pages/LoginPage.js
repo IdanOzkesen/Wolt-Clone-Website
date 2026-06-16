@@ -1,19 +1,23 @@
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from 'react-router-dom';
 import "./LoginPage.css";
 import BaseInputFieldWithError from "../components/BaseInputFieldWithError";
 import { AuthContext } from "../context/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useContext(AuthContext);
 
+  // Location 1: Check if the user is already logged in (has a token).
+  // If so, redirect to their previous destination or default to '/discovery'.
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
-      navigate('/discovery', { replace: true });
+      const fromPath = location.state?.from || '/discovery';
+      navigate(fromPath, { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
   const [formData, setFormData] = useState({
     userName: '',
@@ -51,8 +55,14 @@ function LoginPage() {
 
     const result = await login(formData);
     if (result.success) {
-      navigate('/discovery', { replace: true });
+      // Location 2: After a successful login!
+      // Retrieve the intended destination or default to '/discovery'
+      const fromPath = location.state?.from || '/discovery';
+      navigate(fromPath, { replace: true });
+      return; // Important: Stop execution here to prevent setting false errors
     }
+    
+    // Will reach here only if the login failed
     setErrors({ general: result.error });
   };
 
