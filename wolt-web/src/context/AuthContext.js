@@ -1,18 +1,19 @@
 // src/context/AuthContext.js
 import React, { createContext, useState } from 'react';
-// Directly import apiLogout to match the export in api.js precisely
-import { apiFetch, logout as apiLogout } from '../services/api';
+import { apiFetch } from '../services/api';
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const savedToken = localStorage.getItem('accessToken');
   const savedUserName = localStorage.getItem('name');
+  const savedUserId = localStorage.getItem('id'); // <-- Read the saved ID from persistent storage
 
   // Initialize state using the token as the single source of truth to prevent UI desync
   const [userData, setUserData] = useState(() => {
     if (savedToken) {
       return {
+        id: savedUserId || "", // <-- Inject the ID into the initial state upon refresh/restart
         name: savedUserName || "",
         userDisplayName: localStorage.getItem('userDisplayName') || "",
         address: localStorage.getItem('address') || "",
@@ -45,6 +46,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('refreshToken', data.refreshToken);
 
         const userDataToSave = {
+          id: data.id || data._id || "", // <-- Extract and save the ID from the server response
           name: formData.userName,
           userDisplayName: formData.userDisplayName,
           address: formData.address,
@@ -101,6 +103,7 @@ export function AuthProvider({ children }) {
 
         // Fallback to formData.userName to guarantee a name exists even if the server omits it
         const userDataToSave = {
+          id: userId, // <-- Save the ID extracted from the JWT payload
           name: userInfo.name || formData.userName,
           userDisplayName: userInfo.userDisplayName || userInfo.name || formData.userName,
           address: userInfo.address || "",
@@ -142,6 +145,7 @@ export function AuthProvider({ children }) {
       setUserData(null);
       setIsLoggedIn(false);
 
+      // Clears everything including the newly saved 'id'
       localStorage.clear();
     }
   };

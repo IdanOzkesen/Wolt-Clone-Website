@@ -6,8 +6,9 @@ import './CheckoutPage.css';
 
 function CheckoutPage() {
   const navigate = useNavigate();
-  const { cart, totalPrice } = useCart();
+  const { cart, totalPrice, clearCart } = useCart();
   const { userData, isLoggedIn } = useContext(AuthContext);
+  console.log("My User Data:", userData);
 
   // Form State
   const [orderDetails, setOrderDetails] = useState({
@@ -44,27 +45,67 @@ function CheckoutPage() {
   // Prevent submitting empty orders (AAA-140 validation)
   const isFormValid = orderDetails.fullName && orderDetails.phone && orderDetails.address;
 
-  const handleSubmitOrder = (e) => {
+  const handleSubmitOrder = async (e) => {
     e.preventDefault();
 
     // 1. Check if the user is NOT logged in
     if (!isLoggedIn) {
-
-      // 2. Redirect to login and pass the current path in the state
+      alert("You must be logged in to complete your order. Redirecting to login...");
       navigate('/login', { state: { from: '/checkout' } });
-      return; // Stop the execution here
+      return; 
     }
     
-    // 3. Existing validation check
+    // 2. Validate form fields
     if (!isFormValid) return;
     
-    // Future Task: AAA-141 (Send POST Request)
-    console.log("Submitting Order to Server:", { 
-      restaurantId: cart.restaurantId,
-      items: cart.items,
-      customer: orderDetails,
-      total: totalPrice
-    });
+    try {
+      // 3. Prepare the Payload
+      // Flatten the cart items based on quantity (e.g., qty: 2 means the ID appears twice)
+      const productIds = [];
+      cart.items.forEach(item => {
+        for (let i = 0; i < item.quantity; i++) {
+          productIds.push(item.productId);
+        }
+      });
+
+      const orderPayload = {
+        userId: userData.id, // Taken directly from AuthContext
+        restaurantId: cart.restaurantId,
+        products: productIds,
+        deliveryAddress: orderDetails.address
+      };
+
+      // 4. Retrieve the JWT token from local storage
+      const token = localStorage.getItem('accessToken');
+
+      // 5. Send the POST request to the backend (AAA-141)
+      const response = await fetch(`http://localhost:10000/api/users/${userData.id}/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // JWT attached to headers as required
+        },
+        body: JSON.stringify(orderPayload)
+      });
+
+      // 6. Handle the Server Response
+      if (response.status === 201 || response.ok) {
+        alert("🎉 Order placed successfully! Your food is on the way.");
+        
+        // Clear the cart context
+        clearCart();
+        
+        // Redirect the user back to the discovery/home page
+        navigate('/discovery'); 
+      } else {
+        const errorData = await response.json();
+        alert(`❌ Failed to place order: ${errorData.message || 'Unknown error occurred'}`);
+      }
+
+    } catch (error) {
+      console.error("Error submitting order:", error);
+      alert("❌ A network error occurred while placing your order. Please check if the server is running.");
+    }
   };
 
   // If cart is empty, don't show the checkout form
