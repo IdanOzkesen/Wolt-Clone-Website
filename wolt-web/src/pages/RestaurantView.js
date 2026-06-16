@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import './RestaurantView.css';
 import { apiFetch } from '../services/api';
 import { useCart } from '../context/CartContext'; // 1. Imported the cart context
 import defaultPlaceholder from '../assets/default-placeholder.jpg';
+import { AuthContext } from '../context/AuthContext';
 
 function RestaurantView() {
+  const navigate = useNavigate();
   const { id } = useParams();
-  
+  const { userData, isLoggedIn } = useContext(AuthContext);
   // 2. Destructure the addToCart function from our global state
-  const { addToCart } = useCart(); 
+  const { addToCart } = useCart();
+
 
   // State Management
   const [restaurant, setRestaurant] = useState(null);
@@ -17,6 +20,10 @@ function RestaurantView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const menuSectionRef = useRef(null);
+
+  // 3. Ownership Check: Ensure types match by converting both to String
+  const isOwner = isLoggedIn && userData && restaurant &&
+    String(userData.userId) === String(restaurant.ownerId);
 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
@@ -33,6 +40,7 @@ function RestaurantView() {
           setProducts(productsData);
         }
       } catch (err) {
+        // 4. Log error to console for debugging
         console.error("Error loading restaurant data:", err);
         setError(err.message || 'Failed to sync with server.');
       } finally {
@@ -40,8 +48,36 @@ function RestaurantView() {
       }
     };
 
+
     fetchRestaurantDetails();
   }, [id]);
+  const handleDeleteRestaurant = async () => {
+    if (window.confirm("Are you sure you want to delete this restaurant?")) {
+      const res = await apiFetch(`/restaurants/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'userId': userData.userId
+        }
+      });
+      if (res.ok) navigate("/", { replace: true });
+    }
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      const res = await apiFetch(`/restaurants/${id}/products/${productId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'userId': userData.userId
+        }
+      });
+      if (res.ok) {
+        setProducts(products.filter(p => p.id !== productId));
+      }
+    }
+  };
 
   if (loading) return <div className="wolt-loading-screen">Loading menu...</div>;
   if (error) return <div className="wolt-error-screen">⚠️ Error: {error}. <Link to="/">Back to Home</Link></div>;
@@ -52,7 +88,16 @@ function RestaurantView() {
       <header className="restaurant-hero">
         <div className="hero-overlay">
           <div className="hero-content">
-            <h1 className="restaurant-view-name">{restaurant.name}</h1>
+            {/* 5. Display edit button for restaurant if the current user is the owner */}
+            <h1 className="restaurant-view-name">
+              {restaurant.name}
+              {isOwner && (
+                <>
+                  <button className="edit-pencil-btn" aria-label="Edit">✏️</button>
+                  <button className="delete-btn" onClick={handleDeleteRestaurant} aria-label="Delete">🗑️</button>
+                </>
+              )}
+            </h1>
             <p className="restaurant-view-meta">📍 {restaurant.address} • 📞 {restaurant.phoneNum}</p>
           </div>
         </div>
@@ -60,40 +105,46 @@ function RestaurantView() {
 
       <main className="restaurant-view-body">
         <section className="menu-products-section" ref={menuSectionRef}>
-          <h2 className="section-menu-title">Popular Items</h2>
-          
+          <div className="menu-header-row">
+            <h2 className="section-menu-title">Popular Items</h2>
+            {/* 6. Add product button visible only to the restaurant owner */}
+            {isOwner && <button className="add-product-btn">+ Add Product</button>}
+          </div>
+
           {products.length === 0 ? (
             <p className="no-products-msg">No items found in this restaurant's menu.</p>
           ) : (
             <div className="products-grid-layout">
               {products.map((product) => (
                 <div key={product.id} className="product-item-card">
-                  
                   <div className="product-card-details">
                     <h3 className="product-title-text">
-                      {product.name} {product.isSpicy && '🌶️'} {product.isVegan && '🌱'}
+                      {product.name}
+                      {isOwner && (
+                        <>
+                          <span className="product-edit-icon" aria-label="Edit">✏️</span>
+                          <span className="product-delete-icon" onClick={() => handleDeleteProduct(product.id)} aria-label="Delete">🗑️</span>
+                        </>
+                      )}
                     </h3>
-                    <p className="product-desc-text">
-                      {product.description || "No description available for this item."}
-                    </p>
+                    <p className="product-desc-text">{product.description}</p>
                     <span className="product-price-text">₪{parseFloat(product.price).toFixed(2)}</span>
                   </div>
 
                   <div className="product-image-block">
-                    {/* 3. Connected the button to the real addToCart function */}
-                    <button 
+                    {/* 8. Connected the button to the real addToCart function */}
+                    <button
                       className="add-to-cart-action-btn"
                       onClick={() => addToCart(product, restaurant)}
                     >
                       +
                     </button>
-                    <img 
-                      src={product.image || defaultPlaceholder} 
-                      alt={product.name} 
-                      className="product-dish-img" 
+                    <img
+                      src={product.image || defaultPlaceholder}
+                      alt={product.name}
+                      className="product-dish-img"
                     />
                   </div>
-
                 </div>
               ))}
             </div>
