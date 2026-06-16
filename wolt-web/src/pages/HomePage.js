@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./HomePage.css";
 import { Link, useNavigate } from "react-router-dom";
 import CategorySlider from "../components/CategorySlider";
 import RestaurantSection from "../components/RestaurantSection";
 import { apiFetch } from '../services/api';
 import Button from "../components/Buttons";
+import { AuthContext } from "../context/AuthContext";
+
 
 
 function HomePage() {
@@ -13,6 +15,8 @@ function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState(null); // Track the active category filter
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { isLoggedIn, userData } = useContext(AuthContext); // כאן אנחנו מקבלים את מצב המשתמש
+  const [myRestaurants, setMyRestaurants] = useState([]);
 
   const handleAddRestaurant = async () => {
     navigate('/AddRestaurantPage');
@@ -21,30 +25,40 @@ function HomePage() {
   useEffect(() => {
     const loadRestaurantsData = async () => {
       try {
-        const response = await apiFetch("/restaurants");
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
+        setLoading(true);
+        
+        // 1. קריאה לכל המסעדות (זמין לכולם)
+        const allResResponse = await apiFetch("/restaurants");
+        const allData = await allResResponse.json();
 
-        // Data Processing: Inject mock distances to enable filtering by distance
-        const processedData = (data || []).map((res, index) => {
-          const mockDistance = parseFloat((((index * 7) % 45) / 10 + 0.5).toFixed(1));
-          return {
-            ...res,
-            computedDistance: mockDistance
-          };
-        });
+        // 2. קריאה למסעדות שלי - רק אם המשתמש מחובר
+        let myData = [];
+        if (isLoggedIn && userData) {
+          const userId = userData.userId; 
+          const myResResponse = await apiFetch(`/restaurants/owner/${userId}`);
+          
+          if (myResResponse.ok) {
+            myData = await myResResponse.json();
+          }
+        }
+
+        // עיבוד הנתונים
+        const processedData = (allData || []).map((res, index) => ({
+          ...res,
+          computedDistance: parseFloat((((index * 7) % 45) / 10 + 0.5).toFixed(1))
+        }));
 
         setRestaurants(processedData);
+        setMyRestaurants(myData);
       } catch (err) {
-        console.error("Error fetching restaurants:", err);
-        setError("Unable to load restaurants from the server.");
+        console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }
     };
 
     loadRestaurantsData();
-  }, []);
+  }, [isLoggedIn, userData]);
 
   if (loading) return <div className="wolt-loading">Loading delicious content...</div>;
   if (error) return <div className="wolt-error">{error}</div>;
@@ -65,7 +79,7 @@ function HomePage() {
         <Button variant="primary" onClick={handleAddRestaurant}>
           Add New Restaurant
         </Button>
-        </div>
+      </div>
 
       {/* Top horizontal circular categories slider with sync state */}
       <CategorySlider
@@ -75,6 +89,18 @@ function HomePage() {
       />
 
       <main className="sections-list">
+
+        {/* 3. Section חדש למסעדות שלי - מעל כולם */}
+        {myRestaurants.length > 0 && (
+          <div className="dashboard-group">
+            <h1 className="group-main-title">My Restaurants 👨‍🍳</h1>
+            {myRestaurants.map(res => (
+              <Link to={`/restaurant/${res.id}`} key={res.id} className="restaurant-card-link">
+                <RestaurantSection restaurant={res} />
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* If the filter yields no results */}
         {filteredRestaurants.length === 0 && (

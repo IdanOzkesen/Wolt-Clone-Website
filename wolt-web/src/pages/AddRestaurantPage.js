@@ -17,7 +17,7 @@ function AddRestaurantPage() {
         { name: 'address', label: 'Address', placeholder: 'Enter Address', required: true },
         { name: 'category', label: 'Category', placeholder: 'Enter Category', required: true },
         { name: 'phoneNum', label: 'Phone Number', placeholder: 'Enter Phone Number', required: true },
-        { name: 'profilePhoto', label: 'Restaurant Photo', type: 'file', required: false }
+        { name: 'photo', label: 'Restaurant Photo', type: 'file', required: false }
     ];
 
     useEffect(() => {
@@ -27,16 +27,10 @@ function AddRestaurantPage() {
   }, [navigate]);
 
     const handleSubmit = async (formData) => {
-        // הכנה של נתוני ה-FormData
-        const dataToSend = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-            dataToSend.append(key, value);
-        });
-
-        const result = await addRestaurant(dataToSend);
+        const result = await addRestaurant(formData);
 
         if (result.success) {
-            navigate(`/restaurant/${result.data.id}`);
+            navigate(`/restaurant/${result.data.id}`, { replace: true });
         } else {
             alert(result.error);
         }

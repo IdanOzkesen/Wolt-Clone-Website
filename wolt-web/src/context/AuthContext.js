@@ -45,6 +45,11 @@ export function AuthProvider({ children }) {
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
 
+        const userId = data.id;
+        if (userId) {
+          localStorage.setItem('userId', String(userId));
+        }
+
         const userDataToSave = {
           id: data.id || data._id || "", // <-- Extract and save the ID from the server response
           name: formData.userName,
@@ -88,7 +93,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('refreshToken', data.refreshToken);
 
         const tokenPayload = JSON.parse(atob(data.accessToken.split('.')[1]));
-        const userId = tokenPayload.id;
+        const userId = data.userId || tokenPayload.id;
 
         const userResponse = await apiFetch(`/users/${userId}`, {
           method: 'GET'
@@ -100,8 +105,12 @@ export function AuthProvider({ children }) {
         }
 
         const userInfo = await userResponse.json();
+        const resolvedUserId = userInfo.id || userId;
 
-        // Fallback to formData.userName to guarantee a name exists even if the server omits it
+        if (resolvedUserId) {
+          localStorage.setItem('userId', String(resolvedUserId));
+        }
+
         const userDataToSave = {
           id: userId, // <-- Save the ID extracted from the JWT payload
           name: userInfo.name || formData.userName,
