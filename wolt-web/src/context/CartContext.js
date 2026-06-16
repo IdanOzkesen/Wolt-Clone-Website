@@ -15,12 +15,11 @@ export const CartProvider = ({ children }) => {
   const totalItemsCount = cart.items.reduce((total, item) => total + item.quantity, 0);
 
   const addToCart = (product, restaurant) => {
+    if (cart.restaurantId && cart.restaurantId !== restaurant.id) {
+      alert("You can only order from one restaurant at a time. Please clear your cart first.");
+      return;
+    }
     setCart((prevCart) => {
-      if (prevCart.restaurantId && prevCart.restaurantId !== restaurant.id) {
-        alert("You can only order from one restaurant at a time. Please clear your cart first.");
-        return prevCart;
-      }
-
       const existingItemIndex = prevCart.items.findIndex(item => item.productId === product.id);
       
       let updatedItems = [...prevCart.items]; // Copy the array
