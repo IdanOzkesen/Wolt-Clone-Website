@@ -9,6 +9,8 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import RestaurantView from './pages/RestaurantView';
+import AddRestaurantPage from './pages/AddRestaurantPage';
+
 
 const MainLayout = () => {
   return (
@@ -32,6 +34,7 @@ function App() {
               <Route path="/" element={<LandPage />} />
               <Route path="/discovery" element={<HomePage />} />
               <Route path="/restaurant/:id" element={<RestaurantView />} />
+              <Route path="/AddRestaurantPage" element={<AddRestaurantPage />} />
             </Route>
 
             <Route path="*" element={<NotFoundPage />} />

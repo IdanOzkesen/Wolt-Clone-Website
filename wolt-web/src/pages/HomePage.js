@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "./HomePage.css";
+import { Link, useNavigate } from "react-router-dom";
 import CategorySlider from "../components/CategorySlider";
 import RestaurantSection from "../components/RestaurantSection";
 import { apiFetch } from '../services/api';
-import { Link } from "react-router-dom";
+import Button from "../components/Buttons";
 
 
 function HomePage() {
+  const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null); // Track the active category filter
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const handleAddRestaurant = async () => {
+    navigate('/AddRestaurantPage');
+  };
 
   useEffect(() => {
     const loadRestaurantsData = async () => {
@@ -55,6 +60,12 @@ function HomePage() {
 
   return (
     <div className="discovery-page-container">
+
+      <div style={{ padding: '20px 20px 0 20px' }}>
+        <Button variant="primary" onClick={handleAddRestaurant}>
+          Add New Restaurant
+        </Button>
+        </div>
 
       {/* Top horizontal circular categories slider with sync state */}
       <CategorySlider
