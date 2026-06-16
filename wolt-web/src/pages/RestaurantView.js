@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { useParams, Link } from 'react-router-dom';
 import './RestaurantView.css';
 import { apiFetch } from '../services/api';
@@ -97,45 +96,13 @@ function RestaurantView() {
                   </div>
 
                 </div>
+              ))}
             </div>
-        </div>
-    );
-
-    if (loading) return <div>Loading...</div>;
-
-    return (
-        <div className="restaurant-view-page">
-            {/* ... Hero and Main Content ... */}
-
-            {/* Modal - Floating on top of EVERYTHING */}
-            {selectedProduct && (
-                <div className="modal-overlay" onClick={closeModal}>
-                    <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-                        <button className="close-btn" onClick={closeModal}>×</button>
-
-                        <img src={selectedProduct.image || defaultPlaceholder} alt={selectedProduct.name} className="modal-img" />
-
-                        <div className="modal-details">
-                            <h2>{selectedProduct.name}</h2>
-                            <p className="price">ILS {parseFloat(selectedProduct.price).toFixed(2)}</p>
-                            <p className="desc">{selectedProduct.description || "No description."}</p>
-                        </div>
-
-                        <div className="modal-footer">
-                            <div className="qty-controls">
-                                <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                                <span>{quantity}</span>
-                                <button onClick={() => setQuantity(quantity + 1)}>+</button>
-                            </div>
-                            <button className="add-btn" onClick={closeModal}>
-                                Add to order • ILS {(parseFloat(selectedProduct.price) * quantity).toFixed(2)}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
+          )}
+        </section>
+      </main>
+    </div>
+  );
 }
 
 export default RestaurantView;
