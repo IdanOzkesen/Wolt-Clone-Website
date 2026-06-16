@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import { CartProvider } from './context/CartContext'; // הוספנו את הייבוא של העגלה
+import { CartProvider } from './context/CartContext';
+import { RestaurantProvider } from './context/RestaurantContext'; 
 
 import TopPanel from './components/TopPanel';
 import LandPage from './pages/LandPage';
@@ -16,7 +17,7 @@ const MainLayout = () => {
   return (
     <>
       <TopPanel />
-      <Outlet /> 
+      <Outlet />
     </>
   );
 };
@@ -24,22 +25,24 @@ const MainLayout = () => {
 function App() {
   return (
     <AuthProvider>
-      <CartProvider> {/* המעטפת של עגלת הקניות שומרת על הסטייט לכל האפליקציה */}
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<LandPage />} />
-              <Route path="/discovery" element={<HomePage />} />
-              <Route path="/restaurant/:id" element={<RestaurantView />} />
-              <Route path="/AddRestaurantPage" element={<AddRestaurantPage />} />
-            </Route>
+      <CartProvider>
+        <RestaurantProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
 
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </BrowserRouter>
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<LandPage />} />
+                <Route path="/discovery" element={<HomePage />} />
+                <Route path="/restaurant/:id" element={<RestaurantView />} />
+                <Route path="/AddRestaurantPage" element={<AddRestaurantPage />} />
+              </Route>
+
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </BrowserRouter>
+        </RestaurantProvider>
       </CartProvider>
     </AuthProvider>
   );

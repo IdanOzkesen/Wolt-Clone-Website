@@ -45,6 +45,7 @@ function TopPanel() {
   const handleLogout = () => {
     setShowUserMenu(false);
     logout();
+    navigate('/')
   };
 
   // Safe data extraction with fallbacks
