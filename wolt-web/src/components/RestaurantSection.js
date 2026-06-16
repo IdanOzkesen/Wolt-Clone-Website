@@ -56,7 +56,7 @@ function RestaurantSection({ restaurant, distance }) {
           <div className="products-small-loading">Loading menu...</div>
         ) : products.length > 0 ? (
           products.map(product => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} variant={""} />
           ))
         ) : (
           <div className="no-products-placeholder">

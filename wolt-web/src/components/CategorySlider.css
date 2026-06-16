@@ -1,7 +1,8 @@
+/* Container allowed to expand on screen */
 .category-slider-container {
   width: 100%;
-  margin-bottom: 32px;
-  padding: 0 16px;
+  max-width: 1400px;
+  margin: 0 auto 32px auto;
   box-sizing: border-box;
 }
 
@@ -10,25 +11,37 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  padding: 0 24px;
 }
 
+/* Updated to use Dark/Light mode text variable */
 .category-title {
   font-size: 22px;
   font-weight: 700;
-  color: #202125;
+  color: var(--text-primary); 
   margin: 0;
+  transition: color 0.3s ease;
 }
 
+/* Padding moved here to prevent shadow/image cropping during scroll */
 .category-list {
   display: flex;
   gap: 24px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding-bottom: 8px;
+  padding: 10px 24px; 
+  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .category-list::-webkit-scrollbar {
   display: none;
+}
+
+.category-list::after {
+  content: '';
+  padding-right: 1px;
 }
 
 .category-item {
@@ -44,17 +57,23 @@
   transform: scale(1.05);
 }
 
+/* Updated to use Theme Card Background */
 .category-img-wrapper {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #f3f4f6;
+  background-color: var(--card-bg); /* Adapts to Dark/Light mode */
   margin-bottom: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease, background-color 0.3s ease;
+}
+
+.category-emoji-icon {
+  font-size: 36px;
 }
 
 .category-img-wrapper img {
@@ -63,22 +82,25 @@
   object-fit: cover;
 }
 
+/* Updated to use Theme Text */
 .category-item span {
   font-size: 14px;
   font-weight: 600;
-  color: #313131;
+  color: var(--text-primary); /* Adapts to Dark/Light mode */
   text-align: center;
+  transition: color 0.3s ease;
 }
 
-/* Styling for the active selected category item */
+/* Active Category - Connected to your Global Brand Variables */
 .category-item.active .category-img-wrapper {
-  background-color: #009de0; /* Wolt Light-blue accent */
-  border: 2px solid #0082ba;
+  background-color: var(--brand-primary);
+  border: 2px solid var(--brand-secondary);
   transform: scale(1.08);
-  box-shadow: 0 4px 12px rgba(0, 157, 224, 0.3);
+  /* A slight glow effect using the brand-secondary color */
+  box-shadow: 0 4px 12px rgba(0, 194, 232, 0.3); 
 }
 
 .category-item.active span {
-  color: #009de0;
+  color: var(--brand-primary);
   font-weight: 700;
 }
