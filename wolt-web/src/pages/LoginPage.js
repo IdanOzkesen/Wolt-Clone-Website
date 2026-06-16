@@ -6,15 +6,19 @@ import { AuthContext } from "../context/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useContext(AuthContext);
   const [generalError, setGeneralError] = useState("");
 
+  // Location 1: Check if the user is already logged in (has a token).
+  // If so, redirect to their previous destination or default to '/discovery'.
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
-      navigate('/discovery', { replace: true });
+      const fromPath = location.state?.from || '/discovery';
+      navigate(fromPath, { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
   const fields = [
     { name: 'userName', label: 'User Name', placeholder: 'Enter your full name', required: true },

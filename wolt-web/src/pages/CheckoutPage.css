@@ -1,0 +1,315 @@
+/* =========================================================
+   Checkout Page - Base (Light Mode) & Dark Mode Overrides
+   ========================================================= */
+
+.checkout-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 40px 20px; 
+  color: #202125; /* Light mode text */
+  transition: color 0.2s ease;
+}
+
+.dark .checkout-page-container {
+  color: #ffffff; /* Dark mode text */
+}
+
+.checkout-header {
+  margin-bottom: 30px;
+}
+
+.checkout-header h1 {
+  font-size: 36px;
+  margin: 0 0 8px 0;
+}
+
+.checkout-header p {
+  color: #5f6368;
+}
+
+.dark .checkout-header p {
+  color: #8a99ad;
+}
+
+.checkout-header strong {
+  color: #009de0;
+}
+
+/* =========================================================
+   Grid Layout
+   ========================================================= */
+.checkout-content-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* =========================================================
+   Base Card Style
+   ========================================================= */
+.checkout-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft shadow for light mode */
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.dark .checkout-card {
+  background-color: #131924;
+  border: 1px solid #1e2635;
+  box-shadow: none;
+}
+
+.checkout-card h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 22px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 16px;
+}
+
+.dark .checkout-card h2 {
+  border-bottom-color: #1e2635;
+}
+
+/* =========================================================
+   Form Styles
+   ========================================================= */
+.delivery-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5f6368;
+}
+
+.dark .form-group label {
+  color: #8a99ad;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 14px;
+  background-color: #f8f9fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #202125;
+  font-size: 16px;
+  outline: none;
+  /* The Magic Trick: Invisible large inset shadow by default */
+  box-shadow: 0 0 0 1000px transparent inset;
+  /* Now we animate the shadow color too */
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.dark .form-group input,
+.dark .form-group textarea {
+  background-color: #0b0f17;
+  border-color: #1e2635;
+  color: #ffffff;
+  /* Keeps the trick active in dark mode */
+  box-shadow: 0 0 0 1000px transparent inset;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #009de0;
+}
+
+/* =========================================================
+   Order Summary Styles
+   ========================================================= */
+.summary-card {
+  position: sticky;
+  top: 100px;
+}
+
+.summary-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-qty {
+  color: #009de0;
+  font-weight: bold;
+  font-size: 14px;
+  min-width: 24px;
+}
+
+.summary-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.summary-price {
+  color: #5f6368;
+  font-weight: bold;
+}
+
+.dark .summary-price {
+  color: #8a99ad;
+}
+
+.summary-divider {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 16px 0;
+}
+
+.dark .summary-divider {
+  background-color: #1e2635;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #5f6368;
+  font-size: 16px;
+}
+
+.dark .summary-row {
+  color: #8a99ad;
+}
+
+.total-row {
+  font-size: 24px;
+  font-weight: bold;
+  color: #202125;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.dark .total-row {
+  color: #ffffff;
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+.place-order-btn {
+  width: 100%;
+  background-color: #009de0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 18px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.place-order-btn:hover:not(:disabled) {
+  background-color: #007bb5;
+}
+
+.place-order-btn:disabled {
+  background-color: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.dark .place-order-btn:disabled {
+  background-color: #1e2635;
+  color: #5a6b82;
+}
+
+.validation-msg {
+  color: #ff5a5a;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* =========================================================
+   Empty State
+   ========================================================= */
+.checkout-empty {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.checkout-empty h2 { font-size: 32px; margin-bottom: 8px; }
+
+.checkout-empty p { 
+  color: #5f6368; 
+  margin-bottom: 24px; 
+}
+
+.dark .checkout-empty p {
+  color: #8a99ad;
+}
+
+.back-to-home-btn {
+  background-color: #e2e8f0;
+  color: #202125;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dark .back-to-home-btn {
+  background-color: #2a3a40;
+  color: white;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .checkout-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   Browser Autofill Overrides (Fixing the pale blue background)
+   ========================================================= */
+
+/* Light Mode Autofill */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover, 
+.form-group input:-webkit-autofill:focus, 
+.form-group input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #f8f9fa inset !important;
+  -webkit-text-fill-color: #202125 !important;
+  transition: box-shadow 0.2s ease, color 0.2s ease !important;
+}
+
+/* Dark Mode Autofill */
+.dark .form-group input:-webkit-autofill,
+.dark .form-group input:-webkit-autofill:hover, 
+.dark .form-group input:-webkit-autofill:focus, 
+.dark .form-group input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #0b0f17 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition: box-shadow 0.2s ease, color 0.2s ease !important;
+}
