@@ -104,7 +104,9 @@ function HomePage() {
 
         {/* If the filter yields no results */}
         {filteredRestaurants.length === 0 && (
-          <div className="no-results-placeholder">
+          <div className="empty-state-centered">
+            <span className="empty-icon">🍽️</span>
+            <h3>No restaurants found</h3>
             <p>No restaurants found matching "{selectedCategory}" in your area.</p>
           </div>
         )}

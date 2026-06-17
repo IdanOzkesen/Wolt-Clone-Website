@@ -6,18 +6,29 @@ export const RestaurantContext = createContext();
 
 export function RestaurantProvider({ children }) {
     const [restaurants, setRestaurants] = useState([]);
+    
+    // Extract user data from AuthContext
     const { userData } = useContext(AuthContext);
-
 
     const addRestaurant = async (restaurantData) => {
         try {
+            // Safely extract the ID whether it is saved as 'userId' or 'id' in your context
+            const currentOwnerId = userData?.userId || userData?.id;
+
+            // Prevent sending a faulty request to the server if the user ID is entirely missing
+            if (!currentOwnerId) {
+                console.error("Auth Error: userData is missing the ID.", userData);
+                return { success: false, error: 'User authentication error: Missing owner ID.' };
+            }
+
+            // Build the payload exactly as the server expects it
             const payload = {
                 name: restaurantData.name,
                 address: restaurantData.address,
                 category: restaurantData.category,
                 phoneNum: restaurantData.phoneNum,
                 photo: restaurantData.photo,
-                ownerId: userData.userId
+                ownerId: currentOwnerId // Injected safely
             };
 
             const response = await apiFetch('/restaurants', {
@@ -55,6 +66,7 @@ export function RestaurantProvider({ children }) {
 
             return { success: true, data: newRestaurant };
         } catch (err) {
+            console.error("Catch block error:", err);
             return { success: false, error: "Network error" };
         }
     };

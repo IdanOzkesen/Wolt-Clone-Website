@@ -1,0 +1,197 @@
+.search-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 60px 20px;
+  color: #202125;
+  min-height: 80vh;
+}
+
+.dark .search-page-container {
+  color: #ffffff;
+}
+
+.search-header {
+  margin-bottom: 40px;
+}
+
+.search-header h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.search-section {
+  margin-bottom: 48px;
+}
+
+.section-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 12px;
+}
+
+.dark .section-header-flex {
+  border-color: #2d3748;
+}
+
+.section-header-flex h2 {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 700;
+}
+
+.view-all-link {
+  color: #009de0;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   PLACES GRID (Vertical Cards)
+   ========================================================= */
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.place-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 1px solid #f1f1f1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dark .place-card {
+  background: #131924;
+  border-color: #1e2635;
+}
+
+.place-card:hover {
+  transform: translateY(-4px);
+}
+
+.place-image-wrapper {
+  width: 100%;
+  height: 150px;
+  background-color: #f8f9fa; /* Prevents blank space if image loads slow */
+}
+
+.place-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.place-info {
+  padding: 16px;
+}
+
+.place-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+}
+
+.place-tags {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #707070;
+}
+
+.place-meta {
+  font-size: 13px;
+  color: #000000;
+  font-weight: 600;
+}
+
+.dark .place-meta, .dark .place-tags {
+  color: #a0aec0;
+}
+
+/* =========================================================
+   ITEMS GRID (Horizontal Cards)
+   ========================================================= */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.item-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 1px solid #f1f1f1;
+  display: flex;
+  flex-direction: row; /* Makes it horizontal */
+  justify-content: space-between;
+  height: 120px;
+}
+
+.dark .item-card {
+  background: #131924;
+  border-color: #1e2635;
+}
+
+.item-card:hover {
+  transform: translateY(-2px);
+}
+
+.item-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.item-price {
+  color: #009de0;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.item-name {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.item-restaurant-name {
+  margin: 0;
+  font-size: 13px;
+  color: #707070;
+}
+
+.dark .item-restaurant-name {
+  color: #a0aec0;
+}
+
+.item-image-wrapper {
+  width: 140px;
+  height: 100%;
+  background-color: #f8f9fa;
+  flex-shrink: 0;
+}
+
+.item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
