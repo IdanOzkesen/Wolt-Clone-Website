@@ -99,10 +99,6 @@
   background-color: var(--card-hover); 
 }
 
-.search-input:focus {
-  background-color: var(--card-hover); 
-}
-
 /* Actions container */
 .top-panel-actions {
   display: flex;
@@ -149,25 +145,46 @@
   object-fit: cover;
   object-position: center; /* Keeps the inner character dead-centered */
 }
-/* --- User Profile Pill & Dropdown --- */
+
+/* =========================================================
+   User Profile Pill & Circular Buttons (Base: Light Mode)
+   ========================================================= */
 .user-menu-container {
   position: relative;
+}
+
+.user-profile-pill,
+.icon-circle-btn {
+  background-color: #f0f4f8; /* LIGHT MODE: Soft light blue-gray */
+  color: #1a1a1a; /* LIGHT MODE: Dark text/icons */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .user-profile-pill {
   display: flex;
   align-items: center;
   gap: 12px;
-  background-color: #2a3a40; /* Dark slate matching your image */
-  border: none;
   border-radius: 30px;
   padding: 4px 14px 4px 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.user-profile-pill:hover {
-  background-color: #364b53;
+.icon-circle-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Hover effects for Light Mode */
+.user-profile-pill:hover,
+.icon-circle-btn:hover {
+  background-color: #e2e8f0;
 }
 
 .user-avatar {
@@ -184,10 +201,57 @@
   border: 2px solid white;
 }
 
+/* Text elements inside the pill (Light Mode defaults) */
+.user-profile-pill .chevron-icon,
+.user-first-name {
+  color: #1a1a1a;
+  transition: color 0.3s ease;
+}
+
 .user-profile-pill .chevron-icon {
-  color: white;
   font-size: 18px;
   font-weight: bold;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  background-color: #009de0;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #f0f4f8; /* Matches the light mode button background */
+  transition: border-color 0.3s ease;
+}
+
+/* =========================================================
+   DARK MODE OVERRIDES FOR BUTTONS
+   ========================================================= */
+.dark .user-profile-pill,
+.dark .icon-circle-btn {
+  background-color: #2a3a40; /* DARK MODE: Dark slate */
+  color: #ffffff; /* DARK MODE: White text/icons */
+}
+
+.dark .user-profile-pill:hover,
+.dark .icon-circle-btn:hover {
+  background-color: #364b53;
+}
+
+.dark .user-profile-pill .chevron-icon,
+.dark .user-first-name {
+  color: #ffffff; /* White text for dark mode */
+}
+
+.dark .cart-badge {
+  border-color: #2a3a40; /* Matches the dark mode button background */
 }
 
 /* =========================================================
@@ -294,43 +358,6 @@
   background-color: rgba(255, 90, 90, 0.1);
 }
 
-/* --- Circular Icon Buttons (Cart & Theme) --- */
-.icon-circle-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background-color: #2a3a40;
-  border: none;
-  color: white;
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-  transition: background-color 0.2s ease;
-}
-
-.icon-circle-btn:hover {
-  background-color: #364b53;
-}
-
-.cart-badge {
-  position: absolute;
-  top: -2px;
-  right: -4px;
-  background-color: #009de0;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid #0b0f17;
-}
 .dropdown-profile-pic {
   display: flex;
   justify-content: center;

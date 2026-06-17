@@ -7,6 +7,7 @@ import "./TopPanel.css";
 import woltLogo from "../assets/logo.png";
 import { useCart } from '../context/CartContext'; 
 import CartSidebar from './CartSidebar';
+import { apiFetch } from '../services/api'; // <--- NEW IMPORT
 
 function TopPanel() {
   const navigate = useNavigate();
@@ -21,20 +22,46 @@ function TopPanel() {
   // Address States
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
-
-  // State for the search input
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Function to handle pressing "Enter" in the search bar
+  // ==========================================
+  // JIRA AAA-160: FETCH LOGGED-IN USER DETAILS
+  // ==========================================
+  // State to hold the full user profile fetched from the database
+  const [fetchedUser, setFetchedUser] = useState(null);
+
+  useEffect(() => {
+    const fetchFullUserProfile = async () => {
+      // Only execute if the user is authenticated and we have their ID
+      if (isLoggedIn && userData?.userId) {
+        try {
+          // Use the custom apiFetch (No need to pass headers/tokens, it does it automatically!)
+          const response = await apiFetch(`/users/${userData.userId}`, { method: 'GET' });
+          
+          if (response.ok) {
+            const data = await response.json();
+            setFetchedUser(data); // Save the fetched data to state
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
+    };
+
+    fetchFullUserProfile();
+  }, [isLoggedIn, userData?.userId]); // Re-run if login status or user ID changes
+
+  // ==========================================
+  // EXISTING LOGIC (Dark Mode, Logo Routing, etc.)
+  // ==========================================
+  
   const handleSearchKeyDown = (e) => {
     if (e.key === 'Enter' && searchQuery.trim() !== "") {
-      // Navigate to the search page with the query as a URL parameter
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      searchQuery(""); // Optional: clear the search bar after searching
+      setSearchQuery(""); 
     }
   };
 
-  // Sync address from localStorage whenever the route changes
   useEffect(() => {
     const storedAddress = localStorage.getItem('address');
     if (storedAddress) {
@@ -42,44 +69,33 @@ function TopPanel() {
     }
   }, [location.pathname]);
 
-  // ==========================================
-  // FIX 1: PERSISTENT DARK MODE (Survives Refresh)
-  // ==========================================
-  
-  // 1. Initialize state by checking localStorage first (Lazy Initialization)
   const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return savedTheme === 'dark'; // Returns true if 'dark' is saved, otherwise false
+    return savedTheme === 'dark'; 
   });
 
-  // 2. React to changes: Update the DOM and save to localStorage whenever darkMode changes
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem('theme', 'dark'); // Save user preference
+      localStorage.setItem('theme', 'dark'); 
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem('theme', 'light'); // Save user preference
+      localStorage.setItem('theme', 'light'); 
     }
   }, [darkMode]);
 
-  // 3. Toggle function now only flips the state. The useEffect handles the rest.
   const toggleTheme = () => {
     setDarkMode((prev) => !prev);
   };
 
-  // ==========================================
-  // FIX 2: SMART LOGO ROUTING
-  // ==========================================
   const handleLogoClick = () => {
-    
-    // 1. If the user IS logged in, check if they are on the restaurants feed ('/discovery')
-    if (location.pathname === '/discovery') {
-      // If already on the restaurants feed, take them to the Landing Page
+    if (!isLoggedIn) {
       navigate('/'); 
+      return; 
     } 
-    // 2. From any other page (like '/restaurant/:id'), return them to the restaurants feed
-    else {
+    if (location.pathname === '/discovery') {
+      navigate('/'); 
+    } else {
       navigate('/discovery');
     }
   };
@@ -90,13 +106,18 @@ function TopPanel() {
     navigate('/');
   };
 
-  // Safe data extraction with fallbacks
-  const displayName = userData?.userDisplayName || "";
-  const displayAddress = userData?.address || address || "Set Address";
-  const profilePhoto = userData?.profilePhoto || ""; 
+  // ==========================================
+  // DYNAMIC UI VARIABLES
+  // ==========================================
+  // Prioritize the fetched user data, fallback to context data if not yet loaded
+  const displayName = fetchedUser?.name || userData?.userDisplayName || "";
+  
+  // Check common image field names (photo, imageUrl, profilePhoto) from your backend schema
+  const profilePhoto = fetchedUser?.photo || fetchedUser?.imageUrl || userData?.profilePhoto || ""; 
+  
+  const displayAddress = fetchedUser?.address || userData?.address || address || "Set Address";
   const isLandPage = location.pathname === "/";
 
-  // Helper function to extract initials (e.g., "John Doe" -> "JD")
   const getInitials = (name) => {
     if (!name) return "";
     const words = name.trim().split(" ");
@@ -110,7 +131,6 @@ function TopPanel() {
         
         {/* LEFT SECTION: Logo & Address */}
         <div className="top-panel-left">
-          {/* Changed onClick to use the new smart routing function */}
           <div className="top-panel-logo-wrapper" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
             <img src={woltLogo} alt="Wolt Clone" className="top-panel-circular-logo" />
           </div>
@@ -124,7 +144,7 @@ function TopPanel() {
           </button>
         </div>
 
-        {/* MIDDLE SECTION: Search Bar (Hidden on LandPage) */}
+        {/* MIDDLE SECTION: Search Bar */}
         {!isLandPage && (
           <div className="top-panel-search">
             <input 
@@ -138,10 +158,9 @@ function TopPanel() {
           </div>
         )}
 
-        {/* RIGHT SECTION: Actions (Cart, Profile, Theme) */}
+        {/* RIGHT SECTION: Actions */}
         <div className="top-panel-actions">
           
-          {/* Circular Cart Button */}
           <button className="icon-circle-btn" onClick={() => setIsCartOpen(true)}>
             🛍️
             {totalItemsCount > 0 && <span className="cart-badge">{totalItemsCount}</span>}
@@ -149,23 +168,24 @@ function TopPanel() {
 
           {isLoggedIn ? (
             <div className="user-menu-container">
-              {/* Profile Pill Button */}
               <button 
                 className="user-profile-pill" 
                 onClick={() => setShowUserMenu(!showUserMenu)}
               >
                 <div className="user-avatar">
-                  {/* Render photo if it exists, otherwise fallback to initials */}
                   {profilePhoto ? (
                     <img src={profilePhoto} alt="Profile" className="user-avatar-img" />
                   ) : (
                     getInitials(displayName)
                   )}
                 </div>
+                {/* Displaying the user's name next to the avatar dynamically */}
+                <span className="user-first-name" style={{ marginLeft: '8px', fontWeight: 'bold' }}>
+                  {displayName.split(" ")[0]}
+                </span>
                 <span className="chevron-icon">⌄</span>
               </button>
 
-              {/* Dropdown Menu */}
               {showUserMenu && (
                 <div className="user-dropdown">
                   {profilePhoto && (
@@ -174,7 +194,15 @@ function TopPanel() {
                     </div>
                   )}
                   
-                  {/* "My Orders" Button */}
+                  <button 
+                    className="dropdown-menu-btn"
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      navigate('/profile'); 
+                    }}>
+                    My Profile
+                  </button>
+
                   <button 
                     className="dropdown-menu-btn"
                     onClick={() => {
@@ -184,7 +212,6 @@ function TopPanel() {
                     My Orders
                   </button>
 
-                  {/* Log Out Button */}
                   <button 
                     className="dropdown-menu-btn logout-btn" 
                     onClick={handleLogout}
@@ -201,7 +228,6 @@ function TopPanel() {
             </>
           )}
 
-          {/* Theme Toggle Button */}
           <button className="icon-circle-btn" onClick={toggleTheme}>
             {darkMode ? "☀️" : "🌙"}
           </button>
@@ -214,7 +240,6 @@ function TopPanel() {
         onSave={(fullAddress) => { setAddress(fullAddress); }}
       />
 
-      {/* Cart Sidebar rendered at the root level */}
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );

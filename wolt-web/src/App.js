@@ -14,6 +14,7 @@ import AddRestaurantPage from './pages/AddRestaurantPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrdersPage';
 import SearchPage from './pages/SearchPage';
+import ProfilePage from './pages/ProfilePage';
 
 
 const MainLayout = () => {
@@ -43,6 +44,7 @@ function App() {
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/orders" element={<OrdersPage />} />
                 <Route path="/search" element={<SearchPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Route>
 
               <Route path="*" element={<NotFoundPage />} />
