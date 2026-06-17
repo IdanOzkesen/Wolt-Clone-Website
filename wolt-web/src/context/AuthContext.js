@@ -89,13 +89,23 @@ export function AuthProvider({ children }) {
 
       if (response.ok) {
         const data = await response.json();
+        
+        // 1. First, save the tokens to local storage
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
 
+        // 2. Safe ID extraction: Try getting it from the response, fallback to decoding the JWT token payload
         const tokenPayload = JSON.parse(atob(data.accessToken.split('.')[1]));
-        const userId = data.user.id;
+        const extractedUserId = (data.user && (data.user.id || data.user._id)) || 
+                                tokenPayload.id || tokenPayload._id || tokenPayload.userId;
 
-        const userResponse = await apiFetch(`/users/${userId}`, {
+        // Prevent the app from crashing silently if the ID is nowhere to be found
+        if (!extractedUserId) {
+           throw new Error("Could not extract user ID from login response or token payload.");
+        }
+
+        // 3. Fetch the rest of the user's details from the server using the extracted ID
+        const userResponse = await apiFetch(`/users/${extractedUserId}`, {
           method: 'GET'
         });
 
@@ -105,14 +115,14 @@ export function AuthProvider({ children }) {
         }
 
         const userInfo = await userResponse.json();
-        const resolvedUserId = userInfo.userId || userId;
+        const resolvedUserId = userInfo._id || userInfo.id || userInfo.userId || extractedUserId;
 
         if (resolvedUserId) {
           localStorage.setItem('userId', String(resolvedUserId));
         }
 
         const userDataToSave = {
-          userId: userId, // <-- Save the ID extracted from the JWT payload
+          userId: resolvedUserId, 
           name: userInfo.name || formData.userName,
           userDisplayName: userInfo.userDisplayName || userInfo.name || formData.userName,
           address: userInfo.address || "",
@@ -132,7 +142,9 @@ export function AuthProvider({ children }) {
         return { success: false, error: errorData.error || "Login failed. Please try again." };
       }
     } catch (err) {
-      return { success: false, error: "Network error. Please check if the server is running." };
+      // Log the actual error to the console for debugging if a crash occurs
+      console.error("Login process crashed:", err);
+      return { success: false, error: "A system error occurred during login. Check console." };
     }
   };
 
