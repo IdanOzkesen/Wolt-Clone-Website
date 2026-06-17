@@ -29,7 +29,7 @@ function RestaurantSection({ restaurant, distance }) {
     }
   }, [restaurant.id]);
 
-  const restaurantLogo = restaurant.image || defaultPlaceholder;
+  const restaurantLogo = restaurant.imageUrl || defaultPlaceholder;
 
   return (
     <div className="restaurant-section-row">

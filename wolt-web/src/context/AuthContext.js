@@ -7,13 +7,13 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const savedToken = localStorage.getItem('accessToken');
   const savedUserName = localStorage.getItem('name');
-  const savedUserId = localStorage.getItem('id'); // <-- Read the saved ID from persistent storage
+  const savedUserId = localStorage.getItem('userId'); // <-- Read the saved ID from persistent storage
 
   // Initialize state using the token as the single source of truth to prevent UI desync
   const [userData, setUserData] = useState(() => {
     if (savedToken) {
       return {
-        id: savedUserId || "", // <-- Inject the ID into the initial state upon refresh/restart
+        userId: savedUserId || "", // <-- Inject the ID into the initial state upon refresh/restart
         name: savedUserName || "",
         userDisplayName: localStorage.getItem('userDisplayName') || "",
         address: localStorage.getItem('address') || "",
@@ -51,7 +51,7 @@ export function AuthProvider({ children }) {
         }
 
         const userDataToSave = {
-          id: data.id || data._id || "", // <-- Extract and save the ID from the server response
+          userId: data.userId || "", // <-- Extract and save the ID from the server response
           name: formData.userName,
           userDisplayName: formData.userDisplayName,
           address: formData.address,
@@ -93,7 +93,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('refreshToken', data.refreshToken);
 
         const tokenPayload = JSON.parse(atob(data.accessToken.split('.')[1]));
-        const userId = data.userId || tokenPayload.id;
+        const userId = data.userId || tokenPayload.userId;
 
         const userResponse = await apiFetch(`/users/${userId}`, {
           method: 'GET'
@@ -105,14 +105,14 @@ export function AuthProvider({ children }) {
         }
 
         const userInfo = await userResponse.json();
-        const resolvedUserId = userInfo.id || userId;
+        const resolvedUserId = userInfo.userId || userId;
 
         if (resolvedUserId) {
           localStorage.setItem('userId', String(resolvedUserId));
         }
 
         const userDataToSave = {
-          id: userId, // <-- Save the ID extracted from the JWT payload
+          userId: userId, // <-- Save the ID extracted from the JWT payload
           name: userInfo.name || formData.userName,
           userDisplayName: userInfo.userDisplayName || userInfo.name || formData.userName,
           address: userInfo.address || "",

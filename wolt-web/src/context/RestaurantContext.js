@@ -27,7 +27,7 @@ export function RestaurantProvider({ children }) {
                 address: restaurantData.address,
                 category: restaurantData.category,
                 phoneNum: restaurantData.phoneNum,
-                photo: restaurantData.photo,
+                imageUrl: restaurantData.imageUrl,
                 ownerId: currentOwnerId // Injected safely
             };
 
@@ -52,7 +52,8 @@ export function RestaurantProvider({ children }) {
                         r.name === payload.name &&
                         r.address === payload.address &&
                         r.category === payload.category &&
-                        r.phoneNum === payload.phoneNum
+                        r.phoneNum === payload.phoneNum &&
+                        r.imageUrl === payload.imageUrl
                 );
                 id = created?.id;
             }
