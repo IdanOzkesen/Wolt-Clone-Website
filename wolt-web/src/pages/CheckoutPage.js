@@ -50,7 +50,6 @@ function CheckoutPage() {
 
     // 1. Check if the user is NOT logged in
     if (!isLoggedIn) {
-      alert("You must be logged in to complete your order. Redirecting to login...");
       navigate('/login', { state: { from: '/checkout' } });
       return; 
     }
