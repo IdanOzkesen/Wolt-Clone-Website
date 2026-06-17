@@ -70,6 +70,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   height: 130px;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .product-item-card:hover {
@@ -248,4 +249,173 @@
 
 .product-delete-icon:hover {
     opacity: 1;
+}
+
+/* ================================
+   PRODUCT POPUP (MODAL)
+   ================================ */
+.product-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+/* כרטיס הפופ-אפ עצמו */
+.product-modal-sheet {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--bg-primary);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+}
+
+.product-modal-sheet::-webkit-scrollbar {
+    display: none;
+}
+
+.product-modal-close {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.2s ease;
+}
+
+.product-modal-close:hover {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.product-modal-img-wrap {
+    width: 100%;
+    height: 240px;
+    background-color: var(--bg-secondary);
+    overflow: hidden;
+}
+
+.product-modal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-modal-body {
+    padding: 20px 20px 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.product-modal-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.product-modal-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brand-primary);
+    margin: 0;
+}
+
+.product-modal-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* שורת התחתית: בורר כמות + כפתור הוספה להזמנה */
+.product-modal-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px 20px 20px;
+    position: sticky;
+    bottom: 0;
+    background: var(--bg-primary);
+    direction: rtl; /* בורר הכמות מימין והכפתור משמאל, כמו בעיצוב */
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--input-border);
+    border-radius: 30px;
+    padding: 6px 12px;
+    flex-shrink: 0;
+}
+
+.qty-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.qty-btn:hover {
+    background-color: var(--card-hover);
+}
+
+.qty-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 16px;
+    text-align: center;
+}
+
+.add-to-order-btn {
+    flex: 1;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 30px;
+    background-color: var(--btn-primary);
+    color: var(--btn-text);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.add-to-order-btn:hover {
+    background-color: var(--btn-primary-hover);
+    transform: translateY(-1px);
+}
+
+.add-to-order-btn:active {
+    transform: translateY(1px);
 }

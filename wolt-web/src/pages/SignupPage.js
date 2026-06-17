@@ -17,13 +17,13 @@ function SignupPage() {
   }, [navigate]);
 
   const fields = [
+    { name: 'profilePhoto', label: 'Profile Photo', type: 'file', required: false },
     { name: 'userName', label: 'Full Name', placeholder: 'Enter your full name', required: true },
     { name: 'userDisplayName', label: 'Display Name', placeholder: 'Enter your display name', required: true },
     { name: 'password', label: 'Password', type: 'password', placeholder: 'Create a password', required: true },
     { name: 'confirmPassword', label: 'Confirm Password', type: 'password', placeholder: 'Confirm your password', required: true },
     { name: 'phoneNumber', label: 'Phone Number', type: 'tel', placeholder: 'Enter your phone number', required: true },
     { name: 'address', label: 'Address', placeholder: 'Enter your address', required: true },
-    { name: 'profilePhoto', label: 'Profile Photo', type: 'file', required: false },
   ];
 
   const validateSignup = (submitData) => {

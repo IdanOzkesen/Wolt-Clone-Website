@@ -12,15 +12,43 @@ function ProfilePage() {
     // Fetch the user's full details when the component mounts
     useEffect(() => {
         const fetchUserProfile = async () => {
-            // Safety check: ensure user is logged in and has an ID
-            if (!isLoggedIn || !userData?.userId) {
+            // 1. If not logged in at all, stop here.
+            if (!isLoggedIn) {
+                setLoading(false);
+                return;
+            }
+
+            // 2. Attempt to get the ID from the Context first
+            let idToFetch = userData?.userId;
+
+            // 3. Fallback mechanism: If the Context is missing the ID (e.g., stale localStorage),
+            // we decode the JWT payload directly to extract the user ID.
+            if (!idToFetch) {
+                const token = localStorage.getItem('accessToken');
+                if (token) {
+                    try {
+                        // JWT is structured as Header.Payload.Signature
+                        // We split by '.' and decode the Payload (index 1) using atob()
+                        const payload = JSON.parse(atob(token.split('.')[1]));
+                        
+                        // Check common MongoDB/Node.js ID field names
+                        idToFetch = payload.id || payload._id || payload.userId;
+                    } catch (e) {
+                        console.error("Failed to decode JWT token:", e);
+                    }
+                }
+            }
+
+            // 4. If we still don't have an ID, abort the fetch.
+            if (!idToFetch) {
+                console.warn("Aborting fetch: No User ID found in context or token payload.");
                 setLoading(false);
                 return;
             }
 
             try {
-                // Use our custom fetch wrapper to get the user data securely
-                const response = await apiFetch(`/users/${userData.userId}`, { 
+                // Execute the network request using the safely extracted ID
+                const response = await apiFetch(`/users/${idToFetch}`, { 
                     method: 'GET' 
                 });
 
@@ -39,7 +67,7 @@ function ProfilePage() {
         };
 
         fetchUserProfile();
-    }, [isLoggedIn, userData?.userId]);
+    }, [isLoggedIn, userData]);
 
     // Helper function to extract initials for the avatar fallback
     const getInitials = (name) => {

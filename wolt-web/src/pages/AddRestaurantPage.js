@@ -17,7 +17,7 @@ function AddRestaurantPage() {
         { name: 'address', label: 'Address', placeholder: 'Enter Address', required: true },
         { name: 'category', label: 'Category', placeholder: 'Enter Category', required: true },
         { name: 'phoneNum', label: 'Phone Number', placeholder: 'Enter Phone Number', required: true },
-        { name: 'photo', label: 'Restaurant Photo', type: 'file', required: false }
+        { name: 'imageUrl', label: 'Restaurant Photo', type: 'file', required: false }
     ];
 
     useEffect(() => {
