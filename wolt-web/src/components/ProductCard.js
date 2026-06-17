@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ProductCard.css';
 import defaultPlaceholder from '../assets/default-placeholder.jpg';
 
 function ProductCard({ product, onClick, variant = 'default' }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const productImage = product.image || defaultPlaceholder;
+  // Prefer the image saved on the server; fall back to the placeholder only when none exists
+  const productImage = product.imageUrl || product.image || defaultPlaceholder;
+  const navigate = useNavigate();
 
   const handleCardClick = () => {
     if (variant === 'restaurant') {
@@ -19,6 +21,13 @@ function ProductCard({ product, onClick, variant = 'default' }) {
   const closeModal = (e) => {
     e.stopPropagation();
     setIsModalOpen(false);
+  };
+
+  // Moves the user forward to the next step (the dedicated screen is built later).
+  // For now it just navigates to a separate page on click.
+  const handleNext = (e) => {
+    e.stopPropagation();
+    navigate(`/product/${product.id}`);
   };
 
   return (
@@ -60,7 +69,7 @@ function ProductCard({ product, onClick, variant = 'default' }) {
               {/* החלק של המסעדה בתחתית המודל שמפנה לעמוד המסעדה */}
               {/* הנחתי שיש לך product.restaurantId ו-product.restaurantName */}
               <div className="modal-restaurant-link-wrapper">
-                <Link to={`/restaurants/${product.restaurantId}`} className="modal-restaurant-link">
+                <Link to={`/restaurant/${product.restaurantId}`} className="modal-restaurant-link">
                   <div className="restaurant-link-info">
                     <span className="restaurant-name">{product.restaurantName || "Go to Restaurant"}</span>
                     {/* אפשר לשים פה גם ציון או זמן משלוח אם יש לך ב-API */}
@@ -68,6 +77,11 @@ function ProductCard({ product, onClick, variant = 'default' }) {
                   <span className="restaurant-link-arrow">›</span>
                 </Link>
               </div>
+
+              {/* כפתור Next - מעביר לעמוד הבא בזרימה (העמוד עצמו ייבנה בהמשך) */}
+              <button className="modal-next-btn" onClick={handleNext}>
+                Next
+              </button>
 
             </div>
           </div>

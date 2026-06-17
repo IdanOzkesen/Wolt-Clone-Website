@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./HomePage.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CategorySlider from "../components/CategorySlider";
 import RestaurantSection from "../components/RestaurantSection";
 import { apiFetch } from '../services/api';
@@ -95,9 +95,7 @@ function HomePage() {
           <div className="dashboard-group">
             <h1 className="group-main-title">My Restaurants 👨‍🍳</h1>
             {myRestaurants.map(res => (
-              <Link to={`/restaurant/${res.id}`} key={res.id} className="restaurant-card-link">
-                <RestaurantSection restaurant={res} />
-              </Link>
+              <RestaurantSection key={res.id} restaurant={res} />
             ))}
           </div>
         )}
@@ -116,12 +114,11 @@ function HomePage() {
           <div className="dashboard-group">
             <h1 className="group-main-title">Popular Nearby (Under 2 km) 🛵</h1>
             {nearbyRestaurants.map(res => (
-              <Link to={`/restaurant/${res.id}`} key={res.id} className="restaurant-card-link">
-                <RestaurantSection
-                  restaurant={res}
-                  distance={res.computedDistance}
-                />
-              </Link>
+              <RestaurantSection
+                key={res.id}
+                restaurant={res}
+                distance={res.computedDistance}
+              />
             ))}
           </div>
         )}
@@ -131,12 +128,11 @@ function HomePage() {
           <div className="dashboard-group">
             <h1 className="group-main-title">All Restaurants in Your Area 📍</h1>
             {furtherRestaurants.map(res => (
-              <Link to={`/restaurant/${res.id}`} key={res.id} className="restaurant-card-link">
-                <RestaurantSection
-                  restaurant={res}
-                  distance={res.computedDistance}
-                />
-              </Link>
+              <RestaurantSection
+                key={res.id}
+                restaurant={res}
+                distance={res.computedDistance}
+              />
             ))}
           </div>
         )}

@@ -31,7 +31,8 @@ export function AuthProvider({ children }) {
       name: formData.userName,
       password: formData.password,
       address: formData.address,
-      phoneNum: formData.phoneNumber
+      phoneNum: formData.phoneNumber,
+      imageUrl: formData.profilePhoto // base64 data URL produced by the file input
     };
 
     try {
@@ -55,7 +56,7 @@ export function AuthProvider({ children }) {
           name: formData.userName,
           userDisplayName: formData.userDisplayName,
           address: formData.address,
-          profilePhoto: data.profilePhoto || ""
+          profilePhoto: data.user.imageUrl || "" // photo the server stored for this user
         };
 
         for (const [key, value] of Object.entries(userDataToSave)) {
@@ -126,7 +127,7 @@ export function AuthProvider({ children }) {
           name: userInfo.name || formData.userName,
           userDisplayName: userInfo.userDisplayName || userInfo.name || formData.userName,
           address: userInfo.address || "",
-          profilePhoto: userInfo.profilePhoto || ""
+          profilePhoto: userInfo.imageUrl || "" // server stores the photo under imageUrl
         };
 
         for (const [key, value] of Object.entries(userDataToSave)) {

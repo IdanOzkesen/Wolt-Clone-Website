@@ -14,21 +14,31 @@ const DynamicForm = ({
   footer,
   validate,
   submitClassName,
+  initialValues = {},
 }) => {
-  // יצירת אובייקט התחלתי ריק לפי השדות
-  const initialState = fields.reduce((acc, field) => ({ ...acc, [field.name]: '' }), {});
+  // יצירת אובייקט התחלתי לפי השדות (עם ערכים קיימים אם סופקו - לטובת טפסי עריכה)
+  const initialState = fields.reduce((acc, field) => ({ ...acc, [field.name]: initialValues[field.name] ?? '' }), {});
 
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
-  const [imagePreview, setImagePreview] = useState(null);
+  // אם כבר קיימת תמונה (במצב עריכה) - נציג אותה כתצוגה מקדימה
+  const [imagePreview, setImagePreview] = useState(() => {
+    const fileField = fields.find(field => field.type === 'file');
+    return fileField ? (initialValues[fileField.name] || null) : null;
+  });
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
     if (type === 'file' && files[0]) {
+      // ממירים את הקובץ ל-base64 (data URL) כדי שאפשר יהיה לשמור אותו בשרת כמחרוזת ולהציגו ישירות
       const file = files[0];
-      setFormData(prev => ({ ...prev, [name]: file }));
-      setImagePreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, [name]: reader.result }));
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
@@ -36,11 +46,10 @@ const DynamicForm = ({
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
+  // התמונות נשמרות כעת כמחרוזת base64, ולכן הן נכללות בשליחה יחד עם שאר השדות
   const getSubmitData = () =>
     fields.reduce((acc, field) => {
-      if (field.type !== 'file') {
-        acc[field.name] = formData[field.name];
-      }
+      acc[field.name] = formData[field.name];
       return acc;
     }, {});
 

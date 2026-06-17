@@ -81,6 +81,17 @@
   border: 2px solid var(--gray, #e0e0e0);
 }
 
+/* תמונת פרופיל עגולה ממורכזת מתחת לכותרת ההרשמה */
+.auth-form .form-group:first-of-type {
+  align-items: center;
+}
+
+.auth-form .preview-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
 .submit-btn {
   width: 100%;
   padding: 14px; 

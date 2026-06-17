@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
 import './RestaurantSection.css';
 import { apiFetch } from '../services/api';
@@ -33,17 +34,19 @@ function RestaurantSection({ restaurant, distance }) {
 
   return (
     <div className="restaurant-section-row">
-      {/* Restaurant Header Information */}
+      {/* Restaurant Header Information (clicking the details opens the restaurant page) */}
       <div className="restaurant-row-header">
-        <div className="restaurant-meta-right">
-          <img src={restaurantLogo} alt={restaurant.name} className="res-row-logo" />
-          <div className="res-text-details">
-            <h2>{restaurant.name}</h2>
-            <p className="res-sub-meta">
-              📍 {restaurant.address} • 📞 {restaurant.phoneNum} • ⏱️ {distance ? `${distance} km away` : 'Nearby'}
-            </p>
+        <Link to={`/restaurant/${restaurant.id}`} className="restaurant-card-link">
+          <div className="restaurant-meta-right">
+            <img src={restaurantLogo} alt={restaurant.name} className="res-row-logo" />
+            <div className="res-text-details">
+              <h2>{restaurant.name}</h2>
+              <p className="res-sub-meta">
+                📍 {restaurant.address} • 📞 {restaurant.phoneNum} • ⏱️ {distance ? `${distance} km away` : 'Nearby'}
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
         <div className="slider-arrows">
           <button className="arrow-btn">⮕</button>
           <button className="arrow-btn">⬅</button>
@@ -56,7 +59,12 @@ function RestaurantSection({ restaurant, distance }) {
           <div className="products-small-loading">Loading menu...</div>
         ) : products.length > 0 ? (
           products.map(product => (
-            <ProductCard key={product.id} product={product} variant={""} />
+            // Enrich the product with its restaurant details so the popup can link back to it
+            <ProductCard
+              key={product.id}
+              product={{ ...product, restaurantId: restaurant.id, restaurantName: restaurant.name }}
+              variant={""}
+            />
           ))
         ) : (
           <div className="no-products-placeholder">

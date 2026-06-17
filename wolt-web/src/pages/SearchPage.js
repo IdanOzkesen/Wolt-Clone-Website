@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import './SearchPage.css';
+import defaultPlaceholder from '../assets/default-placeholder.jpg';
 
 function SearchPage() {
   const [searchParams] = useSearchParams();
@@ -99,12 +100,12 @@ function SearchPage() {
                     onClick={() => navigate(`/restaurant/${rest._id || rest.id}`)}
                   >
                     <div className="place-image-wrapper">
-                      <img 
-                        src={rest.image || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=300&auto=format&fit=crop'} 
-                        alt={rest.name} 
+                      <img
+                        src={rest.imageUrl || rest.image || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=300&auto=format&fit=crop'}
+                        alt={rest.name}
                         className="place-img"
                         onError={(e) => {
-                          e.target.onerror = null; 
+                          e.target.onerror = null;
                           e.target.src = 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=300&auto=format&fit=crop';
                         }}
                       />
@@ -150,7 +151,7 @@ function SearchPage() {
                     </div>
                     <div className="item-image-wrapper">
                       {/* Uses the ACTUAL product image from your DB */}
-                      <img src={product.image} alt={product.name} className="item-img" />
+                      <img src={product.imageUrl || product.image || defaultPlaceholder} alt={product.name} className="item-img" />
                     </div>
                   </div>
                 ))}

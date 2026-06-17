@@ -41,3 +41,19 @@
   color: var(--text-primary);
   margin-left: 2px;
 }
+
+/* תצוגה מקדימה של העלאת תמונה */
+.file-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid var(--input-border);
+}
