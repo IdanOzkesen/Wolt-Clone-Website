@@ -239,6 +239,12 @@ function OrdersPage() {
                     <h4 className="expanded-title">Order Items:</h4>
                     <ul className="expanded-items-list">
                       {renderOrderItems(order.products)}
+                    
+                      <li className="expanded-item-row" style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px dashed #ccc' }}>
+                        <span className="expanded-item-qty"></span>
+                        <span className="expanded-item-name">🛵 Delivery Fee</span>
+                        <span className="expanded-item-price">₪{deliverPrice.toFixed(2)}</span>
+                      </li>
                     </ul>
                   </div>
                 )}
