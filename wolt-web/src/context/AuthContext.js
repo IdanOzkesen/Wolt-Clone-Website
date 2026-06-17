@@ -51,7 +51,7 @@ export function AuthProvider({ children }) {
         }
 
         const userDataToSave = {
-          userId: data.id || "", // <-- Extract and save the ID from the server response
+          userId: data.user.id || "", // <-- Extract and save the ID from the server response
           name: formData.userName,
           userDisplayName: formData.userDisplayName,
           address: formData.address,
