@@ -206,3 +206,27 @@
   background-color: #1e2635;
   color: #8a99ad;
 }
+
+.clear-cart-btn {
+  background: transparent;
+  border: none;
+  color: #ff5a5a; 
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s ease;
+  margin-left: auto; 
+}
+
+.clear-cart-btn:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+.dark .clear-cart-btn {
+  color: #ff7676;
+}
