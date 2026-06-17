@@ -8,30 +8,23 @@ let activeRefreshTokens = [];
 
 
 // get user ID by credentials, the request body should contain name and password
-const getUserByCredentials = (req, res) => {
-    // Extract the name and password from the request body
-    const { name, password } = req.body;
-    // Check if both name and password are provided
-    if (!name || !password) {
-        res.status(400).json({ error: "Missing required fields: name or password" });
-        return;
-    }
-    // Use the user model to get the user by their credentials
-    const user = userModel.getUserByCredentials(name, password);
-
-    // if the user is not found with the provided credentials, return 404 error
-    if (!user) {
-        res.status(404).json({ error: "Invalid username or password" }); 
-        return;
-    }
-    // If the user is found, generate an access token and a refresh token
-    const userId = user.id
+const generateTokens = (userId) => {
     const accessToken = jwt.sign({ id: userId }, ACCESS_SECRET, { expiresIn: '15m' });
     const refreshToken = jwt.sign({ id: userId }, REFRESH_SECRET, { expiresIn: '30d' });
     activeRefreshTokens.push(refreshToken);
-    // Return the access token, refresh token and userId in the response
-    res.json({ accessToken, refreshToken, userId });
-}
+    return { accessToken, refreshToken };
+};
+
+const getUserByCredentials = (req, res) => {
+    const { name, password } = req.body;
+    if (!name || !password) return res.status(400).json({ error: "Missing fields" });
+    
+    const user = userModel.getUserByCredentials(name, password);
+    if (!user) return res.status(404).json({ error: "Invalid credentials" });
+
+    const tokens = generateTokens(user.id);
+    res.json({ ...tokens, userId: user.id });
+};
 
 const refreshTokenHandler = (req, res) => {
     const { Refresh_Token } = req.body;
@@ -67,4 +60,4 @@ const logoutHandler = (req, res) => {
     res.json({ message: "Logged out successfully" });
 }
 
-module.exports = { getUserByCredentials, refreshTokenHandler, ACCESS_SECRET, logoutHandler };
+module.exports = { getUserByCredentials, refreshTokenHandler, ACCESS_SECRET, logoutHandler, generateTokens };

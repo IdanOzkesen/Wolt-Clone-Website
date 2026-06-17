@@ -1,5 +1,6 @@
 const userModel = require('../models/user.js')
 const {createSocket} = require('../middlewares/middlewares.js')
+const { generateTokens } = require('./token.js');
 
 // create a new user, the request body must contain name, password, address, phoneNum, and payment
 const createUser = async (req, res) => {
@@ -40,7 +41,13 @@ const createUser = async (req, res) => {
         res.status(404).json({error: "Failed to create socket connection"})
         return
     }
-    res.status(201).json(newUser)
+    const tokens = generateTokens(newUser.id);
+    
+    res.status(201).json({ 
+        user: newUser, 
+        accessToken: tokens.accessToken, 
+        refreshToken: tokens.refreshToken 
+    });
 }
 
 // get a specific user by their ID, provided in the request parameters
