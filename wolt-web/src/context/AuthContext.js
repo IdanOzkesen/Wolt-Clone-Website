@@ -45,13 +45,13 @@ export function AuthProvider({ children }) {
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
 
-        const userId = data.id;
+        const userId = data.user.id;
         if (userId) {
           localStorage.setItem('userId', String(userId));
         }
 
         const userDataToSave = {
-          userId: data.userId || "", // <-- Extract and save the ID from the server response
+          userId: data.id || "", // <-- Extract and save the ID from the server response
           name: formData.userName,
           userDisplayName: formData.userDisplayName,
           address: formData.address,
@@ -93,7 +93,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('refreshToken', data.refreshToken);
 
         const tokenPayload = JSON.parse(atob(data.accessToken.split('.')[1]));
-        const userId = data.userId || tokenPayload.userId;
+        const userId = data.user.id;
 
         const userResponse = await apiFetch(`/users/${userId}`, {
           method: 'GET'
