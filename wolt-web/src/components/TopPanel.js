@@ -30,7 +30,7 @@ function TopPanel() {
     if (e.key === 'Enter' && searchQuery.trim() !== "") {
       // Navigate to the search page with the query as a URL parameter
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery(""); // Optional: clear the search bar after searching
+      searchQuery(""); // Optional: clear the search bar after searching
     }
   };
 
@@ -42,15 +42,45 @@ function TopPanel() {
     }
   }, [location.pathname]);
 
-  // Theme state
-  const [darkMode, setDarkMode] = useState(false);
+  // ==========================================
+  // FIX 1: PERSISTENT DARK MODE (Survives Refresh)
+  // ==========================================
+  
+  // 1. Initialize state by checking localStorage first (Lazy Initialization)
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark'; // Returns true if 'dark' is saved, otherwise false
+  });
 
-  const toggleTheme = () => {
-    setDarkMode((prev) => !prev);
-    if (!darkMode) {
+  // 2. React to changes: Update the DOM and save to localStorage whenever darkMode changes
+  useEffect(() => {
+    if (darkMode) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem('theme', 'dark'); // Save user preference
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem('theme', 'light'); // Save user preference
+    }
+  }, [darkMode]);
+
+  // 3. Toggle function now only flips the state. The useEffect handles the rest.
+  const toggleTheme = () => {
+    setDarkMode((prev) => !prev);
+  };
+
+  // ==========================================
+  // FIX 2: SMART LOGO ROUTING
+  // ==========================================
+  const handleLogoClick = () => {
+    
+    // 1. If the user IS logged in, check if they are on the restaurants feed ('/discovery')
+    if (location.pathname === '/discovery') {
+      // If already on the restaurants feed, take them to the Landing Page
+      navigate('/'); 
+    } 
+    // 2. From any other page (like '/restaurant/:id'), return them to the restaurants feed
+    else {
+      navigate('/discovery');
     }
   };
 
@@ -80,7 +110,8 @@ function TopPanel() {
         
         {/* LEFT SECTION: Logo & Address */}
         <div className="top-panel-left">
-          <div className="top-panel-logo-wrapper" onClick={() => navigate("/")}>
+          {/* Changed onClick to use the new smart routing function */}
+          <div className="top-panel-logo-wrapper" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
             <img src={woltLogo} alt="Wolt Clone" className="top-panel-circular-logo" />
           </div>
 
@@ -143,7 +174,7 @@ function TopPanel() {
                     </div>
                   )}
                   
-                  {/* New "My Orders" Button */}
+                  {/* "My Orders" Button */}
                   <button 
                     className="dropdown-menu-btn"
                     onClick={() => {
