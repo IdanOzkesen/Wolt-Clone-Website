@@ -39,7 +39,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
                     
                     <div className="cart-item-details">
                       <span className="cart-item-name">{item.name}</span>
-                      <span className="cart-item-price">${(item.price * item.quantity).toFixed(2)}</span>
+                      <span className="cart-item-price">₪{(item.price * item.quantity).toFixed(2)}</span>
                     </div>
 
                     <div className="cart-item-controls">
@@ -63,7 +63,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
         <div className="cart-footer">
           <div className="cart-total-row">
             <span>Total:</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span>₪{totalPrice.toFixed(2)}</span>
           </div>
           <button 
             className="go-to-checkout-btn" 

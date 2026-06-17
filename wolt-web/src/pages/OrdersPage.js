@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './OrdersPage.css';
+import { apiFetch } from '../services/api';
+const deliverPrice = 10
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -23,9 +25,8 @@ function OrdersPage() {
         const token = localStorage.getItem('accessToken');
         
         // 1. Fetch the raw orders
-        const ordersResponse = await fetch(`http://localhost:10000/api/users/${userData.id}/orders`, {
+        const ordersResponse = await apiFetch(`/users/${userData.userId}/orders`, {
           method: 'GET',
-          headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (!ordersResponse.ok) throw new Error('Failed to fetch orders');
@@ -55,11 +56,10 @@ function OrdersPage() {
 
         // 3. Fetch details for products AND restaurants simultaneously
         const productPromises = productsToFetch.map(({ productId, restaurantId }) => 
-          fetch(`http://localhost:10000/api/restaurants/${restaurantId}/products/${productId}`, {
+          apiFetch(`/restaurants/${restaurantId}/products/${productId}`, {
             method: 'GET',
             headers: { 
-              'Authorization': `Bearer ${token}`,
-              'userId': userData.id 
+              'userId': userData.userId 
             } 
           })
             .then(res => res.ok ? res.json() : null)
@@ -67,9 +67,8 @@ function OrdersPage() {
         );
 
         const restaurantPromises = Array.from(uniqueRestaurants).map(restId => 
-          fetch(`http://localhost:10000/api/restaurants/${restId}`, {
-            method: 'GET',
-            headers: { 'Authorization': `Bearer ${token}` }
+          apiFetch(`/restaurants/${restId}`, {
+            method: 'GET'
           })
             .then(res => res.ok ? res.json() : null)
             .catch(() => null)
@@ -104,7 +103,7 @@ function OrdersPage() {
             return productMap[id] || { _id: id, name: `Unknown Item (${id.substring(0,6)})`, price: 0 };
           });
 
-          const totalPrice = populatedProducts.reduce((sum, p) => sum + (p.price || 0), 0);
+          const totalPrice = populatedProducts.reduce((sum, p) => sum + (p.price || 0), 0) + deliverPrice;
 
           return {
             ...order,
@@ -124,7 +123,7 @@ function OrdersPage() {
       }
     };
 
-    if (userData?.id) {
+    if (userData?.userId) {
       fetchOrdersAndProducts();
     }
   }, [isLoggedIn, userData, navigate]);
@@ -149,7 +148,7 @@ function OrdersPage() {
       <li key={item._id || item.id} className="expanded-item-row">
         <span className="expanded-item-qty">{item.qty}x</span>
         <span className="expanded-item-name">{item.name}</span>
-        {item.price > 0 && <span className="expanded-item-price">${(item.price * item.qty).toFixed(2)}</span>}
+        {item.price > 0 && <span className="expanded-item-price">₪{(item.price * item.qty).toFixed(2)}</span>}
       </li>
     ));
   };
@@ -223,7 +222,7 @@ function OrdersPage() {
                   <div className="order-detail-row">
                     <span className="detail-label">Total Price:</span>
                     <span className="detail-value" style={{ fontWeight: 'bold', color: '#009de0' }}>
-                      ${order.calculatedTotal > 0 ? order.calculatedTotal.toFixed(2) : '---'}
+                      ₪{order.calculatedTotal > 0 ? order.calculatedTotal.toFixed(2) : '---'}
                     </span>
                   </div>
                 </div>
@@ -240,6 +239,12 @@ function OrdersPage() {
                     <h4 className="expanded-title">Order Items:</h4>
                     <ul className="expanded-items-list">
                       {renderOrderItems(order.products)}
+                    
+                      <li className="expanded-item-row" style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px dashed #ccc' }}>
+                        <span className="expanded-item-qty"></span>
+                        <span className="expanded-item-name">🛵 Delivery Fee</span>
+                        <span className="expanded-item-price">₪{deliverPrice.toFixed(2)}</span>
+                      </li>
                     </ul>
                   </div>
                 )}

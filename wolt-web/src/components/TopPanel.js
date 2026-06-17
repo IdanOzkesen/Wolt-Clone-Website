@@ -22,6 +22,18 @@ function TopPanel() {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
 
+  // State for the search input
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Function to handle pressing "Enter" in the search bar
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim() !== "") {
+      // Navigate to the search page with the query as a URL parameter
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery(""); // Optional: clear the search bar after searching
+    }
+  };
+
   // Sync address from localStorage whenever the route changes
   useEffect(() => {
     const storedAddress = localStorage.getItem('address');
@@ -84,7 +96,14 @@ function TopPanel() {
         {/* MIDDLE SECTION: Search Bar (Hidden on LandPage) */}
         {!isLandPage && (
           <div className="top-panel-search">
-            <input type="text" placeholder="Search in Wolt..." className="search-input" />
+            <input 
+              type="text" 
+              placeholder="Search in Wolt..." 
+              className="search-input" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
+            />
           </div>
         )}
 

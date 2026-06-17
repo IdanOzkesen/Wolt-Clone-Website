@@ -50,7 +50,6 @@ function CheckoutPage() {
 
     // 1. Check if the user is NOT logged in
     if (!isLoggedIn) {
-      alert("You must be logged in to complete your order. Redirecting to login...");
       navigate('/login', { state: { from: '/checkout' } });
       return; 
     }
@@ -69,7 +68,7 @@ function CheckoutPage() {
       });
 
       const orderPayload = {
-        userId: userData.id, // Taken directly from AuthContext
+        userId: userData.userId, // Taken directly from AuthContext
         restaurantId: cart.restaurantId,
         products: productIds,
         deliveryAddress: orderDetails.address
@@ -79,7 +78,7 @@ function CheckoutPage() {
       const token = localStorage.getItem('accessToken');
 
       // 5. Send the POST request to the backend (AAA-141)
-      const response = await fetch(`http://localhost:10000/api/users/${userData.id}/orders`, {
+      const response = await fetch(`http://localhost:10000/api/users/${userData.userId}/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -196,7 +195,7 @@ function CheckoutPage() {
                 <li key={item.productId} className="summary-item">
                   <span className="summary-qty">{item.quantity}x</span>
                   <span className="summary-name">{item.name}</span>
-                  <span className="summary-price">${(item.price * item.quantity).toFixed(2)}</span>
+                  <span className="summary-price">₪{(item.price * item.quantity).toFixed(2)}</span>
                 </li>
               ))}
             </ul>
@@ -205,18 +204,18 @@ function CheckoutPage() {
 
             <div className="summary-row">
               <span>Subtotal</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>₪{totalPrice.toFixed(2)}</span>
             </div>
             <div className="summary-row">
               <span>Delivery Fee</span>
-              <span>$2.50</span> {/* Hardcoded delivery fee for UI sake */}
+              <span>₪10.00</span> {/* Hardcoded delivery fee for UI sake */}
             </div>
             
             <div className="summary-divider"></div>
 
             <div className="summary-row total-row">
               <span>Total</span>
-              <span>${(totalPrice + 2.50).toFixed(2)}</span>
+              <span>₪{(totalPrice + 10.00).toFixed(2)}</span>
             </div>
 
             <button 
