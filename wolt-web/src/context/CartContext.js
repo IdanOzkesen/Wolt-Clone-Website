@@ -72,8 +72,13 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // Function to completely clear the cart after a successful order
   const clearCart = () => {
-    setCart({ restaurantId: null, restaurantName: "", items: [] });
+    setCart({
+      restaurantId: null,
+      restaurantName: '',
+      items: []
+    });
   };
 
   const value = {
