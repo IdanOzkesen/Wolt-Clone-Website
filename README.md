@@ -1,20 +1,17 @@
-# Restaurant Management API (Exercise 3)
-## Repository Structure Note
-As permitted by the exercise guidelines, a new dedicated repository was created for **Exercise 3** (the Node.js Web API). The C++ server code from **Exercise 2** remains safely locked in its original, separate repository.
+# Wolt Clone - Advanced Systems Programming (Ex4)
 
-## Description
-This is a RESTful API built with Node.js and Express for Exercise 3. It serves as the backend for a food delivery and restaurant management system. The API handles entities such as users, restaurants, products, and orders. Additionally, it integrates directly with a custom C++ recommendation engine via TCP sockets to track user interactions and product views in real-time.
+This project is a fully functional web application inspired by Wolt. It consists of a React frontend, a Node.js (Express) backend, and a C++ Recommendation Server.
 
-## Prerequisites
-* **Node.js** installed on your machine.
-* **C++ Recommender Server:** The C++ server from Exercise 2 MUST be running locally on port 8080 before starting this Node.js server. The API relies on this active TCP connection for statistics tracking.
+## 🚀 How to Run the Project
 
-## Installation
-To install all required dependencies (like Express), navigate to the project directory and run:
-`npm install`
+The project uses Docker and Makefiles for an easy setup. Please follow these exact steps to compile and run all servers and applications.
 
-## Running the Application
-This system requires two components to run concurrently: the C++ Recommendation Engine and the Node.js API.
+### Prerequisites
+* Docker & Docker Compose installed and running.
+* Node.js and npm installed.
+* `make` utility installed.
+
+### Execution Steps
 
 ### **Step 1: Start the C++ Recommendation Server**
 You must start this server first. Navigate to the C++ project directory and choose one of the following methods:
@@ -27,6 +24,8 @@ We have provided a `Makefile` that handles building and running the containers a
 ```bash
 make up
 ```
+*(This will build and run the C++ server and Python client containers in the background)*
+
 > *NOTE:
 > When you are done, you can shut down the container using:* 
 ```bash
@@ -64,185 +63,69 @@ To build and run the Node.js server automatically, simply run:
 cd JS
 make up
 ```
+*(Wait for the backend server to fully initialize)*
 
-
-## **Quick Start / Testing Guide (Using cURL)**
-**Important Note:** Many endpoints no longer require a userId just to browse (like searching, viewing all restaurants, or viewing a restaurant's menu). However, personal actions (like viewing a specific product to trigger the recommender, modifying personal data, or making an order) still require authentication. Because the data is stored in memory, you must create a user first and use their generated ID for authenticated requests.
-
-**Follow this exact flow to test the API successfully:**
-
-**1. Create a User**
-
-```Bash
-curl -i -X POST http://localhost:10000/api/users \
--H "Content-Type: application/json" \
--d '{"name": "TestUser", "password": "123", "address": "Tel Aviv", "phoneNum": "050-1234567"}'
+### **Step 3: Start the React Frontend**
+Open a **new terminal window**, navigate to the React application folder, and start the development server:
+```bash
+cd ..
+cd wolt-web
+npm start
 ```
-Action: Note that payment is no longer required.
+*(The React application will automatically open in your default browser at http://localhost:3000)*
 
-**2. Authenticate (Login) to get your ID**
+### 📸 Screenshots
+*(Instructor Note: Below are the screenshots demonstrating the successful compilation, running of the servers, and the application interface)*
 
-```Bash
-curl -i -X POST http://localhost:10000/api/token \
--H "Content-Type: application/json" \
--d '{"name": "TestUser", "password": "123"}'
-```
-Action: Copy the id from the JSON response. Replace <USER_ID> in the following commands with this number.
+**Terminal successfully running docker-compose:**
+![Docker Compose Execution](photos/pic1.png)
+![Docker Compose Execution](photos/pic2.png)
 
-**3. Create a Restaurant**
+**React Application Interface:**
+![React App Main Screen](photos/pic2.png)
 
-```Bash
-curl -i -X POST http://localhost:10000/api/restaurants \
--H "Content-Type: application/json" \
--d '{"name": "Burger Place", "address": "Tel Aviv", "category": "Fast Food", "phoneNum": "03-1234567"}'
-```
-Action: Look at the Location header in the response (e.g., Location: /api/restaurants/12345). Copy that ID and replace <REST_ID> below.
+---
 
-**4. Add a Product to the Restaurant**
+## 🛠️ Workflow & Development Process
 
-```Bash
-curl -i -X POST http://localhost:10000/api/restaurants/<REST_ID>/products \
--H "Content-Type: application/json" \
--d '{"name": "Fries", "description": "Crispy potato", "category": "Side", "price": 25}'
-```
-Action: Look at the Location header in the response to get the product ID. Replace <PROD_ID> below.
+Our team followed a strict Agile development process, documenting our workflow as required.
 
-**5. View a Specific Product (Requires Auth - Triggers C++ Socket)**
+* **Jira & Sprints:** We managed our tasks using Jira, dividing the work into Epics, User Stories, and Tasks. We appointed a Scrum Master, planned our sprints, and held status meetings at least twice a week. All activities, conclusions, and task status updates (e.g., in progress, code review, done) were meticulously logged.
+* **Git & Feature Branches:** We worked exclusively with feature branches, maintaining a clean main branch.
+* **Code Reviews:** All code integration was handled strictly via Pull Requests (PRs). Every PR required a thorough code review and explicitly needed approval from a different team member before being merged.
+* **Traceability:** We mapped all tasks to feature branches, matching the Jira issue names to the branch names to ensure smooth integration between GitHub and Jira.
 
-```Bash
-curl -i -X GET http://localhost:10000/api/restaurants/<REST_ID>/products/<PROD_ID> \
--H "userId: <USER_ID>"
-```
-**6. Create an Order**
+---
 
-```Bash
-curl -i -X POST http://localhost:10000/api/users/<USER_ID>/orders \
--H "Content-Type: application/json" \
--H "userId: <USER_ID>" \
--d '{"userId": "<USER_ID>", "restaurantId": "<REST_ID>", "products": ["<PROD_ID>"], "deliveryAddress": "Tel Aviv"}'
-```
-Action: The totalPrice is calculated automatically by the server based on the products array. No need to send it manually!
+## 🔐 Security Notice
+In compliance with project guidelines, no real passwords, private information, sensitive data, tokens, or API keys are uploaded to GitHub or stored anywhere in the codebase, database, or Docker files. 
 
-**7. Test the Search Engine (Anonymous Browsing)**
+---
 
-```Bash
-curl -i -X GET http://localhost:10000/api/search/Fries
-```
-Action: Notice that no userId header is required to search!
+## 📱 Application Features & Usage Guide
 
-## API Endpoints Overview
-(Note: Replace :id, :restaurantId, :productId, :userid, and :orderId with actual IDs from your system. Include <USER_ID> in headers ONLY where specified).
-
-### Search:
-Global search for restaurants and products (No auth required):
-
-```Bash
-curl -i -X GET http://localhost:10000/api/search/:query
-```
-### Restaurants:
-Retrieve all restaurants (No auth required):
-
-```Bash
-curl -i -X GET http://localhost:10000/api/restaurants
-```
-Create a new restaurant:
-
-```Bash
-curl -i -X POST http://localhost:10000/api/restaurants -H "Content-Type: application/json" -d '{"name": "Restaurant Name", "address": "Address", "category": "Category", "phoneNum": "03-1234567"}'
-```
-Retrieve a specific restaurant (No auth required):
-
-```Bash
-curl -i -X GET http://localhost:10000/api/restaurants/:id
-```
-Update a restaurant:
-
-```Bash
-curl -i -X PATCH http://localhost:10000/api/restaurants/:id -H "Content-Type: application/json" -d '{"id": ":id", "name": "Updated Name", "address": "Updated Address", "category": "Category", "phoneNum": "03-9876543"}'
-```
-Delete a restaurant (Requires auth):
-
-```Bash
-curl -i -X DELETE http://localhost:10000/api/restaurants/:id -H "userId: <USER_ID>"
-```
-### Products:
-Retrieve all products for a restaurant (No auth required):
-
-```Bash
-curl -i -X GET http://localhost:10000/api/restaurants/:restaurantId/products
-```
-Add a new product to a restaurant:
-
-```Bash
-curl -i -X POST http://localhost:10000/api/restaurants/:restaurantId/products -H "Content-Type: application/json" -d '{"name": "Product Name", "description": "Yummy", "category": "Food", "price": 50}'
-```
-Retrieve a specific product (Requires auth - Triggers TCP Server):
-
-```Bash
-curl -i -X GET http://localhost:10000/api/restaurants/:restaurantId/products/:productId -H "userId: <USER_ID>"
-```
-Update a specific product:
-
-```Bash
-curl -i -X PATCH http://localhost:10000/api/restaurants/:restaurantId/products/:productId -H "Content-Type: application/json" -d '{"name": "Updated Product", "description": "Very Yummy", "category": "Food", "price": 60}'
-```
-Delete a product (Requires auth - Triggers TCP Server):
-
-```Bash
-curl -i -X DELETE http://localhost:10000/api/restaurants/:restaurantId/products/:productId -H "userId: <USER_ID>"
-```
-### Users & Authentication:
-Register a new user:
-
-```Bash
-curl -i -X POST http://localhost:10000/api/users -H "Content-Type: application/json" -d '{"name": "User", "password": "123", "address": "Address", "phoneNum": "050-1234567"}'
-```
-Authenticate (Login to get User ID):
-
-```Bash
-curl -i -X POST http://localhost:10000/api/token -H "Content-Type: application/json" -d '{"name": "User", "password": "123"}'
-```
-Retrieve a specific user's profile:
-
-```Bash
-curl -i -X GET http://localhost:10000/api/users/:userid -H "userId: <USER_ID>"
-```
-### Orders:
-Create a new order:
-
-```Bash
-curl -i -X POST http://localhost:10000/api/users/:userid/orders -H "Content-Type: application/json" -H "userId: <USER_ID>" -d '{"userId": ":userid", "restaurantId": ":restaurantId", "products": [":productId"], "deliveryAddress": "Address"}'
-```
-Retrieve all orders for a specific user:
-
-```Bash
-curl -i -X GET http://localhost:10000/api/users/:userid/orders -H "userId: <USER_ID>"
-```
-Retrieve a specific order:
-
-```Bash
-curl -i -X GET http://localhost:10000/api/users/:userid/orders/:orderId -H "userId: <USER_ID>"
-```
-Update an order's details:
-
-```Bash
-curl -i -X PATCH http://localhost:10000/api/users/:userid/orders/:orderId -H "Content-Type: application/json" -H "userId: <USER_ID>" -d '{"userId": ":userid", "restaurantId": ":restaurantId", "products": [":productId"], "deliveryAddress": "New Address"}'
-```
-Delete an order:
-
-```Bash
-curl -i -X DELETE http://localhost:10000/api/users/:userid/orders/:orderId -H "userId: <USER_ID>"
-```
+### Guest Access
+You can easily explore the application as a guest! Simply enter your delivery address on the main screen to browse nearby restaurants, view menus, and search for items without needing an account.
+![Guest Browsing](photos/pic5.png)
+![Guest Browsing](photos/pic6.png)
 
 
-### 📸 System Execution Demo
-Below is a step-by-step demonstration of the system running, from starting the servers to executing the core API flow:
+### Registered Users & Authentication
+To unlock the full capabilities of the application, such as **placing an order** or **creating a new restaurant**, you must sign up and log in.
+![Registration Screen](photos/pic7.png)
 
-![Demo 1](Demo1.png)
-![Demo 2](Demo2.png)
-![Demo 3](Demo3.png)
-![Demo 4](Demo4.png)
-![Demo 5](Demo5.png)
-![Demo 6](Demo6.png)
-![Demo 7](Demo7.png)
-![Demo 8](Demo8.png)
+**Strict Registration Validations:**
+* **Password:** Must be at least 8 characters long, and include at least one uppercase letter, one number, and one special character.
+* **Phone Number:** Must contain valid numeric digits only.
+
+### Cart & Ordering Rules
+* **Single Restaurant Policy:** Just like the real Wolt app, a single order can only contain items from one restaurant at a time. Mixing items from multiple restaurants in the same cart is not allowed.
+![Cart and Ordering](photos/pic9.png)
+
+### User Dashboard
+Once authenticated, users unlock a personalized experience:
+* **My Profile:** View your saved personal details, profile picture, and current address.
+* **Order History:** Access a dedicated page to view all your past orders and receipts.
+* **Dark Mode / Light Mode:** Easily toggle between viewing themes using the dedicated switch in the top navigation bar to suit your personal preference.
+![User Profile & Orders](photos/pic8.png)
+![User Profile & Orders](photos/pic10.png)
