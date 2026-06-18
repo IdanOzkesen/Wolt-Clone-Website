@@ -226,7 +226,7 @@ export function AuthProvider({ children }) {
 
       // 2. Send the PUT request to update the user
       const response = await apiFetch(`/users/${userId}`, {
-        method: 'patch',
+        method: 'PATCH',
         body: JSON.stringify(payload)
       });
 

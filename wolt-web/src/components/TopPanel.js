@@ -24,9 +24,6 @@ function TopPanel() {
   const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // State to hold the full user profile fetched from the database
-  const [fetchedUser, setFetchedUser] = useState(null);
-
   useEffect(() => {
     const fetchFullUserProfile = async () => {
       // Only execute if the user is authenticated and we have their ID
@@ -37,7 +34,6 @@ function TopPanel() {
           
           if (response.ok) {
             const data = await response.json();
-            setFetchedUser(data); // Save the fetched data to state
           }
         } catch (error) {
           console.error("Error fetching user profile:", error);
@@ -107,12 +103,11 @@ function TopPanel() {
   // DYNAMIC UI VARIABLES
   // ==========================================
   // Prioritize the fetched user data, fallback to context data if not yet loaded
-  const displayName = fetchedUser?.userDisplayName || userData?.userDisplayName || "";
+  const displayName = userData?.userDisplayName || "";
   
-  // Check common image field names (photo, imageUrl, profilePhoto) from your backend schema
-  const profilePhoto = fetchedUser?.imageUrl || fetchedUser?.imageUrl || userData?.imageUrl || ""; 
+  const profilePhoto = userData?.profilePhoto || ""; 
   
-  const displayAddress = fetchedUser?.address || userData?.address || address || "Set Address";
+  const displayAddress = userData?.address || address || "Set Address";
   const isLandPage = location.pathname === "/";
 
   const getInitials = (name) => {

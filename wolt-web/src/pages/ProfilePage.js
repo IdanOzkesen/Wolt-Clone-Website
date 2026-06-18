@@ -151,7 +151,7 @@ const handleEditUser = async (formData) => {
                         </>
                     </h2>
                     {/* Added display for Display Name right under the main name */}
-                    <p className="profile-display-name">@{profile.displayName}</p>
+                    <p className="profile-display-name">{profile.displayName}</p>
                 </div>
 
                 <div className="profile-details-section">
