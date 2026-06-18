@@ -107,10 +107,10 @@ function TopPanel() {
   // DYNAMIC UI VARIABLES
   // ==========================================
   // Prioritize the fetched user data, fallback to context data if not yet loaded
-  const displayName = fetchedUser?.name || userData?.userDisplayName || "";
+  const displayName = fetchedUser?.userDisplayName || userData?.userDisplayName || "";
   
   // Check common image field names (photo, imageUrl, profilePhoto) from your backend schema
-  const profilePhoto = fetchedUser?.photo || fetchedUser?.imageUrl || userData?.profilePhoto || ""; 
+  const profilePhoto = fetchedUser?.imageUrl || fetchedUser?.imageUrl || userData?.imageUrl || ""; 
   
   const displayAddress = fetchedUser?.address || userData?.address || address || "Set Address";
   const isLandPage = location.pathname === "/";

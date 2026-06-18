@@ -1,37 +1,43 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { apiFetch } from '../services/api';
+import FormModal from '../components/FormModal';
 import './ProfilePage.css';
 
+// UPDATED: keys now exactly match the backend model requirements
+const userFields = [
+    { name: 'imageUrl', label: 'Profile Photo', type: 'file', required: false },
+    { name: 'name', label: 'Full Name', placeholder: 'Enter your full name', required: false },
+    { name: 'displayName', label: 'Display Name', placeholder: 'Enter your display name', required: false },
+    { name: 'password', label: 'New Password', type: 'password', placeholder: 'Enter new password (leave blank to keep current)', required: false },
+    { name: 'confirmPassword', label: 'Confirm Password', type: 'password', placeholder: 'Confirm your new password', required: false },
+    { name: 'phoneNum', label: 'Phone Number', type: 'tel', placeholder: 'Enter your phone number', required: false },
+    { name: 'address', label: 'Address', placeholder: 'Enter your address', required: false },
+];
+
 function ProfilePage() {
-    const { userData, isLoggedIn } = useContext(AuthContext);
+    const { userData, isLoggedIn, editUser } = useContext(AuthContext);
     const [profile, setProfile] = useState(null);
+    const [showEditUser, setShowEditUser] = useState(false);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     // Fetch the user's full details when the component mounts
     useEffect(() => {
         const fetchUserProfile = async () => {
-            // 1. If not logged in at all, stop here.
             if (!isLoggedIn) {
                 setLoading(false);
                 return;
             }
 
-            // 2. Attempt to get the ID from the Context first
             let idToFetch = userData?.userId;
 
-            // 3. Fallback mechanism: If the Context is missing the ID (e.g., stale localStorage),
-            // we decode the JWT payload directly to extract the user ID.
             if (!idToFetch) {
                 const token = localStorage.getItem('accessToken');
                 if (token) {
                     try {
-                        // JWT is structured as Header.Payload.Signature
-                        // We split by '.' and decode the Payload (index 1) using atob()
                         const payload = JSON.parse(atob(token.split('.')[1]));
-                        
-                        // Check common MongoDB/Node.js ID field names
                         idToFetch = payload.id || payload._id || payload.userId;
                     } catch (e) {
                         console.error("Failed to decode JWT token:", e);
@@ -39,7 +45,6 @@ function ProfilePage() {
                 }
             }
 
-            // 4. If we still don't have an ID, abort the fetch.
             if (!idToFetch) {
                 console.warn("Aborting fetch: No User ID found in context or token payload.");
                 setLoading(false);
@@ -47,9 +52,8 @@ function ProfilePage() {
             }
 
             try {
-                // Execute the network request using the safely extracted ID
-                const response = await apiFetch(`/users/${idToFetch}`, { 
-                    method: 'GET' 
+                const response = await apiFetch(`/users/${idToFetch}`, {
+                    method: 'GET'
                 });
 
                 if (!response.ok) {
@@ -69,7 +73,6 @@ function ProfilePage() {
         fetchUserProfile();
     }, [isLoggedIn, userData]);
 
-    // Helper function to extract initials for the avatar fallback
     const getInitials = (name) => {
         if (!name) return "";
         const words = name.trim().split(" ");
@@ -101,33 +104,54 @@ function ProfilePage() {
         );
     }
 
-    console.log("Profile Data from server:", profile);
-    // Determine the photo to display by checking ALL possible fields, 
-    // especially 'profile.profilePhoto' which comes directly from the database fetch
+    // COMPLETED: Call editUser from context and pass the form data
+const handleEditUser = async (formData) => {
+        const result = await editUser(userData.userId, formData);
+        
+        if (result.success) {
+            setProfile(result.data);
+            setShowEditUser(false);
+        } else {
+            alert(result.error); 
+        }
+    };
+
+    const validateEditForm = (submitData) => {
+        const errors = {};
+        if (submitData.password || submitData.confirmPassword) {
+            if (submitData.password !== submitData.confirmPassword) {
+                errors.confirmPassword = "Passwords do not match";
+            }
+        }
+        return errors;
+    };
+
     const displayPhoto = profile.profilePhoto || profile.photo || profile.imageUrl || userData?.profilePhoto;
 
     return (
         <div className="profile-page-container">
-            <div className="profile-header">
-                <h1>My Profile</h1>
-                <p>Your personal account details</p>
-            </div>
-
+            {/* ... Profile Header ... */}
             <div className="profile-card">
                 <div className="profile-avatar-section">
                     <div className="large-avatar">
                         {displayPhoto ? (
-                            // Added inline styles to ensure the image perfectly fits the circle without distortion
-                            <img 
-                                src={displayPhoto} 
-                                alt="Profile" 
+                            <img
+                                src={displayPhoto}
+                                alt="Profile"
                                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                             />
                         ) : (
                             <span>{getInitials(profile.name)}</span>
                         )}
                     </div>
-                    <h2 className="profile-name">{profile.name}</h2>
+                    <h2 className="profile-name">
+                        {profile.name}
+                        <>
+                            <button className="edit-pencil-btn" onClick={() => setShowEditUser(true)} aria-label="Edit">✏️</button>
+                        </>
+                    </h2>
+                    {/* Added display for Display Name right under the main name */}
+                    <p className="profile-display-name">@{profile.displayName}</p>
                 </div>
 
                 <div className="profile-details-section">
@@ -135,24 +159,40 @@ function ProfilePage() {
                         <span className="detail-label">Full Name</span>
                         <span className="detail-value">{profile.name || 'N/A'}</span>
                     </div>
-                    
+
+                    <div className="detail-row">
+                        <span className="detail-label">Display Name</span>
+                        <span className="detail-value">{profile.displayName || 'N/A'}</span>
+                    </div>
+
                     <div className="detail-row">
                         <span className="detail-label">Phone Number</span>
                         <span className="detail-value" dir="ltr">{profile.phoneNum || 'N/A'}</span>
                     </div>
-                    
+
                     <div className="detail-row">
                         <span className="detail-label">Saved Address</span>
                         <span className="detail-value">{profile.address || 'N/A'}</span>
                     </div>
-
-                    {/* Notice informing the user that editing is disabled */}
-                    <div className="profile-notice">
-                        <span className="info-icon">ℹ️</span>
-                        <span>Profile details cannot be updated at this time.</span>
-                    </div>
                 </div>
             </div>
+
+            <FormModal
+                isOpen={showEditUser}
+                onClose={() => setShowEditUser(false)}
+                title="Edit Profile"
+                fields={userFields}
+                initialValues={{
+                    name: profile.name || '',
+                    displayName: profile.displayName || '', // Pass existing Display Name to the form
+                    phoneNum: profile.phoneNum || '',
+                    address: profile.address || '',
+                    imageUrl: displayPhoto || ''
+                }}
+                validate={validateEditForm}
+                submitLabel="Save Changes"
+                onSubmit={handleEditUser}
+            />
         </div>
     );
 }
