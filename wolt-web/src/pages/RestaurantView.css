@@ -2,161 +2,166 @@
    RESTAURANT VIEW (Dark Mode Optimized)
    ================================ */
 .restaurant-view-page {
-  width: 100%;
-  min-height: 100vh;
-  background-color: var(--bg-primary); /* שימוש במשתנה */
-  color: var(--text-primary);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  direction: ltr;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    direction: ltr;
 }
 
 .restaurant-hero {
-  background: var(--bg-secondary); /* רקע כהה מותאם */
-  height: 260px;
-  position: relative;
-  display: flex;
-  align-items: flex-end;
+    background: var(--bg-secondary);
+    width: 100%;
+    
+    aspect-ratio: 3.5 / 1; 
+    
+    min-height: 200px;
+    max-height: 380px;
+    
+    position: relative;
+    display: flex;
+    align-items: flex-end;
 }
 
 .hero-overlay {
-  width: 100%;
-  padding: 30px 5%;
-  /* שימוש ב-rgba מבוסס על משתנה הצבע השחור אם תרצה, או השארת שקיפות קבועה */
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    width: 100%;
+    padding: 30px 5%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
 }
 
 .restaurant-view-name {
-  font-size: 36px;
-  margin: 8px 0;
-  font-weight: 800;
-  color: var(--text-primary);
+    font-size: 36px;
+    margin: 8px 0;
+    font-weight: 800;
+    color: var(--text-primary);
 }
 
 .restaurant-view-meta {
-  color: var(--text-muted);
-  margin: 0;
+    color: var(--text-muted);
+    margin: 0;
 }
 
 .restaurant-view-body {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 30px 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 30px 20px;
 }
 
 .section-menu-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: var(--text-primary);
-  text-align: left;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    text-align: left;
 }
 
 .products-grid-layout {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 16px;
 }
 
 /* ================================
    MENU ITEM CARD
    ================================ */
 .product-item-card {
-  background-color: var(--card-bg); /* משתנה מותאם ל-Dark Mode */
-  border: 1px solid var(--input-border);
-  border-radius: 12px;
-  padding: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  height: 130px;
-  box-sizing: border-box;
-  cursor: pointer;
+    background-color: var(--card-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 130px;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 
 .product-item-card:hover {
-  transform: translateY(-2px);
-  background-color: var(--card-hover);
+    transform: translateY(-2px);
+    background-color: var(--card-hover);
 }
 
 .product-card-details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  padding-right: 12px;
-  text-align: left;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding-right: 12px;
+    text-align: left;
 }
 
 .product-title-text {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
 }
 
 .product-desc-text {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-height: 1.4;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
 }
 
 .product-price-text {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--brand-primary); /* צבע המותג המותאם */
-  margin-top: auto;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-primary);
+    margin-top: auto;
 }
 
 /* ================================
    IMAGE & ACTION BUTTON
    ================================ */
 .product-image-block {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  flex-shrink: 0;
-  border-radius: 8px;
-  overflow: hidden;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .product-dish-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .add-to-cart-action-btn {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  width: 28px;
-  height: 28px;
-  background-color: var(--btn-primary); /* צבע כפתור מותאם */
-  color: var(--btn-text);
-  border: none;
-  border-radius: 6px;
-  font-size: 18px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 2;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 28px;
+    height: 28px;
+    background-color: var(--btn-primary);
+    color: var(--btn-text);
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
 }
 
 .add-to-cart-action-btn:hover {
-  background-color: #005c73;
-  transform: scale(1.05);
+    background-color: #005c73;
+    transform: scale(1.05);
 }
 
 .add-to-cart-action-btn:active {
-  transform: scale(0.95);
+    transform: scale(0.95);
 }
 
 .edit-pencil-btn {
@@ -178,7 +183,6 @@
     background: rgba(255, 255, 255, 0.4);
 }
 
-/* שורה של כותרת התפריט (כדי להכניס את הכפתור) */
 .menu-header-row {
     display: flex;
     justify-content: space-between;
@@ -186,9 +190,8 @@
     margin-bottom: 20px;
 }
 
-/* כפתור הוספת מוצר */
 .add-product-btn {
-    background-color: #00b8ff; /* צבע וולט טיפוסי */
+    background-color: #00b8ff;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -202,7 +205,6 @@
     background-color: #009ad6;
 }
 
-/* אייקון עריכה ליד שם המוצר */
 .product-edit-icon {
     cursor: pointer;
     margin-left: 10px;
@@ -215,16 +217,15 @@
     opacity: 1;
 }
 
-/* תיקון קטן לסידור הכותרת של המוצר כדי שהעיפרון לא ישבור שורות */
 .product-title-text {
     display: flex;
     align-items: center;
-    gap: 8px; /* מרווח נוח בין הטקסט לאייקון */
+    gap: 8px;
     white-space: nowrap;
 }
 
 .delete-btn {
-    background: rgba(255, 69, 58, 0.2); /* אדום שקוף */
+    background: rgba(255, 69, 58, 0.2);
     border: none;
     border-radius: 50%;
     width: 32px;
@@ -243,7 +244,7 @@
     margin-left: 10px;
     font-size: 14px;
     opacity: 0.6;
-    color: #ff453a; /* צבע אדום */
+    color: #ff453a;
     transition: opacity 0.2s;
 }
 
@@ -265,7 +266,6 @@
     padding: 16px;
 }
 
-/* כרטיס הפופ-אפ עצמו */
 .product-modal-sheet {
     position: relative;
     width: 100%;
