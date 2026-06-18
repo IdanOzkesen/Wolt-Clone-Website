@@ -311,7 +311,7 @@ function RestaurantView() {
                 <button className="qty-btn" onClick={increaseQuantity} aria-label="Increase">+</button>
               </div>
               <button className="add-to-order-btn" onClick={handleAddToOrder}>
-                להוסיף להזמנה ₪{(parseFloat(selectedProduct.price) * modalQuantity).toFixed(2)}
+                Add to Order · ₪{(parseFloat(selectedProduct.price) * modalQuantity).toFixed(2)}
               </button>
             </div>
           </div>

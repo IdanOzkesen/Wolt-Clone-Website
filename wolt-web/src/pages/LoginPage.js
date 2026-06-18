@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./LoginPage.css";
+import "./SignupPage.css";
 import DynamicForm from "../components/DynamicForm";
 import { AuthContext } from "../context/AuthContext";
 

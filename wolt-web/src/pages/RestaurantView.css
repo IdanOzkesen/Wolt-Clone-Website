@@ -348,7 +348,7 @@
     margin: 0;
 }
 
-/* שורת התחתית: בורר כמות + כפתור הוספה להזמנה */
+/* Bottom row: quantity selector + add-to-order button */
 .product-modal-footer {
     display: flex;
     align-items: center;
@@ -357,7 +357,6 @@
     position: sticky;
     bottom: 0;
     background: var(--bg-primary);
-    direction: rtl; /* בורר הכמות מימין והכפתור משמאל, כמו בעיצוב */
 }
 
 .quantity-selector {

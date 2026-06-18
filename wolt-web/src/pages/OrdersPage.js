@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './OrdersPage.css';
 import { apiFetch } from '../services/api';
-const deliverPrice = 10;
+const deliverPrice = 10
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -20,29 +20,17 @@ function OrdersPage() {
       return;
     }
 
-    const fetchOrdersAndProducts = async (userId) => {
+    const fetchOrdersAndProducts = async () => {
       try {
-        setLoading(true);
-        // 1. Fetch the raw orders using the safely extracted userId
-        const ordersResponse = await apiFetch(`/users/${userId}/orders`, {
+        const token = localStorage.getItem('accessToken');
+        
+        // 1. Fetch the raw orders
+        const ordersResponse = await apiFetch(`/users/${userData.userId}/orders`, {
           method: 'GET',
         });
 
-        // Smart fallback: If the server returns 404, it implies the user has no orders, 
-        // not a system crash. We set an empty array to show the empty state screen.
-        if (ordersResponse.status === 404) {
-          setOrders([]);
-          setLoading(false);
-          return;
-        }
-
         if (!ordersResponse.ok) throw new Error('Failed to fetch orders');
         let ordersData = await ordersResponse.json();
-
-        // Protection check: Ensure the response is actually an array before mapping
-        if (!Array.isArray(ordersData)) {
-          ordersData = [];
-        }
 
         // Sort by newest first
         ordersData = ordersData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -71,7 +59,7 @@ function OrdersPage() {
           apiFetch(`/restaurants/${restaurantId}/products/${productId}`, {
             method: 'GET',
             headers: { 
-              'userId': userId // Used the safely extracted userId here too
+              'userId': userData.userId 
             } 
           })
             .then(res => res.ok ? res.json() : null)
@@ -112,7 +100,7 @@ function OrdersPage() {
           const resolvedRestaurantName = order.restaurantName || restaurantMap[restId] || 'Unknown Restaurant';
 
           const populatedProducts = order.products.map(id => {
-            return productMap[id] || { _id: id, name: `Unknown Item (${String(id).substring(0,6)})`, price: 0 };
+            return productMap[id] || { _id: id, name: `Unknown Item (${id.substring(0,6)})`, price: 0 };
           });
 
           const totalPrice = populatedProducts.reduce((sum, p) => sum + (p.price || 0), 0) + deliverPrice;
@@ -135,31 +123,8 @@ function OrdersPage() {
       }
     };
 
-    // ==========================================
-    // JWT FALLBACK TO GET USER ID SAFELY
-    // ==========================================
-    let idToFetch = userData?.userId;
-    
-    // If the ID is missing from the Context (e.g., stale session), 
-    // decode the JWT payload to extract it directly.
-    if (!idToFetch) {
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        try {
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          idToFetch = payload.id || payload._id || payload.userId;
-        } catch (e) {
-          console.error("Failed to decode JWT token in orders page:", e);
-        }
-      }
-    }
-
-    if (idToFetch) {
-      fetchOrdersAndProducts(idToFetch);
-    } else {
-      // If we still don't have an ID for some reason, stop the loading spinner 
-      // to prevent an infinite loading screen.
-      setLoading(false);
+    if (userData?.userId) {
+      fetchOrdersAndProducts();
     }
   }, [isLoggedIn, userData, navigate]);
 
@@ -234,6 +199,7 @@ function OrdersPage() {
                 </div>
                 
                 <div className="order-card-body">
+                  {/* NEW ROW: Restaurant Name */}
                   <div className="order-detail-row">
                     <span className="detail-label">Restaurant:</span>
                     <span className="detail-value" style={{ fontWeight: '600' }}>
