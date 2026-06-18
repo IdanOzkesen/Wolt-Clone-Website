@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import './SearchPage.css';
+import { apiFetch } from '../services/api';
 import defaultPlaceholder from '../assets/default-placeholder.jpg';
+
 
 function SearchPage() {
   const [searchParams] = useSearchParams();
@@ -24,7 +26,7 @@ function SearchPage() {
       try {
         // 1. Call your actual backend Search API
         // Make sure this URL matches your Express route exactly!
-        const response = await fetch(`http://localhost:10000/api/search/${encodeURIComponent(query)}`);
+        const response = await apiFetch(`/search/${encodeURIComponent(query)}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch search results from the server');
@@ -89,7 +91,6 @@ function SearchPage() {
             <div className="search-section">
               <div className="section-header-flex">
                 <h2>Places</h2>
-                <span className="view-all-link">View all</span>
               </div>
               
               <div className="places-grid">
@@ -101,12 +102,12 @@ function SearchPage() {
                   >
                     <div className="place-image-wrapper">
                       <img
-                        src={rest.imageUrl || rest.image || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=300&auto=format&fit=crop'}
+                        src={rest.imageUrl || defaultPlaceholder}
                         alt={rest.name}
                         className="place-img"
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=300&auto=format&fit=crop';
+                          e.target.src = defaultPlaceholder;
                         }}
                       />
                     </div>
@@ -132,7 +133,6 @@ function SearchPage() {
             <div className="search-section">
               <div className="section-header-flex">
                 <h2>Related Items</h2>
-                <span className="view-all-link">View all</span>
               </div>
               
               <div className="items-grid">
