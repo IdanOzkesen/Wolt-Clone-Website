@@ -101,8 +101,10 @@ function ProfilePage() {
         );
     }
 
-    // Determine the photo to display
-    const displayPhoto = profile.photo || profile.imageUrl || userData?.profilePhoto;
+    console.log("Profile Data from server:", profile);
+    // Determine the photo to display by checking ALL possible fields, 
+    // especially 'profile.profilePhoto' which comes directly from the database fetch
+    const displayPhoto = profile.profilePhoto || profile.photo || profile.imageUrl || userData?.profilePhoto;
 
     return (
         <div className="profile-page-container">
@@ -115,7 +117,12 @@ function ProfilePage() {
                 <div className="profile-avatar-section">
                     <div className="large-avatar">
                         {displayPhoto ? (
-                            <img src={displayPhoto} alt="Profile" />
+                            // Added inline styles to ensure the image perfectly fits the circle without distortion
+                            <img 
+                                src={displayPhoto} 
+                                alt="Profile" 
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                            />
                         ) : (
                             <span>{getInitials(profile.name)}</span>
                         )}

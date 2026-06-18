@@ -1,10 +1,11 @@
 class user {
-    constructor(id, name, password, address,phoneNum) {
+    constructor(id, name, password, address, phoneNum, imageUrl) {
         this.id = id
         this.name = name
         this.password = password
         this.address = address
         this.phoneNum = phoneNum
+        this.imageUrl = imageUrl // Added imageUrl property
     }
 }
 
@@ -12,13 +13,14 @@ class user {
 let usersList = []
 
 // create a new user and add them to the list if they don't already exist
-const createUser = (name, password, address, phoneNum) => {
+const createUser = (name, password, address, phoneNum, imageUrl) => {
     // check if a user with the exact same details already exists
     if(checkIfUserExist(name, password, address, phoneNum)) {
         return null
     }
     const id = idGenerator()
-    const newUser = new user(id, name, password, address, phoneNum)
+    // pass imageUrl to the constructor
+    const newUser = new user(id, name, password, address, phoneNum, imageUrl)
     usersList.push(newUser)
     return newUser
 }
@@ -63,4 +65,5 @@ module.exports = {
     getUserById,
     getUserByCredentials,
     getAllUsers,
-    checkIfUserExist}
+    checkIfUserExist
+}
