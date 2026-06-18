@@ -1,4 +1,23 @@
-/* Container allowed to expand on screen */
+:root {
+  --cat-bg-all: #e3f2fd;
+  --cat-bg-0: #ffe5e5;
+  --cat-bg-1: #fff0db;
+  --cat-bg-2: #fff9d6;
+  --cat-bg-3: #e5f6e5;
+  --cat-bg-4: #f0e5ff;
+  --cat-bg-5: #e0f7fa;
+}
+
+.dark {
+  --cat-bg-all: #102a43;
+  --cat-bg-0: #4a1515;
+  --cat-bg-1: #4a2c11;
+  --cat-bg-2: #403810;
+  --cat-bg-3: #143314;
+  --cat-bg-4: #2d1a47;
+  --cat-bg-5: #004d40;
+}
+
 .category-slider-container {
   width: 100%;
   max-width: 1400px;
@@ -14,24 +33,20 @@
   padding: 0 24px;
 }
 
-/* Updated to use Dark/Light mode text variable */
 .category-title {
   font-size: 22px;
   font-weight: 700;
-  color: var(--text-primary); 
+  color: var(--text-primary);
   margin: 0;
   transition: color 0.3s ease;
 }
 
-/* Padding moved here to prevent shadow/image cropping during scroll */
 .category-list {
   display: flex;
   gap: 24px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 10px 24px; 
-  
-  -ms-overflow-style: none;
+  padding: 10px 24px;
   scrollbar-width: none;
 }
 
@@ -39,65 +54,47 @@
   display: none;
 }
 
-.category-list::after {
-  content: '';
-  padding-right: 1px;
-}
-
 .category-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  flex-shrink: 0; 
+  flex-shrink: 0;
   transition: transform 0.2s ease;
 }
 
 .category-item:hover {
-  transform: scale(1.05);
+  transform: translateY(-4px);
 }
 
-/* Updated to use Theme Card Background */
 .category-img-wrapper {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: var(--card-bg); /* Adapts to Dark/Light mode */
-  margin-bottom: 8px;
+  width: 85px;
+  height: 85px;
+  border-radius: 24px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease, background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease, background-color 0.3s ease;
 }
 
 .category-emoji-icon {
-  font-size: 36px;
+  font-size: 40px;
 }
 
-.category-img-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Updated to use Theme Text */
 .category-item span {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary); /* Adapts to Dark/Light mode */
+  color: var(--text-primary);
   text-align: center;
   transition: color 0.3s ease;
 }
 
-/* Active Category - Connected to your Global Brand Variables */
 .category-item.active .category-img-wrapper {
-  background-color: var(--brand-primary);
-  border: 2px solid var(--brand-secondary);
   transform: scale(1.08);
-  /* A slight glow effect using the brand-secondary color */
-  box-shadow: 0 4px 12px rgba(0, 194, 232, 0.3); 
+  border: 2px solid var(--brand-primary);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .category-item.active span {

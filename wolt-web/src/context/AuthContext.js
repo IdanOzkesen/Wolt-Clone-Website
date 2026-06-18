@@ -30,6 +30,7 @@ export function AuthProvider({ children }) {
     // Pack the data exactly as your backend expects it (imageUrl for the photo)
     const userDataToSend = {
       name: formData.userName,
+      displayName: formData.userDisplayName,
       password: formData.password,
       address: formData.address,
       phoneNum: formData.phoneNumber,
@@ -44,14 +45,14 @@ export function AuthProvider({ children }) {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // 1. Save tokens securely
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
 
         // 2. SAFELY extract ID to prevent crashes if data.user is undefined
         const extractedUserId = (data.user && (data.user.id || data.user._id)) || data.userId || data.id || data._id;
-        
+
         if (extractedUserId) {
           localStorage.setItem('userId', String(extractedUserId));
         }
@@ -59,8 +60,9 @@ export function AuthProvider({ children }) {
         const userDataToSave = {
           userId: extractedUserId || "",
           name: formData.userName,
-          userDisplayName: formData.userDisplayName || formData.userName,
+          userDisplayName: formData.userDisplayName,
           address: formData.address || "",
+          phoneNum: formData.phoneNum,
           profilePhoto: "" // Default to empty, will safely attempt to save below
         };
 
@@ -109,19 +111,19 @@ export function AuthProvider({ children }) {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // 1. First, save the tokens to local storage
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
 
         // 2. Safe ID extraction: Try getting it from the response, fallback to decoding the JWT token payload
         const tokenPayload = JSON.parse(atob(data.accessToken.split('.')[1]));
-        const extractedUserId = (data.user && (data.user.id || data.user._id)) || 
-                                tokenPayload.id || tokenPayload._id || tokenPayload.userId;
+        const extractedUserId = (data.user && (data.user.id || data.user._id)) ||
+          tokenPayload.id || tokenPayload._id || tokenPayload.userId;
 
         // Prevent the app from crashing silently if the ID is nowhere to be found
         if (!extractedUserId) {
-           throw new Error("Could not extract user ID from login response or token payload.");
+          throw new Error("Could not extract user ID from login response or token payload.");
         }
 
         // 3. Fetch the rest of the user's details from the server using the extracted ID
@@ -146,17 +148,18 @@ export function AuthProvider({ children }) {
         const photoFromServer = userInfo.profilePhoto || userInfo.photo || userInfo.imageUrl || "";
 
         const userDataToSave = {
-          userId: resolvedUserId, 
+          userId: resolvedUserId,
           name: userInfo.name || formData.userName,
           userDisplayName: userInfo.userDisplayName || userInfo.name || formData.userName,
           address: userInfo.address || "",
+          phoneNum: userInfo.phoneNum,
           profilePhoto: "" // Start empty
         };
 
         // 2. Save all TEXT data first (this is safe)
         for (const [key, value] of Object.entries(userDataToSave)) {
           if (key !== 'profilePhoto') {
-             localStorage.setItem(key, value);
+            localStorage.setItem(key, value);
           }
         }
 
@@ -193,8 +196,8 @@ export function AuthProvider({ children }) {
         await apiFetch('/token/logout', {
           method: 'POST',
           // Matching the exact payload key expected by the backend controller
-          body: JSON.stringify({ 
-            Refresh_Token: refreshToken 
+          body: JSON.stringify({
+            Refresh_Token: refreshToken
           })
         });
       }
@@ -209,9 +212,63 @@ export function AuthProvider({ children }) {
     }
   };
 
-  return (
-    <AuthContext.Provider value={{ signup, login, logout, userData, isLoggedIn, setUserData }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const editUser = async (userId, formData) => {
+    try {
+      // בונים את אובייקט הנתונים באופן דינמי - רק מה שמלא נכנס!
+      const payload = {};
+
+      if (formData.name) payload.name = formData.name;
+      if (formData.displayName) payload.displayName = formData.displayName;
+      if (formData.address) payload.address = formData.address;
+      if (formData.phoneNum) payload.phoneNum = formData.phoneNum;
+      if (formData.password) payload.password = formData.password;
+      if (formData.imageUrl) payload.imageUrl = formData.imageUrl;
+
+      // 2. Send the PUT request to update the user
+      const response = await apiFetch(`/users/${userId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
+
+        // 3. Update local storage to reflect the new data everywhere
+        if (updatedUser.name) localStorage.setItem('name', updatedUser.name);
+        if (updatedUser.displayName) localStorage.setItem('userDisplayName', updatedUser.displayName);
+        if (updatedUser.address) localStorage.setItem('address', updatedUser.address);
+        
+        if (updatedUser.imageUrl) {
+          try {
+            localStorage.setItem('profilePhoto', updatedUser.imageUrl);
+          } catch (e) {
+            console.warn("Image too large for local storage");
+          }
+        }
+
+        // 4. Update the Context state so the UI updates immediately
+        setUserData((prev) => ({
+          ...prev,
+          name: updatedUser.name || prev.name,
+          userDisplayName: updatedUser.displayName || prev.userDisplayName,
+          address: updatedUser.address || prev.address,
+          profilePhoto: updatedUser.imageUrl || prev.profilePhoto
+        }));
+
+        return { success: true, data: updatedUser };
+      } else {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || "Failed to update profile." };
+      }
+    } catch (err) {
+      console.error("Edit user process crashed:", err);
+      return { success: false, error: "A network error occurred." };
+    }
+  };
+
+return (
+  <AuthContext.Provider value={{ signup, login, logout, userData, isLoggedIn, setUserData, editUser }}>
+    {children}
+  </AuthContext.Provider>
+);
 }

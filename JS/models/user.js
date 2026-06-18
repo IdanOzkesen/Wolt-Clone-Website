@@ -1,11 +1,12 @@
 class user {
-    constructor(id, name, password, address, phoneNum, imageUrl) {
+    constructor(id, name, displayName, password, address, phoneNum, imageUrl) {
         this.id = id
         this.name = name
+        this.displayName = displayName
         this.password = password
         this.address = address
         this.phoneNum = phoneNum
-        this.imageUrl = imageUrl // Added imageUrl property
+        this.imageUrl = imageUrl
     }
 }
 
@@ -13,14 +14,14 @@ class user {
 let usersList = []
 
 // create a new user and add them to the list if they don't already exist
-const createUser = (name, password, address, phoneNum, imageUrl) => {
+const createUser = (name, displayName, password, address, phoneNum, imageUrl) => {
     // check if a user with the exact same details already exists
     if(checkIfUserExist(name, password, address, phoneNum)) {
         return null
     }
     const id = idGenerator()
-    // pass imageUrl to the constructor
-    const newUser = new user(id, name, password, address, phoneNum, imageUrl)
+    // pass displayName and imageUrl to the constructor
+    const newUser = new user(id, name, displayName, password, address, phoneNum, imageUrl)
     usersList.push(newUser)
     return newUser
 }
@@ -60,10 +61,28 @@ const checkIfUserExist = (name, password, address, phoneNum) => {
         && user.address == address && user.phoneNum == phoneNum) != -1
 }
 
+const updateUser = (id, updatedFields) => {
+    const index = usersList.findIndex(user => user.id === id);
+    if (index === -1) {
+        return null;
+    }
+
+    // Dynamic update: update fields only if they are provided in the request body
+    if (updatedFields.name !== undefined) usersList[index].name = updatedFields.name;
+    if (updatedFields.displayName !== undefined) usersList[index].displayName = updatedFields.displayName; // Added displayName update
+    if (updatedFields.password !== undefined) usersList[index].password = updatedFields.password;
+    if (updatedFields.address !== undefined) usersList[index].address = updatedFields.address;
+    if (updatedFields.phoneNum !== undefined) usersList[index].phoneNum = updatedFields.phoneNum;
+    if (updatedFields.imageUrl !== undefined) usersList[index].imageUrl = updatedFields.imageUrl;
+
+    return usersList[index];
+};
+
 module.exports = {
     createUser,
     getUserById,
     getUserByCredentials,
     getAllUsers,
-    checkIfUserExist
+    checkIfUserExist,
+    updateUser
 }

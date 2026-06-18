@@ -1,7 +1,6 @@
 .dynamic-form-container {
   display: flex;
   justify-content: center;
-  /* מוריד את הטופס למטה כדי לא להיחסם ע"י ה-TopPanel */
   padding-top: 100px; 
   min-height: 100vh;
   background-color: var(--bg-primary);
@@ -16,7 +15,7 @@
   padding: 40px 30px;
   border-radius: 12px;
   background-color: var(--card-bg);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1); /* צל קצת יותר בולט */
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
   margin-bottom: 50px;
 }
 
@@ -31,7 +30,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* מרווח קצת יותר גדול לטובת ה-Label */
+  gap: 8px;
   width: 100%;
 }
 
@@ -42,7 +41,6 @@
   margin-left: 2px;
 }
 
-/* תצוגה מקדימה של העלאת תמונה */
 .file-upload-wrapper {
   display: flex;
   flex-direction: column;

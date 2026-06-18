@@ -14,7 +14,7 @@ function HomePage() {
   const [restaurants, setRestaurants] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null); // Track the active category filter
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
   const { isLoggedIn, userData } = useContext(AuthContext);
   const [myRestaurants, setMyRestaurants] = useState([]);
 

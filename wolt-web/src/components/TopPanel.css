@@ -1,30 +1,27 @@
-/* Main header container */
 .top-panel {
   position: sticky;
   top: 0;
   left: 0;
   right: 0;
-  height: 72px;
+  height: 88px;
   background-color: var(--bg-primary); 
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Spreads Left, Center, and Right evenly */
-  padding: 0 24px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+  justify-content: space-between; 
+  padding: 0 32px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.06);
   z-index: 1000;
   transition: background-color 0.3s ease; 
 }
 
-/* Left Section: Logo + Address Group */
 .top-panel-left {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
 }
 
-/* Logo styling */
 .top-panel-logo {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
   cursor: pointer;
   user-select: none;
@@ -33,15 +30,14 @@
 .brand-text { color: var(--brand-primary); } 
 .clone-text { color: var(--text-primary); } 
 
-/* Wolt-Style Address Button */
 .top-panel-address {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 6px 12px 6px 6px;
+  padding: 8px 16px 8px 8px;
   border-radius: 30px;
   transition: background-color 0.2s ease;
 }
@@ -51,9 +47,9 @@
 }
 
 .address-icon-wrapper {
-  background-color: rgba(0, 157, 224, 0.1); /* Subtle light blue circle */
-  width: 32px;
-  height: 32px;
+  background-color: rgba(0, 157, 224, 0.1); 
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -63,32 +59,30 @@
 .address-text {
   color: var(--brand-primary);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .chevron-icon {
   color: var(--brand-primary);
   font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
   margin-left: 2px;
 }
 
-/* Search container */
 .top-panel-search {
   flex: 1;
-  max-width: 500px;
-  margin: 0 20px;
+  max-width: 550px;
+  margin: 0 24px;
 }
 
-/* Search input */
 .search-input {
   width: 100%;
-  padding: 12px 16px 12px 20px;
+  padding: 14px 18px 14px 22px;
   border: none;
   background-color: var(--card-bg); 
   color: var(--text-primary); 
-  border-radius: 24px; /* Make it completely rounded like the real Wolt app */
-  font-size: 14px;
+  border-radius: 28px; 
+  font-size: 15px;
   font-weight: 500;
   outline: none;
   transition: background-color 0.2s, box-shadow 0.2s;
@@ -99,19 +93,17 @@
   background-color: var(--card-hover); 
 }
 
-/* Actions container */
 .top-panel-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   flex-shrink: 0; 
 }
 
-/* Logged-in user profile layout */
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
 
 .user-name {
@@ -119,13 +111,11 @@
   color: var(--text-primary); 
 }
 
-/* Logo styling with pointer cursor for navigation */
-/* Circular logo container mask */
 .top-panel-logo-wrapper {
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  overflow: hidden; /* Perfectly masks out anything outside the circle boundary */
+  overflow: hidden; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,25 +128,21 @@
   transform: scale(1.06);
 }
 
-/* Zooms into the center circle, discarding the blurred background frame */
 .top-panel-circular-logo {
-  height: 136%; /* Scales past the vertical blurred margins */
-  width: auto;  /* Maintains clean 1:1 image proportions */
+  height: 136%; 
+  width: auto;  
   object-fit: cover;
-  object-position: center; /* Keeps the inner character dead-centered */
+  object-position: center; 
 }
 
-/* =========================================================
-   User Profile Pill & Circular Buttons (Base: Light Mode)
-   ========================================================= */
 .user-menu-container {
   position: relative;
 }
 
 .user-profile-pill,
 .icon-circle-btn {
-  background-color: #f0f4f8; /* LIGHT MODE: Soft light blue-gray */
-  color: #1a1a1a; /* LIGHT MODE: Dark text/icons */
+  background-color: #f0f4f8; 
+  color: #1a1a1a; 
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -165,43 +151,42 @@
 .user-profile-pill {
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-radius: 30px;
-  padding: 4px 14px 4px 4px;
+  gap: 14px;
+  border-radius: 35px;
+  padding: 6px 18px 6px 6px;
 }
 
 .icon-circle-btn {
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
 }
 
-/* Hover effects for Light Mode */
 .user-profile-pill:hover,
 .icon-circle-btn:hover {
   background-color: #e2e8f0;
 }
 
 .user-avatar {
-  width: 34px;
-  height: 34px;
-  background-color: #c9f5d3; /* Light green avatar background */
-  color: #617b66; /* Dark green text */
+  width: 46px;
+  height: 46px;
+  background-color: #c9f5d3; 
+  color: #617b66; 
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   border: 2px solid white;
+  overflow: hidden;
 }
 
-/* Text elements inside the pill (Light Mode defaults) */
 .user-profile-pill .chevron-icon,
 .user-first-name {
   color: #1a1a1a;
@@ -216,28 +201,25 @@
 .cart-badge {
   position: absolute;
   top: -2px;
-  right: -4px;
+  right: -2px;
   background-color: #009de0;
   color: white;
   font-size: 12px;
   font-weight: bold;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid #f0f4f8; /* Matches the light mode button background */
+  border: 2px solid #f0f4f8; 
   transition: border-color 0.3s ease;
 }
 
-/* =========================================================
-   DARK MODE OVERRIDES FOR BUTTONS
-   ========================================================= */
 .dark .user-profile-pill,
 .dark .icon-circle-btn {
-  background-color: #2a3a40; /* DARK MODE: Dark slate */
-  color: #ffffff; /* DARK MODE: White text/icons */
+  background-color: #2a3a40; 
+  color: #ffffff; 
 }
 
 .dark .user-profile-pill:hover,
@@ -247,34 +229,31 @@
 
 .dark .user-profile-pill .chevron-icon,
 .dark .user-first-name {
-  color: #ffffff; /* White text for dark mode */
+  color: #ffffff; 
 }
 
 .dark .cart-badge {
-  border-color: #2a3a40; /* Matches the dark mode button background */
+  border-color: #2a3a40; 
 }
 
-/* =========================================================
-   User Dropdown Container (Light & Dark)
-   ========================================================= */
 .user-dropdown {
   position: absolute;
   top: 120%;
   right: 0;
-  background-color: #ffffff; /* Light background for Light Mode */
-  border: 1px solid #e2e8f0; /* Light border */
-  border-radius: 8px;
+  background-color: #ffffff; 
+  border: 1px solid #e2e8f0; 
+  border-radius: 12px;
   padding: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  min-width: 140px;
+  min-width: 160px;
   animation: fadeIn 0.15s ease-out;
 }
 
 .dark .user-dropdown {
-  background-color: #131924; /* Dark background for Dark Mode */
+  background-color: #131924; 
   border-color: #1e2635;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes fadeIn {
@@ -287,12 +266,12 @@
   background: transparent;
   border: none;
   color: #ff5a5a;
-  padding: 10px;
+  padding: 12px;
   text-align: left;
   cursor: pointer;
   font-weight: 600;
   font-size: 15px;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: background-color 0.2s;
 }
 
@@ -300,11 +279,6 @@
   background-color: rgba(255, 90, 90, 0.1);
 }
 
-/* =========================================================
-   User Dropdown Buttons - Light & Dark Mode
-   ========================================================= */
-
-/* Default item (My Orders) - Light Mode */
 .user-dropdown .dropdown-menu-btn {
   width: 100%;
   text-align: left;
@@ -312,48 +286,38 @@
   background: transparent;
   border: none;
   border-bottom: 1px solid #e2e8f0;
-  color: #202125; /* Dark text for light mode */
+  color: #202125; 
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
 }
 
-/* Remove bottom border from the last button */
 .user-dropdown .dropdown-menu-btn:last-child {
   border-bottom: none;
 }
 
-/* Hover state - Light Mode */
 .user-dropdown .dropdown-menu-btn:hover {
   background-color: #f8f9fa;
 }
 
-/* Default item - Dark Mode */
 .dark .user-dropdown .dropdown-menu-btn {
-  color: #ffffff; /* White text for dark mode */
+  color: #ffffff; 
   border-bottom-color: #1e2635;
 }
 
-/* Hover state - Dark Mode */
 .dark .user-dropdown .dropdown-menu-btn:hover {
   background-color: #1a2436;
 }
 
-/* =========================================================
-   Log Out Button Special Styling
-   ========================================================= */
-
 .user-dropdown .dropdown-menu-btn.logout-btn {
-  color: #ff5a5a; /* Always red */
+  color: #ff5a5a; 
 }
 
-/* Red-tinted hover for light mode */
 .user-dropdown .dropdown-menu-btn.logout-btn:hover {
   background-color: #fff0f0;
 }
 
-/* Red-tinted hover for dark mode */
 .dark .user-dropdown .dropdown-menu-btn.logout-btn:hover {
   background-color: rgba(255, 90, 90, 0.1);
 }
@@ -366,28 +330,19 @@
   border-bottom: 1px solid #1e2635; 
 }
 
-.dropdown-profile-pic img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #009de0; 
-}
-
-/* Limitation for the avatar in the top bar (the pill button) */
 .user-avatar img {
-    width: 40px;          /* Size in the top navigation bar */
-    height: 40px;
-    object-fit: cover;
-    border-radius: 50%;
+  width: 100%;          
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
-/* Limitation for the avatar inside the dropdown menu */
 .dropdown-profile-pic img {
-    width: 80px;          /* Size in the dropdown */
-    height: 80px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 0 auto;
-    display: block;
+  width: 80px;          
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: block;
+  border: 2px solid #009de0; 
 }

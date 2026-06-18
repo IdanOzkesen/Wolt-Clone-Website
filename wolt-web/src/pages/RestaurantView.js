@@ -84,10 +84,10 @@ function RestaurantView() {
   useEffect(() => {
     if (products.length > 0 && location.state?.openProductId) {
       const productToOpen = products.find(p => p.id === location.state.openProductId);
-      
+
       if (productToOpen) {
         openProductModal(productToOpen);
-        
+
         navigate(location.pathname, { replace: true, state: {} });
       }
     }
@@ -220,11 +220,11 @@ function RestaurantView() {
     <div className="restaurant-view-page">
       <header
         className="restaurant-hero"
-        style={restaurant.imageUrl ? {
+        style={{
           backgroundImage: `url(${restaurant.imageUrl || defaultPlaceholder})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
-        } : undefined}
+        }}
       >
         <div className="hero-overlay">
           <div className="hero-content">
@@ -297,41 +297,43 @@ function RestaurantView() {
       </main>
 
       {/* Product popup: image, name, price, description, quantity selector + add-to-order button */}
-      {selectedProduct && createPortal(
-        <div className="product-modal-backdrop" onClick={closeProductModal}>
-          <div className="product-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <button className="product-modal-close" onClick={closeProductModal} aria-label="Close">✕</button>
+      {
+        selectedProduct && createPortal(
+          <div className="product-modal-backdrop" onClick={closeProductModal}>
+            <div className="product-modal-sheet" onClick={(e) => e.stopPropagation()}>
+              <button className="product-modal-close" onClick={closeProductModal} aria-label="Close">✕</button>
 
-            <div className="product-modal-img-wrap">
-              <img
-                src={selectedProduct.imageUrl || selectedProduct.image || defaultPlaceholder}
-                alt={selectedProduct.name}
-                className="product-modal-img"
-              />
-            </div>
-
-            <div className="product-modal-body">
-              <h2 className="product-modal-name">{selectedProduct.name}</h2>
-              <span className="product-modal-price">₪{parseFloat(selectedProduct.price).toFixed(2)}</span>
-              <p className="product-modal-desc">
-                {selectedProduct.description || "No description available."}
-              </p>
-            </div>
-
-            <div className="product-modal-footer">
-              <div className="quantity-selector">
-                <button className="qty-btn" onClick={decreaseQuantity} aria-label="Decrease">−</button>
-                <span className="qty-value">{modalQuantity}</span>
-                <button className="qty-btn" onClick={increaseQuantity} aria-label="Increase">+</button>
+              <div className="product-modal-img-wrap">
+                <img
+                  src={selectedProduct.imageUrl || selectedProduct.image || defaultPlaceholder}
+                  alt={selectedProduct.name}
+                  className="product-modal-img"
+                />
               </div>
-              <button className="add-to-order-btn" onClick={handleAddToOrder}>
-                Add to Order · ₪{(parseFloat(selectedProduct.price) * modalQuantity).toFixed(2)}
-              </button>
+
+              <div className="product-modal-body">
+                <h2 className="product-modal-name">{selectedProduct.name}</h2>
+                <span className="product-modal-price">₪{parseFloat(selectedProduct.price).toFixed(2)}</span>
+                <p className="product-modal-desc">
+                  {selectedProduct.description || "No description available."}
+                </p>
+              </div>
+
+              <div className="product-modal-footer">
+                <div className="quantity-selector">
+                  <button className="qty-btn" onClick={decreaseQuantity} aria-label="Decrease">−</button>
+                  <span className="qty-value">{modalQuantity}</span>
+                  <button className="qty-btn" onClick={increaseQuantity} aria-label="Increase">+</button>
+                </div>
+                <button className="add-to-order-btn" onClick={handleAddToOrder}>
+                  Add to Order · ₪{(parseFloat(selectedProduct.price) * modalQuantity).toFixed(2)}
+                </button>
+              </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )
+      }
 
       {/* Owner: edit the restaurant's details */}
       <FormModal
@@ -377,7 +379,7 @@ function RestaurantView() {
         submitLabel="Save Changes"
         onSubmit={handleEditProduct}
       />
-    </div>
+    </div >
   );
 }
 

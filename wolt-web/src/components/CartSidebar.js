@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import './CartSidebar.css';
 
 const CartSidebar = ({ isOpen, onClose }) => {
-  const { cart, addToCart, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart(); 
+  const { cart, addToCart, removeFromCart, totalPrice, clearCart } = useCart(); 
   const navigate = useNavigate();
 
   // If the sidebar is not toggled open, don't render anything

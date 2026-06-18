@@ -7,7 +7,7 @@ import "./TopPanel.css";
 import woltLogo from "../assets/logo.png";
 import { useCart } from '../context/CartContext'; 
 import CartSidebar from './CartSidebar';
-import { apiFetch } from '../services/api'; // <--- NEW IMPORT
+import { apiFetch } from '../services/api';
 
 function TopPanel() {
   const navigate = useNavigate();
@@ -24,12 +24,6 @@ function TopPanel() {
   const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // ==========================================
-  // JIRA AAA-160: FETCH LOGGED-IN USER DETAILS
-  // ==========================================
-  // State to hold the full user profile fetched from the database
-  const [fetchedUser, setFetchedUser] = useState(null);
-
   useEffect(() => {
     const fetchFullUserProfile = async () => {
       // Only execute if the user is authenticated and we have their ID
@@ -40,7 +34,6 @@ function TopPanel() {
           
           if (response.ok) {
             const data = await response.json();
-            setFetchedUser(data); // Save the fetched data to state
           }
         } catch (error) {
           console.error("Error fetching user profile:", error);
@@ -110,12 +103,11 @@ function TopPanel() {
   // DYNAMIC UI VARIABLES
   // ==========================================
   // Prioritize the fetched user data, fallback to context data if not yet loaded
-  const displayName = fetchedUser?.name || userData?.userDisplayName || "";
+  const displayName = userData?.userDisplayName || "";
   
-  // Check common image field names (photo, imageUrl, profilePhoto) from your backend schema
-  const profilePhoto = fetchedUser?.photo || fetchedUser?.imageUrl || userData?.profilePhoto || ""; 
+  const profilePhoto = userData?.profilePhoto || ""; 
   
-  const displayAddress = fetchedUser?.address || userData?.address || address || "Set Address";
+  const displayAddress = userData?.address || address || "Set Address";
   const isLandPage = location.pathname === "/";
 
   const getInitials = (name) => {

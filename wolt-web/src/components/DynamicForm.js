@@ -16,22 +16,34 @@ const DynamicForm = ({
   submitClassName,
   initialValues = {},
 }) => {
-  // יצירת אובייקט התחלתי לפי השדות (עם ערכים קיימים אם סופקו - לטובת טפסי עריכה)
   const initialState = fields.reduce((acc, field) => ({ ...acc, [field.name]: initialValues[field.name] ?? '' }), {});
 
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
-  // אם כבר קיימת תמונה (במצב עריכה) - נציג אותה כתצוגה מקדימה
   const [imagePreview, setImagePreview] = useState(() => {
     const fileField = fields.find(field => field.type === 'file');
     return fileField ? (initialValues[fileField.name] || null) : null;
   });
 
+  const isNumberField = (field) => {
+    if (!field) return false;
+    const name = (field.name || '').toLowerCase();
+    const label = (field.label || '').toLowerCase();
+
+    return (
+      name.includes('number') ||
+      name.includes('num') ||
+      label.includes('number') ||
+      label.includes('num')
+    );
+  };
+
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
+    const currentField = fields.find(f => f.name === name);
+
     if (type === 'file' && files[0]) {
-      // ממירים את הקובץ ל-base64 (data URL) כדי שאפשר יהיה לשמור אותו בשרת כמחרוזת ולהציגו ישירות
       const file = files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -40,13 +52,18 @@ const DynamicForm = ({
       };
       reader.readAsDataURL(file);
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      let finalValue = value;
+
+      if (isNumberField(currentField)) {
+        finalValue = finalValue.replace(/\D/g, '');
+      }
+
+      setFormData(prev => ({ ...prev, [name]: finalValue }));
     }
 
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
-  // התמונות נשמרות כעת כמחרוזת base64, ולכן הן נכללות בשליחה יחד עם שאר השדות
   const getSubmitData = () =>
     fields.reduce((acc, field) => {
       acc[field.name] = formData[field.name];
@@ -95,7 +112,7 @@ const DynamicForm = ({
             <BaseInputFieldWithError
               type={field.type}
               name={field.name}
-              placeholder={field.placeholder} // ה-Placeholder מגיע מה-field
+              placeholder={field.placeholder}
               value={formData[field.name]}
               onChange={handleChange}
               error={errors[field.name]}
