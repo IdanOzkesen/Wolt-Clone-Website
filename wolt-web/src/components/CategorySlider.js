@@ -2,20 +2,23 @@ import React from 'react';
 import './CategorySlider.css';
 
 function CategorySlider({ restaurants = [], selectedCategory, onSelectCategory }) {
-  // Dynamically extract unique categories from the fetched restaurants list
   const uniqueCategories = Array.from(
     new Set(restaurants.map((res) => res.category).filter(Boolean))
   );
 
-  // Helper function to return a matching emoji based on the category name
-  const getCategoryEmoji = (category) => {
+  const getCategoryStyle = (category, index) => {
     const lowerCategory = category.toLowerCase();
-    if (lowerCategory.includes('burger')) return '🍔';
-    if (lowerCategory.includes('piz')) return '🍕';
-    if (lowerCategory.includes('bakery') || lowerCategory.includes('cafe') || lowerCategory.includes('bread')) return '🥐';
-    if (lowerCategory.includes('sushi') || lowerCategory.includes('asian')) return '🍣';
-    if (lowerCategory.includes('dessert') || lowerCategory.includes('sweet')) return '🍰';
-    return '🍽️';
+    let emoji = '🍽️';
+    if (lowerCategory.includes('burger')) emoji = '🍔';
+    else if (lowerCategory.includes('piz')) emoji = '🍕';
+    else if (lowerCategory.includes('bakery') || lowerCategory.includes('cafe') || lowerCategory.includes('bread')) emoji = '🥐';
+    else if (lowerCategory.includes('sushi') || lowerCategory.includes('asian')) emoji = '🍣';
+    else if (lowerCategory.includes('dessert') || lowerCategory.includes('sweet')) emoji = '🍰';
+    else {
+      const fallbackEmojis = ['🥗', '🍲', '🌮', '🍿', '🥤', '🥩'];
+      emoji = fallbackEmojis[index % fallbackEmojis.length];
+    }
+    return { emoji, bg: `var(--cat-bg-${index % 6})` };
   };
 
   return (
@@ -23,32 +26,33 @@ function CategorySlider({ restaurants = [], selectedCategory, onSelectCategory }
       <div className="category-slider-header">
         <h2 className="category-title">What are you craving today?</h2>
       </div>
-      
+
       <div className="category-list">
-        {/* "All" button to clear the category filter and show everything */}
-        <div 
+        <div
           className={`category-item ${selectedCategory === null ? 'active' : ''}`}
           onClick={() => onSelectCategory(null)}
         >
-          <div className="category-img-wrapper">
+          <div className="category-img-wrapper" style={{ backgroundColor: 'var(--cat-bg-all)' }}>
             <span className="category-emoji-icon">🍱</span>
           </div>
           <span>All</span>
         </div>
 
-        {/* Dynamic categories map */}
-        {uniqueCategories.map((category, index) => (
-          <div 
-            key={index} 
-            className={`category-item ${selectedCategory === category ? 'active' : ''}`}
-            onClick={() => onSelectCategory(category)}
-          >
-            <div className="category-img-wrapper">
-              <span className="category-emoji-icon">{getCategoryEmoji(category)}</span>
+        {uniqueCategories.map((category, index) => {
+          const { emoji, bg } = getCategoryStyle(category, index);
+          return (
+            <div
+              key={index}
+              className={`category-item ${selectedCategory === category ? 'active' : ''}`}
+              onClick={() => onSelectCategory(category)}
+            >
+              <div className="category-img-wrapper" style={{ backgroundColor: bg }}>
+                <span className="category-emoji-icon">{emoji}</span>
+              </div>
+              <span>{category}</span>
             </div>
-            <span>{category}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
