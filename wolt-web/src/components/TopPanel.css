@@ -373,3 +373,21 @@
   object-fit: cover;
   border: 2px solid #009de0; 
 }
+
+/* Limitation for the avatar in the top bar (the pill button) */
+.user-avatar img {
+    width: 40px;          /* Size in the top navigation bar */
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Limitation for the avatar inside the dropdown menu */
+.dropdown-profile-pic img {
+    width: 80px;          /* Size in the dropdown */
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: block;
+}

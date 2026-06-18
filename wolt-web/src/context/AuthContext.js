@@ -27,12 +27,13 @@ export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(!!savedToken);
 
   const signup = async (formData) => {
+    // Pack the data exactly as your backend expects it (imageUrl for the photo)
     const userDataToSend = {
       name: formData.userName,
       password: formData.password,
       address: formData.address,
       phoneNum: formData.phoneNumber,
-      imageUrl: formData.profilePhoto // base64 data URL produced by the file input
+      imageUrl: formData.profilePhoto || "" // Sending the Base64 image to the server
     };
 
     try {
@@ -43,26 +44,43 @@ export function AuthProvider({ children }) {
 
       if (response.ok) {
         const data = await response.json();
+        
+        // 1. Save tokens securely
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
 
-        const userId = data.user.id;
-        if (userId) {
-          localStorage.setItem('userId', String(userId));
+        // 2. SAFELY extract ID to prevent crashes if data.user is undefined
+        const extractedUserId = (data.user && (data.user.id || data.user._id)) || data.userId || data.id || data._id;
+        
+        if (extractedUserId) {
+          localStorage.setItem('userId', String(extractedUserId));
         }
 
         const userDataToSave = {
-          userId: data.user.id || "", // <-- Extract and save the ID from the server response
+          userId: extractedUserId || "",
           name: formData.userName,
-          userDisplayName: formData.userDisplayName,
-          address: formData.address,
-          profilePhoto: data.user.imageUrl || "" // photo the server stored for this user
+          userDisplayName: formData.userDisplayName || formData.userName,
+          address: formData.address || "",
+          profilePhoto: "" // Default to empty, will safely attempt to save below
         };
 
+        // 3. Save basic text data to LocalStorage first (always safe)
         for (const [key, value] of Object.entries(userDataToSave)) {
           localStorage.setItem(key, value);
         }
 
+        // 4. SAFELY save the heavy Base64 image to prevent QuotaExceededError crashes
+        const photoToSave = (data.user && data.user.imageUrl) || data.imageUrl || formData.profilePhoto || "";
+        try {
+          if (photoToSave) {
+            localStorage.setItem('profilePhoto', photoToSave);
+            userDataToSave.profilePhoto = photoToSave; // Update state only if storage succeeds
+          }
+        } catch (e) {
+          console.warn("⚠️ Profile photo is too large for LocalStorage. It will be loaded dynamically from the server.");
+        }
+
+        // 5. Finalize login state
         setUserData(userDataToSave);
         setIsLoggedIn(true);
         return { success: true };
@@ -72,6 +90,7 @@ export function AuthProvider({ children }) {
         return { success: false, error: errorData.error || "Signup failed. Please try again." };
       }
     } catch (err) {
+      console.error("Signup crashed:", err);
       return { success: false, error: "Network error. Please check if the server is running." };
     }
   };
@@ -116,22 +135,40 @@ export function AuthProvider({ children }) {
         }
 
         const userInfo = await userResponse.json();
+        console.log("DEBUG: Server user info:", userInfo);
         const resolvedUserId = userInfo._id || userInfo.id || userInfo.userId || extractedUserId;
 
         if (resolvedUserId) {
           localStorage.setItem('userId', String(resolvedUserId));
         }
 
+        // 1. Get the photo from multiple possible fields to be safe
+        const photoFromServer = userInfo.profilePhoto || userInfo.photo || userInfo.imageUrl || "";
+
         const userDataToSave = {
           userId: resolvedUserId, 
           name: userInfo.name || formData.userName,
           userDisplayName: userInfo.userDisplayName || userInfo.name || formData.userName,
           address: userInfo.address || "",
-          profilePhoto: userInfo.imageUrl || "" // server stores the photo under imageUrl
+          profilePhoto: "" // Start empty
         };
 
+        // 2. Save all TEXT data first (this is safe)
         for (const [key, value] of Object.entries(userDataToSave)) {
-          localStorage.setItem(key, value);
+          if (key !== 'profilePhoto') {
+             localStorage.setItem(key, value);
+          }
+        }
+
+        // 3. Try to save the heavy image in a separate 'try-catch' block
+        try {
+          if (photoFromServer) {
+            localStorage.setItem('profilePhoto', photoFromServer);
+            userDataToSave.profilePhoto = photoFromServer; // Update state
+          }
+        } catch (e) {
+          console.warn("Storage full! Image too large for LocalStorage, skipping local save.");
+          // Even if saving fails, the user is still logged in!
         }
 
         setUserData(userDataToSave);
@@ -155,20 +192,20 @@ export function AuthProvider({ children }) {
       if (refreshToken) {
         await apiFetch('/token/logout', {
           method: 'POST',
-          body: JSON.stringify({ token: refreshToken })
+          // Matching the exact payload key expected by the backend controller
+          body: JSON.stringify({ 
+            Refresh_Token: refreshToken 
+          })
         });
       }
     }
     catch (error) {
       console.error("Logout error:", error);
     } finally {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      // Clear everything locally regardless of the server's response
+      localStorage.clear();
       setUserData(null);
       setIsLoggedIn(false);
-
-      // Clears everything including the newly saved 'id'
-      localStorage.clear();
     }
   };
 
