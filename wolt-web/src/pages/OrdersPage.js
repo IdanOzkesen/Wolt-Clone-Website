@@ -21,9 +21,7 @@ function OrdersPage() {
     }
 
     const fetchOrdersAndProducts = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        
+      try {        
         // 1. Fetch the raw orders
         const ordersResponse = await apiFetch(`/users/${userData.userId}/orders`, {
           method: 'GET',
