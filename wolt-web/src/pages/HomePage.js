@@ -15,7 +15,7 @@ function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState(null); // Track the active category filter
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { isLoggedIn, userData } = useContext(AuthContext); // כאן אנחנו מקבלים את מצב המשתמש
+  const { isLoggedIn, userData } = useContext(AuthContext);
   const [myRestaurants, setMyRestaurants] = useState([]);
 
   const handleAddRestaurant = async () => {
@@ -27,11 +27,9 @@ function HomePage() {
       try {
         setLoading(true);
         
-        // 1. קריאה לכל המסעדות (זמין לכולם)
         const allResResponse = await apiFetch("/restaurants");
         const allData = await allResResponse.json();
 
-        // 2. קריאה למסעדות שלי - רק אם המשתמש מחובר
         let myData = [];
         if (isLoggedIn && userData) {
           const userId = userData.userId; 
@@ -42,7 +40,6 @@ function HomePage() {
           }
         }
 
-        // עיבוד הנתונים
         const processedData = (allData || []).map((res, index) => ({
           ...res,
           computedDistance: parseFloat((((index * 7) % 45) / 10 + 0.5).toFixed(1))
@@ -90,7 +87,6 @@ function HomePage() {
 
       <main className="sections-list">
 
-        {/* 3. Section חדש למסעדות שלי - מעל כולם */}
         {myRestaurants.length > 0 && (
           <div className="dashboard-group">
             <h1 className="group-main-title">My Restaurants 👨‍🍳</h1>

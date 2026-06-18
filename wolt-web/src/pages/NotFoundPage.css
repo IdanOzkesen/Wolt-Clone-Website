@@ -1,0 +1,65 @@
+.not-found-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5eedc;
+    padding: 0;
+}
+
+.not-found-content {
+    /* קריטי: הופך את התיבה הזו לנקודת הייחוס של הכפתור המרחף */
+    position: relative; 
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-found-img {
+    max-width: 95vw;
+    /* הגדלתי טיפה את ה-max-height כי עכשיו הכפתור לא תופס מקום מתחת לתמונה */
+    max-height: 90vh; 
+    width: auto;
+    height: auto;
+    border-radius: 24px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.back-home-btn {
+    /* מנתק את הכפתור מהשורה ונותן לו לרחף מעל */
+    position: absolute; 
+    
+    /* ממרכז את הכפתור אופקית */
+    left: 55%;
+    
+    /* הגובה שלו מלמטה. 
+       20% כנראה ימקם אותו ממש מתחת ללוגו "Wolt Clone" באזור הרגליים של הדמות. 
+       **אם זה נמוך או גבוה מדי - פשוט תשנה את המספר הזה (למשל ל-15% או 25%)!** */
+    bottom: 17%; 
+    
+    /* מזיז את הכפתור חצי מהגודל של עצמו שמאלה, כדי שיהיה ממורכז בצורה מושלמת */
+    transform: translateX(-50%); 
+    z-index: 10; /* מוודא שהוא תמיד מעל התמונה */
+    
+    padding: 16px 40px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white;
+    background-color: #009de0;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 157, 224, 0.5); /* הבלטתי טיפה את הצל כדי שיבלוט על הרקע המצויר */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-home-btn:hover {
+    background-color: #007bb5;
+    /* חשוב: השארתי את ה-translateX כדי שהכפתור לא יקפוץ הצידה במעבר עכבר, ורק יעלה קצת למעלה */
+    transform: translate(-50%, -3px); 
+}
+
+.back-home-btn:active {
+    transform: translate(-50%, 1px);
+}

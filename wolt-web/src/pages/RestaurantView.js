@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { createPortal } from 'react-dom';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import './RestaurantView.css';
 import { apiFetch } from '../services/api';
 import { useCart } from '../context/CartContext'; // 1. Imported the cart context
@@ -31,6 +31,7 @@ function RestaurantView() {
   const { userData, isLoggedIn } = useContext(AuthContext);
   // 2. Destructure the addToCart function from our global state
   const { addToCart } = useCart();
+  const location = useLocation();
 
 
   // State Management
@@ -79,6 +80,19 @@ function RestaurantView() {
 
     fetchRestaurantDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (products.length > 0 && location.state?.openProductId) {
+      const productToOpen = products.find(p => p.id === location.state.openProductId);
+      
+      if (productToOpen) {
+        openProductModal(productToOpen);
+        
+        navigate(location.pathname, { replace: true, state: {} });
+      }
+    }
+  }, [products, location.state, navigate, location.pathname]);
+
   const handleDeleteRestaurant = async () => {
     if (window.confirm("Are you sure you want to delete this restaurant?")) {
       const res = await apiFetch(`/restaurants/${id}`, {
@@ -207,7 +221,7 @@ function RestaurantView() {
       <header
         className="restaurant-hero"
         style={restaurant.imageUrl ? {
-          backgroundImage: `url(${restaurant.imageUrl})`,
+          backgroundImage: `url(${restaurant.imageUrl || defaultPlaceholder})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         } : undefined}
@@ -270,7 +284,7 @@ function RestaurantView() {
                       +
                     </button>
                     <img
-                      src={product.imageUrl || product.image || defaultPlaceholder}
+                      src={product.imageUrl || defaultPlaceholder}
                       alt={product.name}
                       className="product-dish-img"
                     />

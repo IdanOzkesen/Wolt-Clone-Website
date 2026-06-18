@@ -14,14 +14,14 @@ const getAllProducts = (req, res) => {
 // create a new product, the request body should contain name, description, category, and price
 const createProduct = (req, res) => {
     const restaurantId = req.params.restaurantId
-    const {name, description, category, price} = req.body
+    const {name, description, category, price, imageUrl} = req.body
     // check if restaurant ID and all required fields are present
     if(!restaurantId || !name || !description || !category || !price) {
         res.status(400).json({eror: "Missing required fields: restaurantId, name, description, category, or price"})
         return
     }
     // create a new product by calling the createProduct function in the product model
-    const newproduct = productModel.createProduct(restaurantId, name, description, category, price)
+    const newproduct = productModel.createProduct(restaurantId, name, description, category, price, imageUrl)
     // if the product creation fails, return a 404 error
     if(newproduct === null) {
         res.status(404).json({ error: "Product already exists" })
@@ -56,7 +56,7 @@ const getProductById = async (req, res) => {
 const updateProduct = (req, res) => {
     const restaurantId = req.params.restaurantId
     const productId = req.params.productId
-    const {name, description, category, price} = req.body
+    const {name, description, category, price, imageUrl} = req.body
     // check if restaurant ID, product ID, and all required fields are present
     if(!restaurantId || !productId || !name || !description || !category || !price) {
         res.status(400).json({error: "Missing required fields: restaurantId, productId, name, description, category, or price"})
@@ -64,7 +64,7 @@ const updateProduct = (req, res) => {
     }
     // update the product by calling the updateProduct function in the product model
     const updatedProduct = productModel.updateProduct(restaurantId, productId, 
-        name, description, category, price)
+        name, description, category, price, imageUrl)
     // if the product update fails or product is not found, return a 404 error
     if(!updatedProduct) {
         res.status(404).json({error: "Product not found or failed to update"})
