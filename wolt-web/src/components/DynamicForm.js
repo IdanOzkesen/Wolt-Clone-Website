@@ -25,7 +25,6 @@ const DynamicForm = ({
     return fileField ? (initialValues[fileField.name] || null) : null;
   });
 
-  // פונקציית עזר שמזהה אם השדה קשור למספרים
   const isNumberField = (field) => {
     if (!field) return false;
     const name = (field.name || '').toLowerCase();
@@ -42,7 +41,6 @@ const DynamicForm = ({
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
-    // מוצאים את השדה הנוכחי מתוך מערך השדות
     const currentField = fields.find(f => f.name === name);
 
     if (type === 'file' && files[0]) {

@@ -7,7 +7,7 @@ import "./TopPanel.css";
 import woltLogo from "../assets/logo.png";
 import { useCart } from '../context/CartContext'; 
 import CartSidebar from './CartSidebar';
-import { apiFetch } from '../services/api'; // <--- NEW IMPORT
+import { apiFetch } from '../services/api';
 
 function TopPanel() {
   const navigate = useNavigate();
@@ -24,9 +24,6 @@ function TopPanel() {
   const [address, setAddress] = useState(() => localStorage.getItem('address') || "");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // ==========================================
-  // JIRA AAA-160: FETCH LOGGED-IN USER DETAILS
-  // ==========================================
   // State to hold the full user profile fetched from the database
   const [fetchedUser, setFetchedUser] = useState(null);
 
