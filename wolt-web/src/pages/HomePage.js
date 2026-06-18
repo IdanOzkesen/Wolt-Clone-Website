@@ -75,9 +75,9 @@ function HomePage() {
   return (
     <div className="discovery-page-container">
 
-      <div style={{ padding: '20px 20px 0 20px' }}>
+      <div className="add-restaurant-bar">
         <Button variant="primary" onClick={handleAddRestaurant}>
-          Add New Restaurant
+          + Add New Restaurant
         </Button>
       </div>
 

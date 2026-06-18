@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
 import './RestaurantSection.css';
 import { apiFetch } from '../services/api';
 import defaultPlaceholder from '../assets/default-placeholder.jpg';
 
-
 function RestaurantSection({ restaurant, distance }) {
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const listRef = useRef(null);
 
-  // Fetch specific products for this restaurant using its ID
   useEffect(() => {
     const fetchRestaurantProducts = async () => {
       try {
@@ -30,11 +29,16 @@ function RestaurantSection({ restaurant, distance }) {
     }
   }, [restaurant.id]);
 
+  const scroll = (dir) => {
+    if (listRef.current) {
+      listRef.current.scrollBy({ left: dir === 'right' ? 620 : -620, behavior: 'smooth' });
+    }
+  };
+
   const restaurantLogo = restaurant.imageUrl || defaultPlaceholder;
 
   return (
     <div className="restaurant-section-row">
-      {/* Restaurant Header Information (clicking the details opens the restaurant page) */}
       <div className="restaurant-row-header">
         <Link to={`/restaurant/${restaurant.id}`} className="restaurant-card-link">
           <div className="restaurant-meta-right">
@@ -42,24 +46,22 @@ function RestaurantSection({ restaurant, distance }) {
             <div className="res-text-details">
               <h2>{restaurant.name}</h2>
               <p className="res-sub-meta">
-                📍 {restaurant.address} • 📞 {restaurant.phoneNum} • ⏱️ {distance ? `${distance} km away` : 'Nearby'}
+                📍 {restaurant.address} &nbsp;·&nbsp; 📞 {restaurant.phoneNum} &nbsp;·&nbsp; ⏱ {distance ? `${distance} km` : 'Nearby'}
               </p>
             </div>
           </div>
         </Link>
         <div className="slider-arrows">
-          <button className="arrow-btn">⮕</button>
-          <button className="arrow-btn">⬅</button>
+          <button className="arrow-btn" onClick={() => scroll('left')} aria-label="Previous">&#8249;</button>
+          <button className="arrow-btn" onClick={() => scroll('right')} aria-label="Next">&#8250;</button>
         </div>
       </div>
 
-      {/* Horizontal List of Products */}
-      <div className="products-horizontal-list">
+      <div className="products-horizontal-list" ref={listRef}>
         {loadingProducts ? (
-          <div className="products-small-loading">Loading menu...</div>
+          <div className="products-small-loading">Loading menu…</div>
         ) : products.length > 0 ? (
           products.map(product => (
-            // Enrich the product with its restaurant details so the popup can link back to it
             <ProductCard
               key={product.id}
               product={{ ...product, restaurantId: restaurant.id, restaurantName: restaurant.name }}
@@ -68,7 +70,7 @@ function RestaurantSection({ restaurant, distance }) {
           ))
         ) : (
           <div className="no-products-placeholder">
-            <p>No items available in the menu right now.</p>
+            <p>No items on the menu right now.</p>
           </div>
         )}
       </div>
