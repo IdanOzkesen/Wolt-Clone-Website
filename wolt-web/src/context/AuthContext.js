@@ -214,7 +214,6 @@ export function AuthProvider({ children }) {
 
   const editUser = async (userId, formData) => {
     try {
-      // בונים את אובייקט הנתונים באופן דינמי - רק מה שמלא נכנס!
       const payload = {};
 
       if (formData.name) payload.name = formData.name;
