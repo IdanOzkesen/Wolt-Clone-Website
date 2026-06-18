@@ -129,3 +129,7 @@ Once authenticated, users unlock a personalized experience:
 * **Dark Mode / Light Mode:** Easily toggle between viewing themes using the dedicated switch in the top navigation bar to suit your personal preference.
 ![User Profile & Orders](photos/pic8.png)
 ![User Profile & Orders](photos/pic10.png)
+
+Initialize the Database (Seeding)**
+To populate the database with initial data, open a terminal in the Wolt Web directory and run the seed script:
+`bash seed.sh`
