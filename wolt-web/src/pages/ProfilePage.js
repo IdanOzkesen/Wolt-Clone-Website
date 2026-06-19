@@ -7,12 +7,12 @@ import './ProfilePage.css';
 // UPDATED: keys now exactly match the backend model requirements
 const userFields = [
     { name: 'imageUrl', label: 'Profile Photo', type: 'file', required: false },
-    { name: 'name', label: 'Full Name', placeholder: 'Enter your full name', required: false },
-    { name: 'displayName', label: 'Display Name', placeholder: 'Enter your display name', required: false },
+    { name: 'name', label: 'Full Name', placeholder: 'Enter your full name', required: true },
+    { name: 'displayName', label: 'Display Name', placeholder: 'Enter your display name', required: true },
     { name: 'password', label: 'New Password', type: 'password', placeholder: 'Enter new password (leave blank to keep current)', required: false },
     { name: 'confirmPassword', label: 'Confirm Password', type: 'password', placeholder: 'Confirm your new password', required: false },
-    { name: 'phoneNum', label: 'Phone Number', type: 'tel', placeholder: 'Enter your phone number', required: false },
-    { name: 'address', label: 'Address', placeholder: 'Enter your address', required: false },
+    { name: 'phoneNum', label: 'Phone Number', type: 'tel', placeholder: 'Enter your phone number', required: true },
+    { name: 'address', label: 'Address', placeholder: 'Enter your address', required: true },
 ];
 
 function ProfilePage() {

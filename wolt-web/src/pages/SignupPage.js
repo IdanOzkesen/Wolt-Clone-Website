@@ -22,7 +22,7 @@ function SignupPage() {
     { name: 'userDisplayName', label: 'Display Name', placeholder: 'Enter your display name', required: true },
     { name: 'password', label: 'Password', type: 'password', placeholder: 'Create a password', required: true },
     { name: 'confirmPassword', label: 'Confirm Password', type: 'password', placeholder: 'Confirm your password', required: true },
-    { name: 'phoneNumber', label: 'Phone Number', type: 'tel', placeholder: 'Enter your phone number', required: true },
+    { name: 'phoneNum', label: 'Phone Number', type: 'tel', placeholder: 'Enter your phone number', required: true },
     { name: 'address', label: 'Address', placeholder: 'Enter your address', required: true },
   ];
 

@@ -17,6 +17,7 @@ export function AuthProvider({ children }) {
         name: savedUserName || "",
         userDisplayName: localStorage.getItem('userDisplayName') || "",
         address: localStorage.getItem('address') || "",
+        phoneNum: localStorage.getItem('phoneNum') || "",
         profilePhoto: localStorage.getItem('profilePhoto') || ""
       };
     }
@@ -33,7 +34,7 @@ export function AuthProvider({ children }) {
       displayName: formData.userDisplayName,
       password: formData.password,
       address: formData.address,
-      phoneNum: formData.phoneNumber,
+      phoneNum: formData.phoneNum,
       imageUrl: formData.profilePhoto || "" // Sending the Base64 image to the server
     };
 
@@ -236,7 +237,12 @@ export function AuthProvider({ children }) {
         if (updatedUser.name) localStorage.setItem('name', updatedUser.name);
         if (updatedUser.displayName) localStorage.setItem('userDisplayName', updatedUser.displayName);
         if (updatedUser.address) localStorage.setItem('address', updatedUser.address);
-        
+        if (updatedUser.phoneNum) localStorage.setItem('phoneNum', updatedUser.phoneNum);
+        if (updatedUser.password) localStorage.setItem('password', updatedUser.password);
+        if (updatedUser.imageUrl) localStorage.setItem('imageUrl', updatedUser.imageUrl);
+
+
+
         if (updatedUser.imageUrl) {
           try {
             localStorage.setItem('profilePhoto', updatedUser.imageUrl);
@@ -265,9 +271,9 @@ export function AuthProvider({ children }) {
     }
   };
 
-return (
-  <AuthContext.Provider value={{ signup, login, logout, userData, isLoggedIn, setUserData, editUser }}>
-    {children}
-  </AuthContext.Provider>
-);
+  return (
+    <AuthContext.Provider value={{ signup, login, logout, userData, isLoggedIn, setUserData, editUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
