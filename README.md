@@ -63,6 +63,7 @@ To build and run the Node.js server automatically, simply run:
 cd JS
 make up
 ```
+
 *(Wait for the backend server to fully initialize)*
 
 ### **Step 3: Start the React Frontend**
@@ -72,6 +73,7 @@ cd ..
 cd wolt-web
 npm start
 ```
+
 *(The React application will automatically open in your default browser at http://localhost:3000)*
 
 ### 📸 Screenshots
@@ -82,7 +84,7 @@ npm start
 ![Docker Compose Execution](photos/pic2.png)
 
 **React Application Interface:**
-![React App Main Screen](photos/pic2.png)
+![React App Main Execution](photos/pic3.png)
 
 ---
 
@@ -92,6 +94,7 @@ To help you easily populate the database with initial data, we have provided a c
 ```bash
 bash seed.sh
 ```
+
 (Note: This script automatically generates multiple default restaurants, complete with menus and random placeholder images we provided. Running this is completely optional—the site functions normally without it—but it is highly recommended as it gives the application a realistic, vibrant look right out of the box. Please keep in mind: because these default restaurants are created by the system, standard users cannot edit or delete them, as they are not the owners. However, you can freely browse their menus and place orders!)
 
 ## 🛠️ Workflow & Development Process
