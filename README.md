@@ -86,6 +86,14 @@ npm start
 
 ---
 
+### **Step 4: Initialize the Database (Seeding) - *Optional but Recommended***
+To help you easily populate the database with initial data, we have provided a custom `seed.sh` script. Simply open a terminal in the Wolt Web directory and execute it:
+
+```bash
+bash seed.sh
+```
+(Note: This script automatically generates multiple default restaurants, complete with menus and random placeholder images we provided. Running this is completely optional—the site functions normally without it—but it is highly recommended as it gives the application a realistic, vibrant look right out of the box. Please keep in mind: because these default restaurants are created by the system, standard users cannot edit or delete them, as they are not the owners. However, you can freely browse their menus and place orders!)
+
 ## 🛠️ Workflow & Development Process
 
 Our team followed a strict Agile development process, documenting our workflow as required.
@@ -106,17 +114,27 @@ In compliance with project guidelines, no real passwords, private information, s
 
 ### Guest Access
 You can easily explore the application as a guest! Simply enter your delivery address on the main screen to browse nearby restaurants, view menus, and search for items without needing an account.
+
 ![Guest Browsing](photos/pic5.png)
 ![Guest Browsing](photos/pic6.png)
 
+* **Dark Mode / Light Mode:** Easily toggle between viewing themes using the dedicated switch in the top navigation bar to suit your personal preference.
 
-### Registered Users & Authentication
-To unlock the full capabilities of the application, such as **placing an order** or **creating a new restaurant**, you must sign up and log in.
-![Registration Screen](photos/pic7.png)
+![User Profile & Orders](photos/pic10.png)
 
 **Strict Registration Validations:**
 * **Password:** Must be at least 8 characters long, and include at least one uppercase letter, one number, and one special character.
-* **Phone Number:** Must contain valid numeric digits only.
+* **Phone Number:** Must contain valid numeric digits only and 7-10 digits.
+
+### Registered Users & Authentication
+To unlock the full capabilities of the application, such as **placing an order** or **creating a new restaurant**, you must sign up and log in.
+
+### Restaurant Ownership & Management
+* **Create & Edit:** As an authenticated user, you can create your very own restaurant and populate it with a custom menu of products. You retain full control to update and edit your restaurant's details and menu items at any time.
+* **Access Control:** Restaurant modifications are strictly restricted to the creator (owner). If you visit a restaurant created by someone else, you can seamlessly browse the menu and place orders, but you will not have permission to alter any of its data.
+
+![Registration Screen](photos/pic7.png)
+
 
 ### Cart & Ordering Rules
 * **Single Restaurant Policy:** Just like the real Wolt app, a single order can only contain items from one restaurant at a time. Mixing items from multiple restaurants in the same cart is not allowed.
@@ -124,12 +142,7 @@ To unlock the full capabilities of the application, such as **placing an order**
 
 ### User Dashboard
 Once authenticated, users unlock a personalized experience:
-* **My Profile:** View your saved personal details, profile picture, and current address.
+* **My Profile:** View and edit your saved personal details, profile picture, and current delivery address.
 * **Order History:** Access a dedicated page to view all your past orders and receipts.
-* **Dark Mode / Light Mode:** Easily toggle between viewing themes using the dedicated switch in the top navigation bar to suit your personal preference.
-![User Profile & Orders](photos/pic8.png)
-![User Profile & Orders](photos/pic10.png)
 
-Initialize the Database (Seeding)**
-To populate the database with initial data, open a terminal in the Wolt Web directory and run the seed script:
-`bash seed.sh`
+![User Profile & Orders](photos/pic8.png)
