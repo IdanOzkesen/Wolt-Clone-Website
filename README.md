@@ -112,6 +112,12 @@ In compliance with project guidelines, no real passwords, private information, s
 
 ## 📱 Application Features & Usage Guide
 
+### Smart Navigation
+* **Dynamic Logo Button:** The main logo located at the top-left corner serves as a smart and intuitive navigation shortcut. If you are browsing anywhere in the application, clicking the logo will instantly take you to the main **Restaurants Page**. However, if you are already on the Restaurants page, clicking it will seamlessly return you to the **Home Page**.
+If you are logged in, clicking the logo from the **Home Page** will take you to the main **Restaurants Page**.
+
+![Guest Browsing](wolt-web/src/assets/logo.png)
+
 ### Guest Access
 You can easily explore the application as a guest! Simply enter your delivery address on the main screen to browse nearby restaurants, view menus, and search for items without needing an account.
 
@@ -120,21 +126,27 @@ You can easily explore the application as a guest! Simply enter your delivery ad
 
 * **Dark Mode / Light Mode:** Easily toggle between viewing themes using the dedicated switch in the top navigation bar to suit your personal preference.
 
-![User Profile & Orders](photos/pic10.png)
-
-**Strict Registration Validations:**
-* **Password:** Must be at least 8 characters long, and include at least one uppercase letter, one number, and one special character.
-* **Phone Number:** Must contain valid numeric digits only and 7-10 digits.
+![Dark Mode / Light Mode](photos/pic10.png)
 
 ### Registered Users & Authentication
 To unlock the full capabilities of the application, such as **placing an order** or **creating a new restaurant**, you must sign up and log in.
+
+![Registration Screen](photos/pic7.png)
+
+**Strict Registration Validations:**
+* **Password:** Must be at least 8 characters long, and include at least one uppercase letter, one number, and one special character.
+* **Phone Number:** Must contain valid numeric digits only.
+
 
 ### Restaurant Ownership & Management
 * **Create & Edit:** As an authenticated user, you can create your very own restaurant and populate it with a custom menu of products. You retain full control to update and edit your restaurant's details and menu items at any time.
 * **Access Control:** Restaurant modifications are strictly restricted to the creator (owner). If you visit a restaurant created by someone else, you can seamlessly browse the menu and place orders, but you will not have permission to alter any of its data.
 
-![Registration Screen](photos/pic7.png)
+![Restaurant Ownership & Management](photos/pic11.png)
+![Restaurant Ownership & Management](photos/pic12.png)
 
+*(NOTE: The pictures are example of a restaurant I added.
+It automaticly shows them under **My Restaurants**)*
 
 ### Cart & Ordering Rules
 * **Single Restaurant Policy:** Just like the real Wolt app, a single order can only contain items from one restaurant at a time. Mixing items from multiple restaurants in the same cart is not allowed.
