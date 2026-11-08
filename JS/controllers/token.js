@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/user.js');
 
-const ACCESS_SECRET = "super_secret_access_key_111";
-const REFRESH_SECRET = "super_secret_refresh_key_222";
+const crypto = require('crypto');
+
+// Secrets come from the environment; if unset, a random one is generated per server start
+const ACCESS_SECRET = process.env.ACCESS_SECRET || crypto.randomBytes(32).toString('hex');
+const REFRESH_SECRET = process.env.REFRESH_SECRET || crypto.randomBytes(32).toString('hex');
 
 let activeRefreshTokens = [];
 
